@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BehördenKlar – Behördenbriefe verstehen</title>
+  <meta name="description" content="Behördenbriefe verstehen, übersetzen und die nächsten Schritten – in deiner Sprache. Jetzt kostenlos testen." />
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-hover: #1557b0;
+      --primary-soft: rgba(26, 115, 232, 0.12);
+      --bg: #f0f4f9;
+      --surface: #ffffff;
+      --text: #1a1d21;
+      --muted: #5f6368;
+      --border: #dadce0;
+      --radius: 16px;
+      --radius-sm: 12px;
+      --shadow: 0 4px 6px -1px rgba(26, 29, 33, 0.06), 0 12px 24px -4px rgba(26, 29, 33, 0.08);
+      --shadow-lg: 0 8px 30px rgba(26, 115, 232, 0.12), 0 4px 12px rgba(26, 29, 33, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* —— Nav —— */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(26, 115, 232, 0.1);
+      box-shadow: 0 2px 16px rgba(26, 29, 33, 0.04);
+    }
+
+    .site-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      min-height: 4rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      line-height: 0;
+      filter: drop-shadow(0 2px 8px rgba(26, 115, 232, 0.12));
+    }
+
+    .brand svg {
+      display: block;
+      height: 48px;
+      width: auto;
+    }
+
+    .brand:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 1.25rem;
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(180deg, var(--primary) 0%, #1666d0 100%);
+      border: none;
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(26, 115, 232, 0.35);
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-cta:hover {
+      background: linear-gradient(180deg, #2b7ef0 0%, var(--primary) 100%);
+      box-shadow: 0 6px 20px rgba(26, 115, 232, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-cta:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 3px;
+    }
+
+    .btn-cta-lg {
+      padding: 0.95rem 1.85rem;
+      font-size: 1.05rem;
+      border-radius: 14px;
+    }
+
+    /* —— Hero —— */
+    .lp-hero {
+      background: linear-gradient(165deg, #e8f1fc 0%, #f5f9ff 45%, #ffffff 100%);
+      border-bottom: 1px solid rgba(26, 115, 232, 0.12);
+      padding: 2.5rem 0 3.5rem;
+      box-shadow: 0 4px 24px rgba(26, 115, 232, 0.06);
+    }
+
+    .lp-hero-inner {
+      text-align: center;
+      max-width: 52rem;
+      margin: 0 auto;
+    }
+
+    .lp-hero h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(1.65rem, 4.5vw, 2.35rem);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    .lp-hero-lead {
+      margin: 0 auto 1.75rem;
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--muted);
+      max-width: 38rem;
+    }
+
+    .lp-hero-cta {
+      margin-bottom: 2rem;
+    }
+
+    .lp-flags {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.32rem;
+      padding: 0.65rem 1rem;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(26, 115, 232, 0.14);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      max-width: fit-content;
+      margin: 0 auto;
+      font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+      line-height: 1;
+      user-select: none;
+    }
+
+    .lp-flags span {
+      display: inline-block;
+    }
+
+    .lp-flags-caption {
+      width: 100%;
+      text-align: center;
+      margin: 0.85rem 0 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* —— Sections —— */
+    .lp-section {
+      padding: 3.25rem 0;
+    }
+
+    .lp-section-alt {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lp-section h2 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(1.35rem, 3vw, 1.65rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-align: center;
+    }
+
+    .lp-section-intro {
+      margin: 0 auto 2rem;
+      text-align: center;
+      color: var(--muted);
+      max-width: 36rem;
+      font-size: 1rem;
+    }
+
+    .lp-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 900px) {
+      .lp-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 520px) {
+      .lp-grid-4 {
+        grid-template-columns: 1fr;
+      }
+
+      .site-nav-inner {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0.65rem 0;
+      }
+
+      .brand svg {
+        height: 40px;
+      }
+    }
+
+    .lp-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.25rem;
+      border: 1px solid rgba(218, 220, 224, 0.9);
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .lp-card:hover {
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(26, 115, 232, 0.2);
+    }
+
+    .lp-section-alt .lp-card {
+      background: var(--bg);
+    }
+
+    .lp-card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .lp-card-icon svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .lp-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .lp-card p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .lp-step-num {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--primary);
+      margin-bottom: 0.35rem;
+    }
+
+    /* —— Footer —— */
+    .site-footer {
+      margin-top: auto;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.25rem 1.5rem;
+    }
+
+    .site-footer-tagline {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 1rem;
+    }
+
+    .site-footer-tagline span {
+      color: var(--primary);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-owner {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .footer-owner a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .footer-owner a:hover {
+      text-decoration: underline;
+    }
+
+  </style>
+</head>
+<body>
+  <header class="site-nav">
+    <div class="container site-nav-inner">
+      <a class="brand" href="landingpage.html" aria-label="BehördenKlar – Startseite">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 70" width="200" height="70" aria-hidden="true" focusable="false">
+          <defs>
+            <style>
+              .logo-word-behorden { fill: #1a73e8; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 17px; font-weight: 700; }
+              .logo-word-klar { fill: #202124; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 17px; font-weight: 700; }
+            </style>
+          </defs>
+          <g>
+            <rect x="8" y="6" width="40" height="58" rx="4" ry="4" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+            <rect x="10" y="8" width="36" height="9" rx="2" fill="#1a73e8"/>
+            <rect x="14" y="24" width="28" height="3" rx="1" fill="#1a73e8" opacity="0.35"/>
+            <rect x="14" y="31" width="22" height="3" rx="1" fill="#1a73e8" opacity="0.35"/>
+            <rect x="14" y="38" width="26" height="3" rx="1" fill="#1a73e8" opacity="0.35"/>
+            <circle cx="40" cy="56" r="9" fill="#1a73e8"/>
+            <path d="M 35.2 56 L 38.4 59.1 L 44.8 51.8" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          <text x="58" y="34" class="logo-word-behorden">Behörden</text>
+          <text x="58" y="54" class="logo-word-klar">Klar</text>
+        </svg>
+      </a>
+      <a class="btn-cta" href="index.html">Jetzt kostenlos testen</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="lp-hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <div class="lp-hero-inner">
+          <h1 id="hero-heading">Behördenbriefe verstehen – in deiner Sprache</h1>
+          <p class="lp-hero-lead">
+            Lade deinen Bescheid hoch oder füge den Text ein – BehördenKlar übersetzt, erklärt verständlich und zeigt dir, was du als Nächstes tun kannst. Ohne Juristendeutsch, dafür klar und strukturiert.
+          </p>
+          <div class="lp-hero-cta">
+            <a class="btn-cta btn-cta-lg" href="index.html">Jetzt kostenlos testen</a>
+          </div>
+          <div class="lp-flags" aria-hidden="true">
+            <span>🇸🇦</span><span>🇹🇷</span><span>🇷🇺</span><span>🇺🇦</span><span>🇷🇴</span><span>🇵🇱</span><span>🇦🇫</span><span>🇧🇬</span><span>🇬🇪</span><span>🇩🇪</span><span>🇬🇧</span><span>🇪🇸</span><span>🇵🇹</span><span>🇪🇬</span><span>🇱🇹</span><span>🇦🇱</span><span>🇧🇦</span><span>🇷🇸</span><span>🇭🇷</span><span>🇨🇳</span><span>🇻🇳</span><span>🇮🇹</span><span>🇬🇷</span><span>🇮🇷</span><span>🇸🇴</span><span>🇪🇷</span>
+          </div>
+          <p class="lp-flags-caption">Viele Sprachen – eine klare Antwort</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lp-section lp-section-alt" aria-labelledby="steps-heading">
+      <div class="container">
+        <h2 id="steps-heading">So funktioniert es</h2>
+        <p class="lp-section-intro">In vier einfachen Schritten vom Behördenbrief zur Orientierung – direkt im Browser.</p>
+        <div class="lp-grid-4">
+          <article class="lp-card">
+            <span class="lp-step-num">Schritt 1</span>
+            <div class="lp-card-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <h3>Hochladen</h3>
+            <p>Text einfügen oder Foto/PDF hochladen – schnell und ohne komplizierte Software.</p>
+          </article>
+          <article class="lp-card">
+            <span class="lp-step-num">Schritt 2</span>
+            <div class="lp-card-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+              </svg>
+            </div>
+            <h3>Übersetzen</h3>
+            <p>Wähle deine Sprache – der Inhalt wird verständlich und vollständig wiedergegeben.</p>
+          </article>
+          <article class="lp-card">
+            <span class="lp-step-num">Schritt 3</span>
+            <div class="lp-card-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+            </div>
+            <h3>Verstehen</h3>
+            <p>Kurze Erklärung, was der Brief für dich bedeutet – ohne Fachchinesisch.</p>
+          </article>
+          <article class="lp-card">
+            <span class="lp-step-num">Schritt 4</span>
+            <div class="lp-card-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+              </svg>
+            </div>
+            <h3>Handeln</h3>
+            <p>Konkrete nächste Schritte und bei Bedarf eine Vorlage für deine Antwort an die Behörde.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="lp-section" aria-labelledby="features-heading">
+      <div class="container">
+        <h2 id="features-heading">Das können wir</h2>
+        <p class="lp-section-intro">Alles, was du brauchst, um Bescheide und Schreiben einzuordnen – auf einen Blick.</p>
+        <div class="lp-grid-4">
+          <article class="lp-card">
+            <div class="lp-card-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+              </svg>
+            </div>
+            <h3>Übersetzung</h3>
+            <p>Der Behördentext in der Sprache, die du am besten verstehst – inklusive wichtiger Begriffe und Fristen.</p>
+          </article>
+          <article class="lp-card">
+            <div class="lp-card-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <h3>Erklärung</h3>
+            <p>Was steht im Brief, was ist die Kernaussage – in einfachen Worten zusammengefasst.</p>
+          </article>
+          <article class="lp-card">
+            <div class="lp-card-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+              </svg>
+            </div>
+            <h3>Schritte</h3>
+            <p>Nummerierte To-dos: Was ist zu erledigen, bis wann, und worauf du achten solltest.</p>
+          </article>
+          <article class="lp-card">
+            <div class="lp-card-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3>Briefkopf-Vorlage</h3>
+            <p>Wenn eine Antwort nötig ist: strukturierter Entwurf mit Platzhaltern für deine Daten und das Aktenzeichen.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="site-footer-tagline"><span>BehördenKlar</span> – Dokumente verstehen, einfach gemacht</p>
+    <nav class="footer-links" aria-label="Rechtliches">
+      <a href="impressum.html">Impressum</a>
+      <a href="agb.html">AGB</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </nav>
+    <p class="footer-owner">Inhaber: Yusuf Coban · <a href="mailto:info@behördenklar.de">info@behördenklar.de</a></p>
+  </footer>
+</body>
+</html>

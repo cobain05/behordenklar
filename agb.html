@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AGB – BehördenKlar</title>
+  <meta name="description" content="Allgemeine Geschäftsbedingungen von BehördenKlar." />
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --bg: #f0f4f9;
+      --surface: #ffffff;
+      --text: #1a1d21;
+      --muted: #5f6368;
+      --border: #dadce0;
+      --radius: 16px;
+      --shadow: 0 4px 6px -1px rgba(26, 29, 33, 0.06), 0 12px 24px -4px rgba(26, 29, 33, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(26, 115, 232, 0.1);
+      box-shadow: 0 2px 16px rgba(26, 29, 33, 0.04);
+    }
+
+    .site-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      min-height: 4rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      line-height: 0;
+      filter: drop-shadow(0 2px 8px rgba(26, 115, 232, 0.12));
+    }
+
+    .brand svg {
+      display: block;
+      height: 48px;
+      width: auto;
+    }
+
+    .brand:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 1.25rem;
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(180deg, var(--primary) 0%, #1666d0 100%);
+      border: none;
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(26, 115, 232, 0.35);
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-cta:hover {
+      background: linear-gradient(180deg, #2b7ef0 0%, var(--primary) 100%);
+      box-shadow: 0 6px 20px rgba(26, 115, 232, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-cta:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 3px;
+    }
+
+    .legal-main {
+      flex: 1;
+      padding: 2rem 0 2.5rem;
+    }
+
+    .legal-inner {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid rgba(218, 220, 224, 0.9);
+      box-shadow: var(--shadow);
+      padding: 2rem 1.5rem 2.25rem;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .legal-inner h2 {
+      font-size: 1.25rem;
+      margin: 0 0 0.75rem;
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .legal-inner h3 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      margin: 1.35rem 0 0.45rem;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .legal-inner h3:first-of-type {
+      margin-top: 0.25rem;
+    }
+
+    .legal-stand {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin: 0 0 1.1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .legal-section {
+      margin: 0 0 1.1rem;
+    }
+
+    .legal-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .legal-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .legal-inner p {
+      margin: 0 0 0.75rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 640px;
+    }
+
+    .legal-inner a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .legal-inner a:hover {
+      text-decoration: underline;
+    }
+
+    .site-footer {
+      margin-top: auto;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.25rem 1.5rem;
+    }
+
+    .site-footer-tagline {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 1rem;
+    }
+
+    .site-footer-tagline span {
+      color: var(--primary);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-links a[aria-current="page"] {
+      font-weight: 800;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .footer-owner {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .footer-owner a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .footer-owner a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 520px) {
+      .site-nav-inner {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0.65rem 0;
+      }
+
+      .brand svg {
+        height: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-nav">
+    <div class="container site-nav-inner">
+      <a class="brand" href="landingpage.html" aria-label="BehördenKlar – Zur Startseite">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 70" width="200" height="70" aria-hidden="true" focusable="false">
+          <defs>
+            <style>
+              .logo-word-behorden { fill: #1a73e8; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 17px; font-weight: 700; }
+              .logo-word-klar { fill: #202124; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 17px; font-weight: 700; }
+            </style>
+          </defs>
+          <g>
+            <rect x="8" y="6" width="40" height="58" rx="4" ry="4" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+            <rect x="10" y="8" width="36" height="9" rx="2" fill="#1a73e8"/>
+            <rect x="14" y="24" width="28" height="3" rx="1" fill="#1a73e8" opacity="0.35"/>
+            <rect x="14" y="31" width="22" height="3" rx="1" fill="#1a73e8" opacity="0.35"/>
+            <rect x="14" y="38" width="26" height="3" rx="1" fill="#1a73e8" opacity="0.35"/>
+            <circle cx="40" cy="56" r="9" fill="#1a73e8"/>
+            <path d="M 35.2 56 L 38.4 59.1 L 44.8 51.8" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          <text x="58" y="34" class="logo-word-behorden">Behörden</text>
+          <text x="58" y="54" class="logo-word-klar">Klar</text>
+        </svg>
+      </a>
+      <a class="btn-cta" href="index.html">Jetzt kostenlos testen</a>
+    </div>
+  </header>
+
+  <main class="legal-main" id="main">
+    <div class="container">
+      <article class="legal-inner">
+        <h2>Allgemeine Geschäftsbedingungen (AGB)</h2>
+        <p class="legal-stand">BehördenKlar – Stand: Mai 2026</p>
+
+        <section class="legal-section" aria-labelledby="agb-p1">
+          <h3 id="agb-p1">§ 1 Geltungsbereich</h3>
+          <p>
+            Diese AGB gelten für alle Leistungen von BehördenKlar (Inhaber: Yusuf Coban, Leonberger Ring 29, 12349 Berlin) gegenüber Nutzern der Website behördenklar.de.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="agb-p2">
+          <h3 id="agb-p2">§ 2 Leistungsbeschreibung</h3>
+          <p>
+            BehördenKlar bietet eine KI-gestützte Übersetzung und Erklärung von Behördendokumenten. Die Ergebnisse dienen ausschließlich zur Orientierung und ersetzen keine Rechts- oder Behördenberatung. Rechtsverbindlich ist stets nur das Originaldokument.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="agb-p3">
+          <h3 id="agb-p3">§ 3 Datenschutz und Datenlöschung</h3>
+          <p>
+            Hochgeladene Dokumente werden ausschließlich zur Verarbeitung genutzt und unmittelbar danach automatisch gelöscht. Es findet keine dauerhafte Speicherung statt.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="agb-p4">
+          <h3 id="agb-p4">§ 4 Haftungsausschluss</h3>
+          <p>
+            BehördenKlar haftet nicht für Schäden die durch fehlerhafte Übersetzungen oder Erklärungen entstehen. Nutzer sind selbst verantwortlich für ihre Handlungen gegenüber Behörden.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="agb-p5">
+          <h3 id="agb-p5">§ 5 Widerrufsrecht</h3>
+          <p>
+            Bei digitalen Inhalten erlischt das Widerrufsrecht mit Beginn der Ausführung, sofern der Nutzer ausdrücklich zugestimmt hat.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="agb-p6">
+          <h3 id="agb-p6">§ 6 Schlussbestimmungen</h3>
+          <p>
+            Es gilt deutsches Recht. Gerichtsstand ist Berlin.
+          </p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p class="site-footer-tagline"><span>BehördenKlar</span> – Dokumente verstehen, einfach gemacht</p>
+    <nav class="footer-links" aria-label="Rechtliches">
+      <a href="impressum.html">Impressum</a>
+      <a href="agb.html" aria-current="page">AGB</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </nav>
+    <p class="footer-owner">Inhaber: Yusuf Coban · <a href="mailto:info@behördenklar.de">info@behördenklar.de</a></p>
+  </footer>
+</body>
+</html>

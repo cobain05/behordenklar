@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BehördenKlar – Briefhilfe</title>
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-hover: #1557b0;
+      --primary-soft: rgba(26, 115, 232, 0.12);
+      --primary-muted: rgba(26, 115, 232, 0.08);
+      --bg: #f0f4f9;
+      --surface: #ffffff;
+      --text: #1a1d21;
+      --muted: #5f6368;
+      --border: #dadce0;
+      --danger: #c5221f;
+      --radius: 16px;
+      --radius-sm: 12px;
+      --shadow: 0 4px 6px -1px rgba(26, 29, 33, 0.06), 0 12px 24px -4px rgba(26, 29, 33, 0.08);
+      --shadow-lg: 0 8px 30px rgba(26, 115, 232, 0.12), 0 4px 12px rgba(26, 29, 33, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* —— Hero —— */
+    .hero {
+      background: linear-gradient(165deg, #e8f1fc 0%, #f5f9ff 42%, #ffffff 100%);
+      border-bottom: 1px solid rgba(26, 115, 232, 0.12);
+      padding: 2rem 0 2.5rem;
+      box-shadow: 0 4px 24px rgba(26, 115, 232, 0.06);
+    }
+
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.25rem 2rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      line-height: 0;
+      filter: drop-shadow(0 2px 8px rgba(26, 115, 232, 0.15));
+    }
+
+    .brand svg {
+      display: block;
+      height: 120px;
+      width: auto;
+    }
+
+    .brand:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
+
+    .hero-welcome {
+      flex: 1;
+      min-width: min(100%, 240px);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem 1.5rem;
+    }
+
+    .hero-text {
+      flex: 1;
+      min-width: min(100%, 200px);
+      max-width: 40rem;
+    }
+
+    .hero-flags {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.28rem;
+      max-width: 100%;
+      font-size: clamp(1.05rem, 2.4vw, 1.42rem);
+      line-height: 1;
+      padding: 0.45rem 0.65rem;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(26, 115, 232, 0.14);
+      border-radius: 14px;
+      box-shadow: 0 2px 14px rgba(26, 115, 232, 0.1);
+      user-select: none;
+    }
+
+    .hero-flags .hero-flag {
+      display: inline-block;
+      line-height: 1;
+    }
+
+    .hero-text h1 {
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.35rem, 3vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    .hero-text p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 36rem;
+    }
+
+    .hero-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.5rem 1.75rem;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(218, 220, 224, 0.8);
+    }
+
+    .mode-toggle {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .mode-toggle label {
+      position: relative;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .mode-toggle input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .mode-pill {
+      display: inline-block;
+      padding: 0.55rem 1.1rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--bg);
+      border: 2px solid transparent;
+      transition: color 0.15s, background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .mode-toggle input:focus-visible + .mode-pill {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    .mode-toggle input:checked + .mode-pill {
+      color: #fff;
+      background: var(--primary);
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(26, 115, 232, 0.35);
+    }
+
+    .mode-toggle label:hover .mode-pill {
+      border-color: rgba(26, 115, 232, 0.35);
+    }
+
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .textarea-hero {
+      width: 100%;
+      min-height: 200px;
+      padding: 1rem 1.1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      font: inherit;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: #fafbfd;
+      resize: vertical;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .textarea-hero:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-soft);
+      background: #fff;
+    }
+
+    /* Drop zone */
+    .drop-zone-wrap {
+      position: relative;
+    }
+
+    .drop-zone {
+      position: relative;
+      min-height: 200px;
+      border: 3px dashed rgba(26, 115, 232, 0.35);
+      border-radius: var(--radius-sm);
+      background: linear-gradient(180deg, var(--primary-muted) 0%, rgba(255, 255, 255, 0.6) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      text-align: center;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+
+    .drop-zone.is-dragover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      box-shadow: inset 0 0 0 4px rgba(26, 115, 232, 0.12);
+      transform: scale(1.01);
+    }
+
+    .drop-zone-input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .drop-zone-icon {
+      font-size: 2.25rem;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      opacity: 0.85;
+    }
+
+    .drop-zone-title {
+      margin: 0 0 0.35rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .drop-zone-hint {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--muted);
+      max-width: 280px;
+    }
+
+    .drop-file-name {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      word-break: break-all;
+      max-width: 100%;
+    }
+
+    .btn-take-photo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      width: 100%;
+      margin-top: 0.85rem;
+      padding: 0.7rem 1rem;
+      font: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(26, 115, 232, 0.08);
+      transition: background 0.15s, border-color 0.15s, transform 0.12s;
+    }
+
+    .btn-take-photo:hover {
+      background: var(--primary-soft);
+    }
+
+    .btn-take-photo:active {
+      transform: scale(0.99);
+    }
+
+    .btn-take-photo:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 3px;
+    }
+
+    .preview {
+      margin-top: 1rem;
+      max-height: 200px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .preview img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 200px;
+      object-fit: contain;
+      background: #e8eaed;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.65rem;
+    }
+
+    /* Language buttons */
+    .lang-section {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .lang-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .lang-btn {
+      appearance: none;
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.5rem 0.75rem;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, color 0.15s, box-shadow 0.15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+    }
+
+    .lang-btn:hover {
+      border-color: rgba(26, 115, 232, 0.45);
+      background: #fafbfd;
+    }
+
+    .lang-btn:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    .lang-btn.is-active {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+    }
+
+    .btn-analyze {
+      margin-top: 1.35rem;
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem 1.5rem;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(180deg, #1a73e8 0%, #1557b0 100%);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(26, 115, 232, 0.4);
+      transition: transform 0.1s, box-shadow 0.15s, filter 0.15s;
+    }
+
+    .btn-analyze:hover:not(:disabled) {
+      filter: brightness(1.05);
+      box-shadow: 0 6px 20px rgba(26, 115, 232, 0.45);
+    }
+
+    .btn-analyze:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+
+    .btn-analyze:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .spinner {
+      width: 1.15rem;
+      height: 1.15rem;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    .btn-analyze.loading .spinner {
+      display: block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Main content below hero */
+    .main {
+      flex: 1;
+      padding: 1.75rem 0 2rem;
+    }
+
+    .card-api {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(218, 220, 224, 0.85);
+    }
+
+    .card-api h2 {
+      margin: 0 0 1rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .key-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: flex-end;
+    }
+
+    .key-row .field {
+      flex: 1 1 220px;
+    }
+
+    .key-row label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .key-row input[type="password"],
+    .key-row input[type="text"] {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .key-row input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-soft);
+    }
+
+    .toggle-key {
+      font-size: 0.88rem;
+      color: var(--primary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.6rem 0;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .toggle-key:hover {
+      color: var(--primary-hover);
+    }
+
+    .error {
+      background: #fce8e6;
+      border: 1px solid #f9ab9e;
+      color: var(--danger);
+      padding: 1rem 1.1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+      display: none;
+      box-shadow: var(--shadow);
+    }
+
+    .error.visible {
+      display: block;
+    }
+
+    /* Results grid */
+    #results {
+      display: none;
+    }
+
+    #results.visible {
+      display: block;
+    }
+
+    .results-head {
+      margin-bottom: 1.25rem;
+    }
+
+    .results-head h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 1024px) {
+      .results-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 1.5rem 0 2rem;
+      }
+
+      .hero-welcome {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero-flags {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .lang-btn {
+        font-size: 0.78rem;
+        padding: 0.45rem 0.6rem;
+      }
+    }
+
+    .result-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.15rem;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(218, 220, 224, 0.9);
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .result-card:hover {
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(26, 115, 232, 0.2);
+    }
+
+    .result-card h3 {
+      margin: 0 0 0.65rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.3;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--primary-soft);
+    }
+
+    .result-body {
+      flex: 1;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 0.86rem;
+      line-height: 1.5;
+      color: var(--text);
+      max-height: 420px;
+      overflow-y: auto;
+      padding-right: 0.25rem;
+    }
+
+    .site-footer {
+      margin-top: auto;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 1.75rem 1.25rem 2rem;
+      text-align: center;
+    }
+
+    .site-footer-tagline {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 0.75rem;
+    }
+
+    .site-footer-tagline span {
+      color: var(--primary);
+    }
+
+    .site-footer-legal {
+      font-size: 0.78rem;
+      color: var(--muted);
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="container hero-inner">
+      <div class="hero-top">
+        <a class="brand" href="index.html" aria-label="BehördenKlar – Startseite">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 70" width="200" height="70" aria-hidden="true" focusable="false">
+            <defs>
+              <style>
+                .logo-word-behorden { fill: #1a73e8; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 17px; font-weight: 700; }
+                .logo-word-klar { fill: #202124; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 17px; font-weight: 700; }
+              </style>
+            </defs>
+            <g>
+              <rect x="8" y="6" width="40" height="58" rx="4" ry="4" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+              <rect x="10" y="8" width="36" height="9" rx="2" fill="#1a73e8"/>
+              <rect x="14" y="24" width="28" height="3" rx="1" fill="#1a73e8" opacity="0.35"/>
+              <rect x="14" y="31" width="22" height="3" rx="1" fill="#1a73e8" opacity="0.35"/>
+              <rect x="14" y="38" width="26" height="3" rx="1" fill="#1a73e8" opacity="0.35"/>
+              <circle cx="40" cy="56" r="9" fill="#1a73e8"/>
+              <path d="M 35.2 56 L 38.4 59.1 L 44.8 51.8" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <text x="58" y="34" class="logo-word-behorden">Behörden</text>
+            <text x="58" y="54" class="logo-word-klar">Klar</text>
+          </svg>
+        </a>
+        <div class="hero-welcome">
+          <div class="hero-text">
+            <h1>Willkommen bei BehördenKlar</h1>
+            <p>Fügen Sie Ihren Behördenbrief ein oder laden Sie ein Foto oder PDF hoch – wir helfen beim Verstehen, Übersetzen und den nächsten Schritten.</p>
+          </div>
+          <div class="hero-flags" aria-hidden="true">
+            <span class="hero-flag">🇸🇦</span><span class="hero-flag">🇹🇷</span><span class="hero-flag">🇷🇺</span><span class="hero-flag">🇺🇦</span><span class="hero-flag">🇷🇴</span><span class="hero-flag">🇵🇱</span><span class="hero-flag">🇦🇫</span><span class="hero-flag">🇧🇬</span><span class="hero-flag">🇬🇪</span><span class="hero-flag">🇩🇪</span><span class="hero-flag">🇬🇧</span><span class="hero-flag">🇪🇸</span><span class="hero-flag">🇵🇹</span><span class="hero-flag">🇪🇬</span><span class="hero-flag">🇱🇹</span><span class="hero-flag">🇦🇱</span><span class="hero-flag">🇧🇦</span><span class="hero-flag">🇷🇸</span><span class="hero-flag">🇭🇷</span><span class="hero-flag">🇨🇳</span><span class="hero-flag">🇻🇳</span><span class="hero-flag">🇮🇹</span><span class="hero-flag">🇬🇷</span><span class="hero-flag">🇮🇷</span><span class="hero-flag">🇸🇴</span><span class="hero-flag">🇪🇷</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="mode-toggle" role="tablist" aria-label="Eingabeart">
+          <label>
+            <input type="radio" name="inputMode" value="file" checked />
+            <span class="mode-pill">Foto oder PDF</span>
+          </label>
+          <label>
+            <input type="radio" name="inputMode" value="text" />
+            <span class="mode-pill">Text eingeben</span>
+          </label>
+        </div>
+
+        <div id="panelFile" class="panel active">
+          <span class="field-label">Datei hochladen</span>
+          <div class="drop-zone-wrap">
+            <div class="drop-zone" id="dropZone" aria-hidden="false">
+              <input type="file" id="letterFile" class="drop-zone-input" accept="image/*,application/pdf" capture="environment" />
+              <div class="drop-zone-icon" aria-hidden="true">📄</div>
+              <p class="drop-zone-title">Datei hierher ziehen</p>
+              <p class="drop-zone-hint">oder klicken und JPG, PNG oder PDF wählen</p>
+              <p class="drop-file-name" id="dropFileName" hidden></p>
+            </div>
+          </div>
+          <button type="button" class="btn-take-photo" id="btnTakePhoto" aria-label="Foto mit der Kamera aufnehmen">
+            <span aria-hidden="true">📷</span> Foto aufnehmen
+          </button>
+          <p class="hint">Max. ca. 32&nbsp;MB. Passwortgeschützte PDFs werden nicht unterstützt.</p>
+          <div id="preview" class="preview" hidden></div>
+        </div>
+
+        <div id="panelText" class="panel">
+          <span class="field-label">Behördenbrief (Deutsch)</span>
+          <textarea id="letterText" class="textarea-hero" placeholder="Brief hier einfügen oder abtippen…"></textarea>
+        </div>
+
+        <div class="lang-section">
+          <span class="field-label">Zielsprache</span>
+          <div class="lang-grid" id="langGrid" role="group" aria-label="Zielsprache wählen">
+            <button type="button" class="lang-btn is-active" data-lang="Arabisch"><span aria-hidden="true">🇸🇦</span> Arabisch</button>
+            <button type="button" class="lang-btn" data-lang="Türkisch"><span aria-hidden="true">🇹🇷</span> Türkisch</button>
+            <button type="button" class="lang-btn" data-lang="Russisch"><span aria-hidden="true">🇷🇺</span> Russisch</button>
+            <button type="button" class="lang-btn" data-lang="Ukrainisch"><span aria-hidden="true">🇺🇦</span> Ukrainisch</button>
+            <button type="button" class="lang-btn" data-lang="Rumänisch"><span aria-hidden="true">🇷🇴</span> Rumänisch</button>
+            <button type="button" class="lang-btn" data-lang="Polnisch"><span aria-hidden="true">🇵🇱</span> Polnisch</button>
+            <button type="button" class="lang-btn" data-lang="Dari/Farsi (Afghanisch)"><span aria-hidden="true">🇦🇫</span> Dari/Farsi</button>
+            <button type="button" class="lang-btn" data-lang="Bulgarisch"><span aria-hidden="true">🇧🇬</span> Bulgarisch</button>
+            <button type="button" class="lang-btn" data-lang="Georgisch"><span aria-hidden="true">🇬🇪</span> Georgisch</button>
+            <button type="button" class="lang-btn" data-lang="Deutsch"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
+            <button type="button" class="lang-btn" data-lang="Englisch"><span aria-hidden="true">🇬🇧</span> Englisch</button>
+            <button type="button" class="lang-btn" data-lang="Spanisch"><span aria-hidden="true">🇪🇸</span> Spanisch</button>
+            <button type="button" class="lang-btn" data-lang="Portugiesisch"><span aria-hidden="true">🇵🇹</span> Portugiesisch</button>
+            <button type="button" class="lang-btn" data-lang="Arabisch (Ägyptisch)"><span aria-hidden="true">🇪🇬</span> Arabisch (Ägyptisch)</button>
+            <button type="button" class="lang-btn" data-lang="Litauisch"><span aria-hidden="true">🇱🇹</span> Litauisch</button>
+            <button type="button" class="lang-btn" data-lang="Albanisch"><span aria-hidden="true">🇦🇱</span> Albanisch</button>
+            <button type="button" class="lang-btn" data-lang="Bosnisch"><span aria-hidden="true">🇧🇦</span> Bosnisch</button>
+            <button type="button" class="lang-btn" data-lang="Serbisch"><span aria-hidden="true">🇷🇸</span> Serbisch</button>
+            <button type="button" class="lang-btn" data-lang="Kroatisch"><span aria-hidden="true">🇭🇷</span> Kroatisch</button>
+            <button type="button" class="lang-btn" data-lang="Chinesisch"><span aria-hidden="true">🇨🇳</span> Chinesisch</button>
+            <button type="button" class="lang-btn" data-lang="Vietnamesisch"><span aria-hidden="true">🇻🇳</span> Vietnamesisch</button>
+            <button type="button" class="lang-btn" data-lang="Italienisch"><span aria-hidden="true">🇮🇹</span> Italienisch</button>
+            <button type="button" class="lang-btn" data-lang="Griechisch"><span aria-hidden="true">🇬🇷</span> Griechisch</button>
+            <button type="button" class="lang-btn" data-lang="Persisch"><span aria-hidden="true">🇮🇷</span> Persisch</button>
+            <button type="button" class="lang-btn" data-lang="Somali"><span aria-hidden="true">🇸🇴</span> Somali</button>
+            <button type="button" class="lang-btn" data-lang="Tigrinya"><span aria-hidden="true">🇪🇷</span> Tigrinya</button>
+          </div>
+        </div>
+
+        <button type="button" class="btn-analyze" id="analyzeBtn">
+          <span class="spinner" aria-hidden="true"></span>
+          <span class="btn-text">Brief analysieren</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <div id="errorBox" class="error" role="alert"></div>
+
+      <section class="card-api" aria-labelledby="api-heading">
+        <h2 id="api-heading">API-Schlüssel</h2>
+        <div class="key-row">
+          <div class="field">
+            <label for="apiKey">Anthropic API Key</label>
+            <input type="password" id="apiKey" autocomplete="off" placeholder="sk-ant-api03-…" />
+          </div>
+          <button type="button" class="toggle-key" id="toggleKey">Anzeigen</button>
+        </div>
+        <p class="hint">Der Schlüssel wird nur in Ihrem Browser verwendet und nicht gespeichert.</p>
+      </section>
+
+      <section id="results" aria-live="polite">
+        <div class="results-head">
+          <h2>Ergebnis</h2>
+        </div>
+        <div class="results-grid">
+          <article class="result-card">
+            <h3 id="h3TitleTranslation">Übersetzung</h3>
+            <div class="result-body" id="outTranslation"></div>
+          </article>
+          <article class="result-card">
+            <h3 id="h3TitleExplain">Erklärung</h3>
+            <div class="result-body" id="outExplain"></div>
+          </article>
+          <article class="result-card">
+            <h3 id="h3TitleSteps">Nächste Schritte</h3>
+            <div class="result-body" id="outSteps"></div>
+          </article>
+          <article class="result-card">
+            <h3 id="h3TitleBriefkopf">Briefkopf</h3>
+            <div class="result-body" id="outTemplate"></div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p class="site-footer-tagline"><span>BehördenKlar</span> – Dokumente verstehen, einfach gemacht</p>
+    <p class="site-footer-legal">
+      Keine Rechtsberatung. Bei Fristen und rechtlichen Folgen prüfen Sie die Angaben oder wenden Sie sich an eine Beratungsstelle oder an eine Rechtsanwältin bzw. einen Rechtsanwalt.
+      Die App über den lokalen Server öffnen (siehe <code>server.py</code>), damit Anfragen ohne CORS-Probleme funktionieren.
+    </p>
+  </footer>
+
+  <script>
+    (function () {
+      const API_URL = "/api/claude";
+      const MODEL = "claude-sonnet-4-5";
+      const ANTHROPIC_VERSION = "2023-06-01";
+
+      const $ = (id) => document.getElementById(id);
+
+      const apiKeyInput = $("apiKey");
+      const toggleKey = $("toggleKey");
+      const analyzeBtn = $("analyzeBtn");
+      const errorBox = $("errorBox");
+      const results = $("results");
+      const letterText = $("letterText");
+      const letterFile = $("letterFile");
+      const btnTakePhoto = $("btnTakePhoto");
+      const preview = $("preview");
+      const dropZone = $("dropZone");
+      const dropFileName = $("dropFileName");
+
+      function getTargetLang() {
+        var active = document.querySelector(".lang-btn.is-active");
+        return active ? active.getAttribute("data-lang") : "Arabisch";
+      }
+
+      function showError(msg) {
+        errorBox.textContent = msg;
+        errorBox.classList.add("visible");
+      }
+
+      function clearError() {
+        errorBox.textContent = "";
+        errorBox.classList.remove("visible");
+      }
+
+      document.querySelectorAll(".lang-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document.querySelectorAll(".lang-btn").forEach(function (b) {
+            b.classList.remove("is-active");
+          });
+          btn.classList.add("is-active");
+          clearError();
+        });
+      });
+
+      toggleKey.addEventListener("click", function () {
+        if (apiKeyInput.type === "password") {
+          apiKeyInput.type = "text";
+          toggleKey.textContent = "Verbergen";
+        } else {
+          apiKeyInput.type = "password";
+          toggleKey.textContent = "Anzeigen";
+        }
+      });
+
+      document.querySelectorAll('input[name="inputMode"]').forEach(function (radio) {
+        radio.addEventListener("change", function () {
+          var textMode = document.querySelector('input[name="inputMode"]:checked').value === "text";
+          $("panelText").classList.toggle("active", textMode);
+          $("panelFile").classList.toggle("active", !textMode);
+          clearError();
+        });
+      });
+
+      btnTakePhoto.addEventListener("click", function () {
+        letterFile.click();
+      });
+
+      ["dragenter", "dragover", "dragleave", "drop"].forEach(function (ev) {
+        dropZone.addEventListener(ev, function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        });
+      });
+
+      ["dragenter", "dragover"].forEach(function (ev) {
+        dropZone.addEventListener(ev, function () {
+          dropZone.classList.add("is-dragover");
+        });
+      });
+
+      ["dragleave", "drop"].forEach(function (ev) {
+        dropZone.addEventListener(ev, function () {
+          dropZone.classList.remove("is-dragover");
+        });
+      });
+
+      dropZone.addEventListener("drop", function (e) {
+        var dt = e.dataTransfer;
+        if (!dt || !dt.files || !dt.files.length) return;
+        var f = dt.files[0];
+        var d = new DataTransfer();
+        d.items.add(f);
+        letterFile.files = d.files;
+        letterFile.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+
+      function fileToBase64(file) {
+        return new Promise(function (resolve, reject) {
+          var reader = new FileReader();
+          reader.onload = function () {
+            var dataUrl = reader.result;
+            var comma = dataUrl.indexOf(",");
+            if (comma === -1) {
+              reject(new Error("Ungültige Datei."));
+              return;
+            }
+            resolve({
+              base64: dataUrl.slice(comma + 1),
+              mediaType: file.type || guessMimeFromName(file.name),
+            });
+          };
+          reader.onerror = function () {
+            reject(new Error("Datei konnte nicht gelesen werden."));
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function guessMimeFromName(name) {
+        var lower = name.toLowerCase();
+        if (lower.endsWith(".png")) return "image/png";
+        if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
+        if (lower.endsWith(".pdf")) return "application/pdf";
+        return "application/octet-stream";
+      }
+
+      function isAllowedMime(mime) {
+        if (!mime) return false;
+        if (mime === "application/pdf") return true;
+        return mime.indexOf("image/") === 0;
+      }
+
+      letterFile.addEventListener("change", function () {
+        preview.hidden = true;
+        preview.innerHTML = "";
+        var f = letterFile.files[0];
+        if (!f) {
+          dropFileName.hidden = true;
+          dropFileName.textContent = "";
+          return;
+        }
+        dropFileName.textContent = f.name;
+        dropFileName.hidden = false;
+        var mime = f.type || guessMimeFromName(f.name);
+        if (mime.indexOf("image/") === 0) {
+          var url = URL.createObjectURL(f);
+          var img = document.createElement("img");
+          img.src = url;
+          img.alt = "Vorschau";
+          img.onload = function () {
+            URL.revokeObjectURL(url);
+          };
+          preview.appendChild(img);
+          preview.hidden = false;
+        }
+      });
+
+      function buildInstructionPrompt(langLabel) {
+        return (
+          "Du bist eine Hilfe für Menschen, die einen deutschen Behördenbrief erhalten haben.\n\n" +
+          "ZUERST (intern, ohne separaten Text): Entscheide, ob der Empfänger in der Regel mit einem eigenen Schreiben an die Behörde antworten muss oder soll " +
+          "(z. B. ausdrückliche Aufforderung zur Stellungnahme, Widerspruchsfrist, Anhörung, Nachreichung von Unterlagen auf schriftliche Aufforderung mit Rückmeldung, " +
+          "formale Bitte um Rückantwort). " +
+          "Setze das JSON-Feld „antwort_erforderlich“ auf true nur in diesen Fällen.\n\n" +
+          "Setze „antwort_erforderlich“ auf false bei reinen Informationsschreiben, reinen Bescheiden ohne Erwartung einer Antwort, " +
+          "Mitteilungen ohne Handlungsauftrag zum Zurückschreiben, reinen Zahlungsbestätigungen o. Ä., sofern keine ausdrückliche schriftliche Rückmeldung verlangt wird.\n\n" +
+          "Die gewählte Zielsprache ist: " +
+          langLabel +
+          ".\n" +
+          "Schreibe „uebersetzung“, „erklaerung“, „schritte“, „kein_briefkopf_text“ sowie die vier Felder „titel_uebersetzung“, „titel_erklaerung“, „titel_schritte“, „titel_briefkopf“ " +
+          "ausschließlich in dieser Zielsprache (nicht auf Deutsch).\n" +
+          "Die Titel sollen kurze, verständliche Überschriften für die Benutzeroberfläche sein, sinngemäß zu: „Übersetzung“, „Was bedeutet der Brief?“, „Was sollen Sie jetzt tun?“, „Briefkopf“.\n\n" +
+          "Wenn „antwort_erforderlich“ true ist: Feld „antwortvorlage“ auf Deutsch, höflich und sachlich, als Briefkopf/Text zum Beantworten der Behörde, " +
+          "mit klaren Platzhaltern in eckigen Klammern, z. B. [Ihr vollständiger Name], [Ihre Adresse], [Aktenzeichen], [Datum], [Behördenname]. " +
+          "Setze in diesem Fall „kein_briefkopf_text“ auf einen leeren String \"\".\n" +
+          "Wenn „antwort_erforderlich“ false ist: setze „antwortvorlage“ auf \"\". " +
+          "Schreibe in „kein_briefkopf_text“ einen kurzen, verständlichen Hinweis in der Zielsprache (sinngemäß: " +
+          "Für dieses Schreiben ist keine Antwort an die Behörde nötig; die Person soll die Schritte oben befolgen).\n\n" +
+          "Antworte ausschließlich mit einem gültigen JSON-Objekt (kein Markdown, kein Code-Fence, keine Erklärung davor oder danach). " +
+          "„antwort_erforderlich“ muss ein JSON-Boolean sein (true oder false), kein String.\n" +
+          "Verwende exakt diese Schlüssel:\n" +
+          "{\n" +
+          '  "antwort_erforderlich": true,\n' +
+          '  "titel_uebersetzung": "Kurze UI-Überschrift für den Übersetzungsblock (Zielsprache).",\n' +
+          '  "titel_erklaerung": "Kurze UI-Überschrift für die Erklärung (Zielsprache).",\n' +
+          '  "titel_schritte": "Kurze UI-Überschrift für die Schritte (Zielsprache).",\n' +
+          '  "titel_briefkopf": "Kurze UI-Überschrift für den Briefkopf-Bereich (Zielsprache).",\n' +
+          '  "uebersetzung": "Vollständige Übersetzung des Briefs in die Zielsprache.",\n' +
+          '  "erklaerung": "Einfache, verständliche Erklärung, was der Brief bedeutet (Zielsprache).",\n' +
+          '  "schritte": "Nummerierte Schritte: Was muss die Person jetzt tun? (Zielsprache)",\n' +
+          '  "antwortvorlage": "Nur wenn antwort_erforderlich true: deutscher Brief mit Platzhaltern; sonst leerer String.",\n' +
+          '  "kein_briefkopf_text": "Nur wenn antwort_erforderlich false: Hinweis in Zielsprache; sonst leerer String."\n' +
+          "}\n\n" +
+          "Wenn der Brief Fristen, Geldbeträge oder rechtliche Konsequenzen nennt, gib diese in der Erklärung und in den Schritten klar wieder. " +
+          "Wenn etwas im Dokument unleserlich fehlt, weise kurz darauf hin."
+        );
+      }
+
+      function extractJsonObject(s) {
+        var i = s.indexOf("{");
+        if (i < 0) {
+          throw new Error("Kein JSON-Objekt in der Modell-Antwort gefunden.");
+        }
+        var depth = 0;
+        var inString = false;
+        var escape = false;
+        for (var j = i; j < s.length; j++) {
+          var ch = s[j];
+          if (inString) {
+            if (escape) {
+              escape = false;
+            } else if (ch === "\\") {
+              escape = true;
+            } else if (ch === '"') {
+              inString = false;
+            }
+            continue;
+          }
+          if (ch === '"') {
+            inString = true;
+            continue;
+          }
+          if (ch === "{") {
+            depth++;
+          } else if (ch === "}") {
+            depth--;
+            if (depth === 0) {
+              return s.slice(i, j + 1);
+            }
+          }
+        }
+        throw new Error("Unvollständiges JSON in der Modell-Antwort.");
+      }
+
+      function parseModelJson(text) {
+        var trimmed = text.trim();
+        if (!trimmed) {
+          throw new Error("Leere Text-Antwort vom Modell.");
+        }
+        var jsonStr = trimmed;
+        var fence = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/);
+        if (fence) {
+          jsonStr = fence[1].trim();
+        } else {
+          try {
+            jsonStr = extractJsonObject(trimmed);
+          } catch (e) {
+            jsonStr = trimmed;
+          }
+        }
+        var obj = JSON.parse(jsonStr);
+        var u = obj.uebersetzung || obj["übersetzung"];
+        var e = obj.erklaerung || obj["erklärung"];
+        var st = obj.schritte;
+        var a = obj.antwortvorlage;
+        var ar = obj.antwort_erforderlich;
+        var tU = obj.titel_uebersetzung;
+        var tE = obj.titel_erklaerung;
+        var tS = obj.titel_schritte;
+        var tB = obj.titel_briefkopf;
+        var kb = obj.kein_briefkopf_text;
+        if (ar === "true") {
+          ar = true;
+        } else if (ar === "false") {
+          ar = false;
+        }
+        if (
+          typeof u !== "string" ||
+          typeof e !== "string" ||
+          typeof st !== "string" ||
+          typeof a !== "string" ||
+          typeof ar !== "boolean" ||
+          typeof tU !== "string" ||
+          typeof tE !== "string" ||
+          typeof tS !== "string" ||
+          typeof tB !== "string" ||
+          typeof kb !== "string"
+        ) {
+          throw new Error("Unerwartetes Antwortformat von der API.");
+        }
+        if (!tU.trim() || !tE.trim() || !tS.trim() || !tB.trim()) {
+          throw new Error("Titel-Felder dürfen nicht leer sein.");
+        }
+        if (ar && !a.trim()) {
+          throw new Error("Antwort laut KI nötig, aber „antwortvorlage“ ist leer.");
+        }
+        if (ar && kb.trim()) {
+          throw new Error("„kein_briefkopf_text“ muss leer sein, wenn eine Antwort nötig ist.");
+        }
+        if (!ar && !kb.trim()) {
+          throw new Error("„kein_briefkopf_text“ fehlt, obwohl keine Antwort nötig ist.");
+        }
+        return {
+          antwort_erforderlich: ar,
+          titel_uebersetzung: tU.trim(),
+          titel_erklaerung: tE.trim(),
+          titel_schritte: tS.trim(),
+          titel_briefkopf: tB.trim(),
+          uebersetzung: u,
+          erklaerung: e,
+          schritte: st,
+          antwortvorlage: a,
+          kein_briefkopf_text: kb.trim(),
+        };
+      }
+
+      function formatAnthropicError(data, httpStatus) {
+        if (!data || typeof data !== "object") {
+          return "API-Fehler" + (httpStatus ? " (" + httpStatus + ")" : "") + ".";
+        }
+        var reqId = data.request_id;
+        if (data.type === "error" && data.error) {
+          if (!reqId && data.error.request_id) {
+            reqId = data.error.request_id;
+          }
+          data = data.error;
+        }
+        var parts = [];
+        if (data.type) {
+          parts.push(String(data.type));
+        }
+        var msg = data.message;
+        if (msg != null) {
+          if (typeof msg === "string") {
+            parts.push(msg);
+          } else if (Array.isArray(msg)) {
+            parts.push(
+              msg
+                .map(function (x) {
+                  return typeof x === "string" ? x : JSON.stringify(x);
+                })
+                .join("\n")
+            );
+          } else if (typeof msg === "object") {
+            parts.push(JSON.stringify(msg));
+          } else {
+            parts.push(String(msg));
+          }
+        }
+        if (reqId) {
+          parts.push("Request-ID: " + reqId);
+        }
+        if (parts.length) {
+          return parts.join(" — ");
+        }
+        return "API-Fehler" + (httpStatus ? " (" + httpStatus + ")" : "") + ".";
+      }
+
+      analyzeBtn.addEventListener("click", async function () {
+        clearError();
+        results.classList.remove("visible");
+
+        var key = apiKeyInput.value.trim();
+        if (!key) {
+          showError("Bitte geben Sie Ihren Anthropic API Key ein.");
+          return;
+        }
+
+        var mode = document.querySelector('input[name="inputMode"]:checked').value;
+        var content = [];
+        var instruction = buildInstructionPrompt(getTargetLang());
+
+        if (mode === "text") {
+          var text = letterText.value.trim();
+          if (!text) {
+            showError("Bitte geben Sie den Brieftext ein oder wählen Sie eine Datei.");
+            return;
+          }
+          content.push({
+            type: "text",
+            text:
+              instruction +
+              "\n\n---\n\nBehördenbrief (Deutsch):\n\n" +
+              text,
+          });
+        } else {
+          var file = letterFile.files[0];
+          if (!file) {
+            showError("Bitte wählen Sie eine Bilddatei oder PDF aus.");
+            return;
+          }
+          var mime = file.type || guessMimeFromName(file.name);
+          if (!isAllowedMime(mime)) {
+            showError("Nur Bilder (z. B. JPG, PNG) oder PDF sind erlaubt.");
+            return;
+          }
+          if (file.size > 32 * 1024 * 1024) {
+            showError("Die Datei ist zu groß (max. ca. 32 MB).");
+            return;
+          }
+
+          try {
+            var encoded = await fileToBase64(file);
+            if (mime === "application/pdf") {
+              content.push({
+                type: "document",
+                source: {
+                  type: "base64",
+                  media_type: "application/pdf",
+                  data: encoded.base64,
+                },
+              });
+            } else {
+              content.push({
+                type: "image",
+                source: {
+                  type: "base64",
+                  media_type: mime,
+                  data: encoded.base64,
+                },
+              });
+            }
+            content.push({
+              type: "text",
+              text:
+                instruction +
+                "\n\nDer Behördenbrief liegt als Datei bei (Bild oder PDF). " +
+                "Analysieren Sie den sichtbaren Inhalt und füllen Sie das JSON wie beschrieben aus.",
+            });
+          } catch (e) {
+            showError(e.message || "Datei konnte nicht verarbeitet werden.");
+            return;
+          }
+        }
+
+        analyzeBtn.disabled = true;
+        analyzeBtn.classList.add("loading");
+
+        try {
+          var res = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              "x-api-key": key,
+              "anthropic-version": ANTHROPIC_VERSION,
+            },
+            body: JSON.stringify({
+              model: MODEL,
+              max_tokens: 8192,
+              thinking: { type: "disabled" },
+              messages: [
+                {
+                  role: "user",
+                  content: content,
+                },
+              ],
+            }),
+          });
+
+          var rawText = await res.text();
+          var data;
+          try {
+            data = JSON.parse(rawText);
+          } catch (e) {
+            throw new Error("Ungültige Server-Antwort.");
+          }
+
+          if (!res.ok) {
+            var errMsg = formatAnthropicError(data, res.status);
+            if (!rawText) {
+              errMsg =
+                "Keine Antwort vom lokalen Server. Läuft server.py? Seite unter http://127.0.0.1:8765/ öffnen.";
+            }
+            throw new Error(errMsg);
+          }
+
+          if (data.type === "error") {
+            throw new Error(formatAnthropicError(data, res.status));
+          }
+
+          var parts = data.content || [];
+          var textOut = "";
+          for (var i = 0; i < parts.length; i++) {
+            if (parts[i].type === "text") {
+              textOut += parts[i].text;
+            }
+          }
+
+          var parsed;
+          try {
+            parsed = parseModelJson(textOut);
+          } catch (pe) {
+            throw new Error(
+              "Die KI-Antwort konnte nicht gelesen werden. Bitte erneut versuchen. Rohauszug: " +
+                textOut.slice(0, 400)
+            );
+          }
+
+          $("h3TitleTranslation").textContent = parsed.titel_uebersetzung;
+          $("h3TitleExplain").textContent = parsed.titel_erklaerung;
+          $("h3TitleSteps").textContent = parsed.titel_schritte;
+          $("h3TitleBriefkopf").textContent = parsed.titel_briefkopf;
+          $("outTranslation").textContent = parsed.uebersetzung;
+          $("outExplain").textContent = parsed.erklaerung;
+          $("outSteps").textContent = parsed.schritte;
+          $("outTemplate").textContent = parsed.antwort_erforderlich
+            ? parsed.antwortvorlage
+            : parsed.kein_briefkopf_text;
+          results.classList.add("visible");
+          results.scrollIntoView({ behavior: "smooth", block: "start" });
+        } catch (err) {
+          var m =
+            err && typeof err.message === "string"
+              ? err.message
+              : err
+                ? String(err)
+                : "Unbekannter Fehler.";
+          showError(m);
+        } finally {
+          analyzeBtn.disabled = false;
+          analyzeBtn.classList.remove("loading");
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
