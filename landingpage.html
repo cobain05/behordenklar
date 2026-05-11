@@ -64,10 +64,135 @@
     .site-nav-inner {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: space-between;
       gap: 1rem;
       padding: 0.85rem 0;
       min-height: 4rem;
+    }
+
+    .site-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .ui-lang-nav-trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      width: auto;
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 0.55rem 0.85rem;
+      border-radius: 12px;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      background: var(--surface);
+      box-shadow: 0 2px 8px rgba(26, 115, 232, 0.1);
+      cursor: pointer;
+    }
+
+    .ui-lang-nav-trigger:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 3px;
+    }
+
+    .ui-lang-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(17, 24, 39, 0.45);
+      backdrop-filter: blur(2px);
+      padding: 1rem;
+    }
+
+    .ui-lang-modal.visible {
+      display: flex;
+    }
+
+    .ui-lang-modal-card {
+      width: min(100%, 520px);
+      max-height: 85vh;
+      overflow-y: auto;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid rgba(218, 220, 224, 0.9);
+      box-shadow: var(--shadow-lg);
+      padding: 1rem;
+    }
+
+    .ui-lang-modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .ui-lang-modal-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .ui-lang-modal-close {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 1.25rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0.2rem 0.3rem;
+      border-radius: 8px;
+    }
+
+    .ui-lang-modal-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .lang-btn {
+      appearance: none;
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.5rem 0.75rem;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, color 0.15s, box-shadow 0.15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+    }
+
+    .lang-btn:hover {
+      border-color: rgba(26, 115, 232, 0.45);
+      background: #fafbfd;
+    }
+
+    .lang-btn:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    .lang-btn.is-active {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
     }
 
     .brand {
@@ -239,10 +364,21 @@
       }
 
       .site-nav-inner {
-        justify-content: flex-start;
+        flex-direction: column;
+        align-items: stretch;
         padding: 0.65rem 0;
       }
 
+      .site-nav-actions {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .ui-lang-nav-trigger {
+        flex: 1;
+        min-width: 0;
+      }
     }
 
     .lp-card {
@@ -431,7 +567,7 @@
 <body>
   <header class="site-nav">
     <div class="container site-nav-inner">
-      <a class="brand" href="landingpage.html" aria-label="BehördenKlar – Startseite">
+      <a class="brand" id="lpBrandLink" href="landingpage.html" aria-label="BehördenKlar – Startseite">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 70" width="200" height="70" aria-hidden="true" focusable="false">
           <defs>
             <style>
@@ -452,21 +588,65 @@
           <text x="58" y="54" class="logo-word-klar">Klar</text>
         </svg>
       </a>
+      <div class="site-nav-actions">
+        <a class="btn-cta" id="lpNavCta" href="index.html">Jetzt kostenlos testen</a>
+        <button type="button" class="ui-lang-nav-trigger" id="uiLangMobileTrigger" aria-haspopup="dialog" aria-controls="uiLangModal" aria-expanded="false">
+          <span id="uiLangMobileTriggerText">🌐 Sprache wählen</span>
+        </button>
+      </div>
     </div>
   </header>
+
+  <div class="ui-lang-modal" id="uiLangModal" aria-hidden="true">
+    <div class="ui-lang-modal-card" role="dialog" aria-modal="true" aria-labelledby="uiLangModalTitle">
+      <div class="ui-lang-modal-head">
+        <h3 class="ui-lang-modal-title" id="uiLangModalTitle">Sprache wählen</h3>
+        <button type="button" class="ui-lang-modal-close" id="uiLangModalClose" aria-label="Schließen">×</button>
+      </div>
+      <div class="ui-lang-modal-grid" id="uiLangModalGrid">
+        <button type="button" class="lang-btn ui-modal-lang-btn is-active" data-ui-lang="Deutsch"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Englisch"><span aria-hidden="true">🇬🇧</span> Englisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Türkisch"><span aria-hidden="true">🇹🇷</span> Türkisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Arabisch"><span aria-hidden="true">🇸🇦</span> Arabisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Russisch"><span aria-hidden="true">🇷🇺</span> Russisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Ukrainisch"><span aria-hidden="true">🇺🇦</span> Ukrainisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Rumänisch"><span aria-hidden="true">🇷🇴</span> Rumänisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Polnisch"><span aria-hidden="true">🇵🇱</span> Polnisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Dari"><span aria-hidden="true">🇦🇫</span> Dari</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Bulgarisch"><span aria-hidden="true">🇧🇬</span> Bulgarisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Georgisch"><span aria-hidden="true">🇬🇪</span> Georgisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Spanisch"><span aria-hidden="true">🇪🇸</span> Spanisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Portugiesisch"><span aria-hidden="true">🇵🇹</span> Portugiesisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Französisch"><span aria-hidden="true">🇫🇷</span> Französisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Italienisch"><span aria-hidden="true">🇮🇹</span> Italienisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Griechisch"><span aria-hidden="true">🇬🇷</span> Griechisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Albanisch"><span aria-hidden="true">🇦🇱</span> Albanisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Bosnisch"><span aria-hidden="true">🇧🇦</span> Bosnisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Serbisch"><span aria-hidden="true">🇷🇸</span> Serbisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Kroatisch"><span aria-hidden="true">🇭🇷</span> Kroatisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Chinesisch"><span aria-hidden="true">🇨🇳</span> Chinesisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Vietnamesisch"><span aria-hidden="true">🇻🇳</span> Vietnamesisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Persisch"><span aria-hidden="true">🇮🇷</span> Persisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Somali"><span aria-hidden="true">🇸🇴</span> Somali</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Tigrinya"><span aria-hidden="true">🇪🇷</span> Tigrinya</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Litauisch"><span aria-hidden="true">🇱🇹</span> Litauisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Arabisch (Ägyptisch)"><span aria-hidden="true">🇪🇬</span> Arabisch (Ägyptisch)</button>
+      </div>
+    </div>
+  </div>
 
   <main>
     <section class="lp-hero" aria-labelledby="hero-heading">
       <div class="container">
         <div class="lp-hero-inner">
           <h1 id="hero-heading">Behördenbriefe verstehen – in deiner Sprache</h1>
-          <p class="lp-hero-lead">
+          <p class="lp-hero-lead" id="lpHeroLead">
             Lade deinen Bescheid hoch oder füge den Text ein – BehördenKlar übersetzt, erklärt verständlich und zeigt dir, was du als Nächstes tun kannst. Ohne Juristendeutsch, dafür klar und strukturiert.
           </p>
           <div class="lp-hero-cta">
-            <a class="btn-cta btn-cta-lg" href="index.html">Jetzt kostenlos testen</a>
+            <a class="btn-cta btn-cta-lg" id="lpHeroCta" href="index.html">Jetzt kostenlos testen</a>
           </div>
-          <div class="lp-flags" aria-hidden="true">
+          <div class="lp-flags" id="lpFlagsWrap" aria-hidden="true">
             <span>🇸🇦</span><span>🇹🇷</span><span>🇷🇺</span><span>🇺🇦</span><span>🇷🇴</span><span>🇵🇱</span><span>🇦🇫</span><span>🇧🇬</span><span>🇬🇪</span><span>🇩🇪</span><span>🇬🇧</span><span>🇪🇸</span><span>🇵🇹</span><span>🇪🇬</span><span>🇱🇹</span><span>🇦🇱</span><span>🇧🇦</span><span>🇷🇸</span><span>🇭🇷</span><span>🇨🇳</span><span>🇻🇳</span><span>🇮🇹</span><span>🇬🇷</span><span>🇮🇷</span><span>🇸🇴</span><span>🇪🇷</span><span>🇫🇷</span>
           </div>
           <p class="lp-flags-caption">Viele Sprachen – eine klare Antwort</p>
@@ -477,47 +657,47 @@
     <section class="lp-section lp-section-alt" aria-labelledby="steps-heading">
       <div class="container">
         <h2 id="steps-heading">So funktioniert es</h2>
-        <p class="lp-section-intro">In vier einfachen Schritten vom Behördenbrief zur Orientierung – direkt im Browser.</p>
+        <p class="lp-section-intro" id="lpStepsIntro">In vier einfachen Schritten vom Behördenbrief zur Orientierung – direkt im Browser.</p>
         <div class="lp-grid-4">
           <article class="lp-card">
-            <span class="lp-step-num">Schritt 1</span>
+            <span class="lp-step-num" id="lpStep1Num">Schritt 1</span>
             <div class="lp-card-icon" aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
               </svg>
             </div>
-            <h3>Hochladen</h3>
-            <p>Text einfügen oder Foto/PDF hochladen – schnell und ohne komplizierte Software.</p>
+            <h3 id="lpStep1Title">Hochladen</h3>
+            <p id="lpStep1Body">Text einfügen oder Foto/PDF hochladen – schnell und ohne komplizierte Software.</p>
           </article>
           <article class="lp-card">
-            <span class="lp-step-num">Schritt 2</span>
+            <span class="lp-step-num" id="lpStep2Num">Schritt 2</span>
             <div class="lp-card-icon" aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
               </svg>
             </div>
-            <h3>Übersetzen</h3>
-            <p>Wähle deine Sprache – der Inhalt wird verständlich und vollständig wiedergegeben.</p>
+            <h3 id="lpStep2Title">Übersetzen</h3>
+            <p id="lpStep2Body">Wähle deine Sprache – der Inhalt wird verständlich und vollständig wiedergegeben.</p>
           </article>
           <article class="lp-card">
-            <span class="lp-step-num">Schritt 3</span>
+            <span class="lp-step-num" id="lpStep3Num">Schritt 3</span>
             <div class="lp-card-icon" aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
             </div>
-            <h3>Verstehen</h3>
-            <p>Kurze Erklärung, was der Brief für dich bedeutet – ohne Fachchinesisch.</p>
+            <h3 id="lpStep3Title">Verstehen</h3>
+            <p id="lpStep3Body">Kurze Erklärung, was der Brief für dich bedeutet – ohne Fachchinesisch.</p>
           </article>
           <article class="lp-card">
-            <span class="lp-step-num">Schritt 4</span>
+            <span class="lp-step-num" id="lpStep4Num">Schritt 4</span>
             <div class="lp-card-icon" aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
               </svg>
             </div>
-            <h3>Handeln</h3>
-            <p>Konkrete nächste Schritte und bei Bedarf eine Vorlage für deine Antwort an die Behörde.</p>
+            <h3 id="lpStep4Title">Handeln</h3>
+            <p id="lpStep4Body">Konkrete nächste Schritte und bei Bedarf eine Vorlage für deine Antwort an die Behörde.</p>
           </article>
         </div>
       </div>
@@ -526,7 +706,7 @@
     <section class="lp-section" aria-labelledby="features-heading">
       <div class="container">
         <h2 id="features-heading">Das können wir</h2>
-        <p class="lp-section-intro">Alles, was du brauchst, um Bescheide und Schreiben einzuordnen – auf einen Blick.</p>
+        <p class="lp-section-intro" id="lpFeaturesIntro">Alles, was du brauchst, um Bescheide und Schreiben einzuordnen – auf einen Blick.</p>
         <div class="lp-grid-4">
           <article class="lp-card">
             <div class="lp-card-icon" aria-hidden="true">
@@ -534,8 +714,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
               </svg>
             </div>
-            <h3>Übersetzung</h3>
-            <p>Der Behördentext in der Sprache, die du am besten verstehst – inklusive wichtiger Begriffe und Fristen.</p>
+            <h3 id="lpFeat1Title">Übersetzung</h3>
+            <p id="lpFeat1Body">Der Behördentext in der Sprache, die du am besten verstehst – inklusive wichtiger Begriffe und Fristen.</p>
           </article>
           <article class="lp-card">
             <div class="lp-card-icon" aria-hidden="true">
@@ -543,8 +723,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
             </div>
-            <h3>Erklärung</h3>
-            <p>Was steht im Brief, was ist die Kernaussage – in einfachen Worten zusammengefasst.</p>
+            <h3 id="lpFeat2Title">Erklärung</h3>
+            <p id="lpFeat2Body">Was steht im Brief, was ist die Kernaussage – in einfachen Worten zusammengefasst.</p>
           </article>
           <article class="lp-card">
             <div class="lp-card-icon" aria-hidden="true">
@@ -552,8 +732,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
               </svg>
             </div>
-            <h3>Schritte</h3>
-            <p>Nummerierte To-dos: Was ist zu erledigen, bis wann, und worauf du achten solltest.</p>
+            <h3 id="lpFeat3Title">Schritte</h3>
+            <p id="lpFeat3Body">Nummerierte To-dos: Was ist zu erledigen, bis wann, und worauf du achten solltest.</p>
           </article>
           <article class="lp-card">
             <div class="lp-card-icon" aria-hidden="true">
@@ -561,8 +741,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <h3>Briefkopf-Vorlage</h3>
-            <p>Wenn eine Antwort nötig ist: strukturierter Entwurf mit Platzhaltern für deine Daten und das Aktenzeichen.</p>
+            <h3 id="lpFeat4Title">Briefkopf-Vorlage</h3>
+            <p id="lpFeat4Body">Wenn eine Antwort nötig ist: strukturierter Entwurf mit Platzhaltern für deine Daten und das Aktenzeichen.</p>
           </article>
         </div>
       </div>
@@ -572,22 +752,23 @@
       <div class="container">
         <div class="lp-contact-card">
           <h2 id="contact-heading">Hast du Fragen oder brauchst du Hilfe?</h2>
-          <p>Wir sind für dich da – schreib uns einfach eine E-Mail.</p>
-          <a class="lp-contact-btn" href="mailto:info@behördenklar.de">✉️ Kontakt aufnehmen</a>
+          <p id="lpContactText">Wir sind für dich da – schreib uns einfach eine E-Mail.</p>
+          <a class="lp-contact-btn" id="lpContactBtn" href="mailto:info@behördenklar.de">✉️ Kontakt aufnehmen</a>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p class="site-footer-tagline"><span>BehördenKlar</span> – Dokumente verstehen, einfach gemacht</p>
+    <p class="site-footer-tagline" id="lpFooterTagline"><span>BehördenKlar</span> – Dokumente verstehen, einfach gemacht</p>
     <nav class="footer-links" aria-label="Rechtliches">
-      <a href="impressum.html">Impressum</a>
-      <a href="agb.html">AGB</a>
-      <a href="datenschutz.html">Datenschutz</a>
+      <a id="lpNavImpressum" href="impressum.html">Impressum</a>
+      <a id="lpNavAgb" href="agb.html">AGB</a>
+      <a id="lpNavDatenschutz" href="datenschutz.html">Datenschutz</a>
     </nav>
-    <p class="footer-owner">Inhaber: Yusuf Coban · <a href="mailto:info@behördenklar.de">info@behördenklar.de</a></p>
+    <p class="footer-owner"><span id="lpFooterOwnerLabel">Inhaber: Yusuf Coban</span> · <a href="mailto:info@behördenklar.de">info@behördenklar.de</a></p>
   </footer>
+  <script src="landing-i18n-runtime.js"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function () {
