@@ -1375,6 +1375,12 @@
   </div>
 
   <script>
+    try {
+      var _initLang = localStorage.getItem("behordenklar-ui-lang");
+    } catch(e) {
+      var _initLang = null;
+    }
+
     (function () {
       // Lokaler server.py und Vercel Serverless: POST /api/claude. Bei file:// auf server.py (Port 8765) zeigen.
       const API_URL = (function () {
@@ -2800,15 +2806,8 @@
         }
       });
 
-      var _storedLang = (function () {
-        try {
-          return localStorage.getItem("behordenklar-ui-lang");
-        } catch (e) {
-          return null;
-        }
-      })();
-      if (_storedLang && uiTranslations[_storedLang]) {
-        applyUiLanguage(_storedLang);
+      if (_initLang && uiTranslations[_initLang]) {
+        applyUiLanguage(_initLang);
       } else {
         applyUiLanguage("Deutsch");
       }
