@@ -337,8 +337,57 @@
       outline-offset: 3px;
     }
 
-    .preview {
+    .preview-wrap {
+      position: relative;
       margin-top: 1rem;
+    }
+
+    .preview-wrap[hidden] {
+      display: none !important;
+    }
+
+    .preview-remove-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      z-index: 4;
+      width: 2.35rem;
+      height: 2.35rem;
+      padding: 0;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      background: #dc2626;
+      color: #fff;
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
+      transition: transform 0.12s, filter 0.15s, box-shadow 0.15s;
+    }
+
+    .preview-remove-btn:hover {
+      filter: brightness(1.08);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    .preview-remove-btn:active {
+      transform: scale(0.96);
+    }
+
+    .preview-remove-btn:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+
+    .preview-remove-btn[hidden] {
+      display: none !important;
+    }
+
+    .preview {
       max-height: 200px;
       border-radius: var(--radius-sm);
       overflow: hidden;
@@ -909,7 +958,10 @@
             <span aria-hidden="true">📷</span> <span id="takePhotoLabel">Foto aufnehmen</span>
           </button>
           <p class="hint" id="uploadHint">Max. ca. 32&nbsp;MB. Passwortgeschützte PDFs werden nicht unterstützt.</p>
-          <div id="preview" class="preview" hidden></div>
+          <div class="preview-wrap" id="previewWrap" hidden>
+            <button type="button" class="preview-remove-btn" id="previewRemoveBtn" hidden aria-label="Foto entfernen">×</button>
+            <div id="preview" class="preview"></div>
+          </div>
         </div>
 
         <div id="panelText" class="panel">
@@ -1167,7 +1219,9 @@
       const letterText = $("letterText");
       const letterFile = $("letterFile");
       const btnTakePhoto = $("btnTakePhoto");
+      const previewWrap = $("previewWrap");
       const preview = $("preview");
+      const previewRemoveBtn = $("previewRemoveBtn");
       const dropZone = $("dropZone");
       const dropFileName = $("dropFileName");
       const btnBack = $("btnBack");
@@ -1203,8 +1257,8 @@
       const resultsHeading = $("resultsHeading");
 
       const uiTranslations = {
-        "Deutsch": { uiLangLabel: "🌐 Sprache der Seite wählen:", targetLangLabel: "Zielsprache für die Übersetzung des Dokuments:", modeFile: "Foto oder PDF", modeText: "Text eingeben", uploadLabel: "Datei hochladen", dropTitle: "Datei hierher ziehen", dropHint: "oder klicken und Bild oder PDF wählen", takePhoto: "Foto aufnehmen", uploadHint: "Max. ca. 32 MB. Passwortgeschützte PDFs werden nicht unterstützt.", textInputLabel: "Behördenbrief (Deutsch)", textPlaceholder: "Brief hier einfügen oder abtippen…", analyzeText: "Brief analysieren", apiHeading: "API-Schlüssel", apiKeyLabel: "Anthropic API Key", apiHint: "Der Schlüssel wird nur in Ihrem Browser verwendet und nicht gespeichert.", resultsHeading: "Ergebnis", toggleShow: "Anzeigen", toggleHide: "Verbergen" },
-        "Englisch": { uiLangLabel: "🌐 Choose page language:", targetLangLabel: "Target language for document translation:", modeFile: "Photo or PDF", modeText: "Enter text", uploadLabel: "Upload document", dropTitle: "Drop file here", dropHint: "or click and choose image or PDF", takePhoto: "Take photo", uploadHint: "Max. about 32 MB. Password-protected PDFs are not supported.", textInputLabel: "Official letter (German)", textPlaceholder: "Paste or type the letter here…", analyzeText: "Analyze letter", apiHeading: "API key", apiKeyLabel: "Anthropic API Key", apiHint: "The key is only used in your browser and is not stored.", resultsHeading: "Result", toggleShow: "Show", toggleHide: "Hide" },
+        "Deutsch": { uiLangLabel: "🌐 Sprache der Seite wählen:", targetLangLabel: "Zielsprache für die Übersetzung des Dokuments:", modeFile: "Foto oder PDF", modeText: "Text eingeben", uploadLabel: "Datei hochladen", dropTitle: "Datei hierher ziehen", dropHint: "oder klicken und Bild oder PDF wählen", takePhoto: "Foto aufnehmen", uploadHint: "Max. ca. 32 MB. Passwortgeschützte PDFs werden nicht unterstützt.", textInputLabel: "Behördenbrief (Deutsch)", textPlaceholder: "Brief hier einfügen oder abtippen…", analyzeText: "Brief analysieren", apiHeading: "API-Schlüssel", apiKeyLabel: "Anthropic API Key", apiHint: "Der Schlüssel wird nur in Ihrem Browser verwendet und nicht gespeichert.", resultsHeading: "Ergebnis", toggleShow: "Anzeigen", toggleHide: "Verbergen", removePhoto: "Foto entfernen" },
+        "Englisch": { uiLangLabel: "🌐 Choose page language:", targetLangLabel: "Target language for document translation:", modeFile: "Photo or PDF", modeText: "Enter text", uploadLabel: "Upload document", dropTitle: "Drop file here", dropHint: "or click and choose image or PDF", takePhoto: "Take photo", uploadHint: "Max. about 32 MB. Password-protected PDFs are not supported.", textInputLabel: "Official letter (German)", textPlaceholder: "Paste or type the letter here…", analyzeText: "Analyze letter", apiHeading: "API key", apiKeyLabel: "Anthropic API Key", apiHint: "The key is only used in your browser and is not stored.", resultsHeading: "Result", toggleShow: "Show", toggleHide: "Hide", removePhoto: "Remove photo" },
         "Türkisch": { uiLangLabel: "🌐 Sayfa dilini seçin:", targetLangLabel: "Belge çevirisi için hedef dil:", modeFile: "Fotoğraf veya PDF", modeText: "Metin girin", uploadLabel: "Belge yükle", dropTitle: "Dosyayı buraya bırakın", dropHint: "veya tıklayıp görsel ya da PDF seçin", takePhoto: "Fotoğraf çek", uploadHint: "Maks. yaklaşık 32 MB. Şifreli PDF desteklenmez.", textInputLabel: "Resmi mektup (Almanca)", textPlaceholder: "Mektubu buraya yapıştırın veya yazın…", analyzeText: "Mektubu analiz et", apiHeading: "API anahtarı", apiKeyLabel: "Anthropic API Key", apiHint: "Anahtar yalnızca tarayıcınızda kullanılır ve kaydedilmez.", resultsHeading: "Sonuç" },
         "Arabisch": { uiLangLabel: "🌐 اختر لغة الصفحة:", targetLangLabel: "لغة ترجمة المستند:", modeFile: "صورة أو PDF", modeText: "إدخال نص", uploadLabel: "رفع المستند", dropTitle: "اسحب الملف هنا", dropHint: "أو انقر واختر صورة أو PDF", takePhoto: "التقاط صورة", uploadHint: "الحد الأقصى حوالي 32 ميغابايت. ملفات PDF المحمية غير مدعومة.", textInputLabel: "الخطاب الرسمي (بالألمانية)", textPlaceholder: "ألصق الرسالة أو اكتبها هنا…", analyzeText: "تحليل الخطاب", apiHeading: "مفتاح API", apiKeyLabel: "Anthropic API Key", apiHint: "يُستخدم المفتاح في متصفحك فقط ولا يتم حفظه.", resultsHeading: "النتيجة" },
         "Russisch": { uiLangLabel: "🌐 Выберите язык страницы:", targetLangLabel: "Язык перевода документа:", modeFile: "Фото или PDF", modeText: "Ввести текст", uploadLabel: "Загрузить документ", dropTitle: "Перетащите файл сюда", dropHint: "или нажмите и выберите изображение или PDF", takePhoto: "Сделать фото", uploadHint: "Макс. около 32 МБ. Защищенные PDF не поддерживаются.", textInputLabel: "Официальное письмо (нем.)", textPlaceholder: "Вставьте или введите письмо здесь…", analyzeText: "Анализировать письмо", apiHeading: "API-ключ", apiKeyLabel: "Anthropic API Key", apiHint: "Ключ используется только в браузере и не сохраняется.", resultsHeading: "Результат" },
@@ -1288,6 +1342,7 @@
         dropHint.textContent = t.dropHint;
         takePhotoLabel.textContent = t.takePhoto;
         uploadHint.textContent = t.uploadHint;
+        previewRemoveBtn.setAttribute("aria-label", t.removePhoto || "Remove photo");
         textInputLabel.textContent = t.textInputLabel;
         letterText.placeholder = t.textPlaceholder;
         analyzeText.textContent = t.analyzeText;
@@ -1632,7 +1687,8 @@
       }
 
       letterFile.addEventListener("change", function () {
-        preview.hidden = true;
+        previewWrap.hidden = true;
+        previewRemoveBtn.hidden = true;
         preview.innerHTML = "";
         var f = letterFile.files[0];
         if (!f) {
@@ -1652,8 +1708,15 @@
             URL.revokeObjectURL(url);
           };
           preview.appendChild(img);
-          preview.hidden = false;
+          previewWrap.hidden = false;
+          previewRemoveBtn.hidden = false;
         }
+      });
+
+      previewRemoveBtn.addEventListener("click", function () {
+        letterFile.value = "";
+        letterFile.dispatchEvent(new Event("change", { bubbles: true }));
+        clearError();
       });
 
       function buildInstructionPrompt(langLabel) {
