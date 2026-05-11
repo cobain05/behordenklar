@@ -2800,7 +2800,18 @@
         }
       });
 
-      applyUiLanguage(getUiLang());
+      var _storedLang = (function () {
+        try {
+          return localStorage.getItem("behordenklar-ui-lang");
+        } catch (e) {
+          return null;
+        }
+      })();
+      if (_storedLang && uiTranslations[_storedLang]) {
+        applyUiLanguage(_storedLang);
+      } else {
+        applyUiLanguage("Deutsch");
+      }
 
       window.addEventListener("resize", function () {
         updateDropZoneTextsForViewport(getUiLang());
