@@ -1062,6 +1062,7 @@
               <p class="drop-file-name" id="dropFileName" hidden></p>
             </div>
           </div>
+          <input type="file" id="letterCamera" accept="image/*" capture="environment" hidden aria-hidden="true" tabindex="-1" />
           <button type="button" class="btn-take-photo" id="btnTakePhoto" aria-label="Kamera oder Galerie öffnen">
             <span id="takePhotoLabel">📷 Kamera öffnen</span>
           </button>
@@ -1331,6 +1332,7 @@
       const results = $("results");
       const letterText = $("letterText");
       const letterFile = $("letterFile");
+      const letterCamera = $("letterCamera");
       const btnTakePhoto = $("btnTakePhoto");
       const previewStripWrap = $("previewStripWrap");
       const previewStrip = $("previewStrip");
@@ -1983,7 +1985,7 @@
       });
 
       btnTakePhoto.addEventListener("click", function () {
-        letterFile.click();
+        letterCamera.click();
       });
 
       btnBack.addEventListener("click", function () {
@@ -2268,9 +2270,9 @@
         }
       }
 
-      letterFile.addEventListener("change", function () {
-        var incoming = Array.from(letterFile.files || []);
-        letterFile.value = "";
+      function handleLetterFileInputChange(inputEl) {
+        var incoming = Array.from(inputEl.files || []);
+        inputEl.value = "";
         if (!incoming.length) {
           return;
         }
@@ -2278,6 +2280,14 @@
         syncLetterInputFromStaged();
         renderLetterFilePreviews();
         updateDropFileNameSummary();
+      }
+
+      letterFile.addEventListener("change", function () {
+        handleLetterFileInputChange(letterFile);
+      });
+
+      letterCamera.addEventListener("change", function () {
+        handleLetterFileInputChange(letterCamera);
       });
 
       function buildInstructionPrompt(langLabel) {
