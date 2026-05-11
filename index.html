@@ -858,10 +858,6 @@
         justify-content: center;
       }
 
-      .lang-section-ui {
-        display: none !important;
-      }
-
       .hero-card {
         display: flex;
         flex-direction: column;
@@ -890,14 +886,6 @@
 
       .hero-card .btn-analyze {
         order: 3;
-      }
-
-      #uiLangGrid {
-        display: none;
-      }
-
-      #uiLangLabel {
-        display: none;
       }
 
       #targetLangGrid {
@@ -1157,39 +1145,6 @@
           <textarea id="letterText" class="textarea-hero" placeholder="Brief hier einfügen oder abtippen…"></textarea>
         </div>
 
-        <div class="lang-section lang-section-ui">
-          <span class="field-label" id="uiLangLabel">🌐 Sprache der Seite wählen:</span>
-          <div class="lang-grid" id="uiLangGrid" role="group" aria-label="Sprache der Seite wählen">
-            <button type="button" class="lang-btn ui-lang-btn is-active" data-ui-lang="Deutsch"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Englisch"><span aria-hidden="true">🇬🇧</span> Englisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Türkisch"><span aria-hidden="true">🇹🇷</span> Türkisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Arabisch"><span aria-hidden="true">🇸🇦</span> Arabisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Russisch"><span aria-hidden="true">🇷🇺</span> Russisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Ukrainisch"><span aria-hidden="true">🇺🇦</span> Ukrainisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Rumänisch"><span aria-hidden="true">🇷🇴</span> Rumänisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Polnisch"><span aria-hidden="true">🇵🇱</span> Polnisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Dari"><span aria-hidden="true">🇦🇫</span> Dari</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Bulgarisch"><span aria-hidden="true">🇧🇬</span> Bulgarisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Georgisch"><span aria-hidden="true">🇬🇪</span> Georgisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Spanisch"><span aria-hidden="true">🇪🇸</span> Spanisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Portugiesisch"><span aria-hidden="true">🇵🇹</span> Portugiesisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Französisch"><span aria-hidden="true">🇫🇷</span> Französisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Italienisch"><span aria-hidden="true">🇮🇹</span> Italienisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Griechisch"><span aria-hidden="true">🇬🇷</span> Griechisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Albanisch"><span aria-hidden="true">🇦🇱</span> Albanisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Bosnisch"><span aria-hidden="true">🇧🇦</span> Bosnisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Serbisch"><span aria-hidden="true">🇷🇸</span> Serbisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Kroatisch"><span aria-hidden="true">🇭🇷</span> Kroatisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Chinesisch"><span aria-hidden="true">🇨🇳</span> Chinesisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Vietnamesisch"><span aria-hidden="true">🇻🇳</span> Vietnamesisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Persisch"><span aria-hidden="true">🇮🇷</span> Persisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Somali"><span aria-hidden="true">🇸🇴</span> Somali</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Tigrinya"><span aria-hidden="true">🇪🇷</span> Tigrinya</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Litauisch"><span aria-hidden="true">🇱🇹</span> Litauisch</button>
-            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Arabisch (Ägyptisch)"><span aria-hidden="true">🇪🇬</span> Arabisch (Ägyptisch)</button>
-          </div>
-        </div>
-
         <div class="ui-lang-modal" id="uiLangModal" aria-hidden="true">
           <div class="ui-lang-modal-card" role="dialog" aria-modal="true" aria-labelledby="uiLangModalTitle">
             <div class="ui-lang-modal-head">
@@ -1430,7 +1385,6 @@
 
       let loadingIntervalId = null;
       let loadingStepIndex = 0;
-      const uiLangLabel = $("uiLangLabel");
       const targetLangLabel = $("targetLangLabel");
       const modeFileLabel = $("modeFileLabel");
       const modeTextLabel = $("modeTextLabel");
@@ -1518,7 +1472,7 @@
         try {
           var savedUi = localStorage.getItem("behordenklar-ui-lang");
           if (savedUi && uiTranslations[savedUi]) {
-            document.querySelectorAll(".ui-lang-btn, .ui-modal-lang-btn").forEach(function (b) {
+            document.querySelectorAll(".ui-modal-lang-btn").forEach(function (b) {
               b.classList.toggle("is-active", b.getAttribute("data-ui-lang") === savedUi);
             });
           }
@@ -1537,7 +1491,7 @@
             return savedUi;
           }
         } catch (e) {}
-        var active = document.querySelector(".ui-lang-btn.is-active");
+        var active = document.querySelector(".ui-modal-lang-btn.is-active");
         return active ? active.getAttribute("data-ui-lang") : "Deutsch";
       }
 
@@ -1577,7 +1531,6 @@
         if (footerDisclaimer) {
           footerDisclaimer.textContent = t.footerDisclaimer || "";
         }
-        uiLangLabel.textContent = t.uiLangLabel;
         targetLangLabel.textContent = t.targetLangLabel;
         targetLangModalTitle.textContent = (t.targetLangLabel || "").replace(/:\s*$/, "").trim();
         modeFileLabel.textContent = t.modeFile;
@@ -1837,7 +1790,6 @@
           btn.appendChild(document.createTextNode(" "));
           btn.appendChild(document.createTextNode(name));
         }
-        document.querySelectorAll(".ui-lang-btn").forEach(setOne);
         document.querySelectorAll(".ui-modal-lang-btn").forEach(setOne);
       }
 
@@ -1865,12 +1817,12 @@
 
       function syncHeroFlagsEmojisOrder() {
         var wrap = document.querySelector(".hero-flags-emojis");
-        var grid = $("uiLangGrid");
+        var grid = $("uiLangModalGrid");
         if (!wrap || !grid) {
           return;
         }
         wrap.replaceChildren();
-        grid.querySelectorAll(".ui-lang-btn").forEach(function (btn) {
+        grid.querySelectorAll(".ui-modal-lang-btn").forEach(function (btn) {
           var langKey = btn.getAttribute("data-ui-lang");
           var span = document.createElement("span");
           span.className = "hero-flag";
@@ -1883,7 +1835,6 @@
       function refreshLanguageGridsAfterUiLangChange(uiLangKey) {
         setUiLangButtonLabels(uiLangKey);
         setTargetLangButtonLabels(uiLangKey);
-        sortLangButtonContainer($("uiLangGrid"), "button.ui-lang-btn", uiLangKey);
         sortLangButtonContainer($("uiLangModalGrid"), "button.ui-modal-lang-btn", uiLangKey);
         sortLangButtonContainer($("targetLangGrid"), "button.target-lang-btn", uiLangKey);
         sortLangButtonContainer($("targetLangModalGrid"), "button.target-modal-lang-btn", uiLangKey);
@@ -1962,9 +1913,6 @@
       }
 
       function syncActiveUiLangButtons(lang) {
-        document.querySelectorAll(".ui-lang-btn").forEach(function (b) {
-          b.classList.toggle("is-active", b.getAttribute("data-ui-lang") === lang);
-        });
         document.querySelectorAll(".ui-modal-lang-btn").forEach(function (b) {
           b.classList.toggle("is-active", b.getAttribute("data-ui-lang") === lang);
         });
@@ -2031,13 +1979,6 @@
         if (e.target === targetLangModal) {
           closeTargetLangModal();
         }
-      });
-
-      document.querySelectorAll(".ui-lang-btn").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          applyUiLanguage(btn.getAttribute("data-ui-lang"));
-          clearError();
-        });
       });
 
       document.querySelectorAll(".ui-modal-lang-btn").forEach(function (btn) {
