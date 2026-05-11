@@ -1729,6 +1729,70 @@
         });
       }
 
+      var IMAGE_API_MAX_SIDE = 1500;
+      var IMAGE_API_JPEG_QUALITY = 0.7;
+
+      function loadImageFromFile(file) {
+        return new Promise(function (resolve, reject) {
+          var url = URL.createObjectURL(file);
+          var img = new Image();
+          img.onload = function () {
+            URL.revokeObjectURL(url);
+            resolve(img);
+          };
+          img.onerror = function () {
+            URL.revokeObjectURL(url);
+            reject(new Error("Bild konnte nicht geladen werden."));
+          };
+          img.src = url;
+        });
+      }
+
+      function compressImageToJpegBase64(file, maxSide, quality) {
+        maxSide = maxSide == null ? IMAGE_API_MAX_SIDE : maxSide;
+        quality = quality == null ? IMAGE_API_JPEG_QUALITY : quality;
+        return loadImageFromFile(file).then(function (img) {
+          var w = img.naturalWidth || img.width;
+          var h = img.naturalHeight || img.height;
+          if (!w || !h) {
+            throw new Error("Ungültige Bildabmessungen.");
+          }
+          var scale = Math.min(1, maxSide / Math.max(w, h));
+          var nw = Math.max(1, Math.round(w * scale));
+          var nh = Math.max(1, Math.round(h * scale));
+          var canvas = document.createElement("canvas");
+          canvas.width = nw;
+          canvas.height = nh;
+          var ctx = canvas.getContext("2d");
+          if (!ctx) {
+            throw new Error("Canvas nicht verfügbar.");
+          }
+          ctx.drawImage(img, 0, 0, nw, nh);
+          var dataUrl = canvas.toDataURL("image/jpeg", quality);
+          var comma = dataUrl.indexOf(",");
+          if (comma === -1) {
+            throw new Error("JPEG-Kodierung fehlgeschlagen.");
+          }
+          return {
+            base64: dataUrl.slice(comma + 1),
+            mediaType: "image/jpeg",
+          };
+        });
+      }
+
+      function encodeAttachmentForApi(file) {
+        var mime = file.type || guessMimeFromName(file.name);
+        if (mime === "application/pdf") {
+          return fileToBase64(file);
+        }
+        if (mime.indexOf("image/") === 0) {
+          return compressImageToJpegBase64(file, IMAGE_API_MAX_SIDE, IMAGE_API_JPEG_QUALITY).catch(function () {
+            return fileToBase64(file);
+          });
+        }
+        return fileToBase64(file);
+      }
+
       function guessMimeFromName(name) {
         var lower = name.toLowerCase();
         if (lower.endsWith(".png")) return "image/png";
@@ -2141,7 +2205,7 @@
             for (fj = 0; fj < filesToSend.length; fj++) {
               var fEnc = filesToSend[fj];
               var mimeEnc = fEnc.type || guessMimeFromName(fEnc.name);
-              var encoded = await fileToBase64(fEnc);
+              var encoded = await encodeAttachmentForApi(fEnc);
               if (mimeEnc === "application/pdf") {
                 content.push({
                   type: "document",
@@ -2156,7 +2220,7 @@
                   type: "image",
                   source: {
                     type: "base64",
-                    media_type: mimeEnc,
+                    media_type: encoded.mediaType || "image/jpeg",
                     data: encoded.base64,
                   },
                 });
