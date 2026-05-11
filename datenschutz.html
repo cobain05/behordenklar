@@ -256,7 +256,7 @@
     }
   </style>
 </head>
-<body>
+<body data-site-shell="legal" data-legal-page="datenschutz">
   <header class="site-nav">
     <div class="container site-nav-inner">
       <a class="brand" href="landingpage.html" aria-label="BehördenKlar – Zur Startseite">
@@ -280,15 +280,15 @@
           <text x="58" y="54" class="logo-word-klar">Klar</text>
         </svg>
       </a>
-      <a class="btn-cta" href="index.html">Jetzt kostenlos testen</a>
+      <a class="btn-cta" id="legalNavCta" href="index.html">Jetzt kostenlos testen</a>
     </div>
   </header>
 
   <main class="legal-main" id="main">
     <div class="container">
       <article class="legal-inner">
-        <h2>Datenschutzerklärung</h2>
-        <p class="legal-stand">BehördenKlar – Stand: Mai 2026</p>
+        <h2 id="legalMainHeading">Datenschutzerklärung</h2>
+        <p class="legal-stand"><span>BehördenKlar</span> – <span id="legalAsOf">Stand: Mai 2026</span></p>
 
         <section class="legal-section" aria-labelledby="ds-p1">
           <h3 id="ds-p1">§ 1 Verantwortlicher</h3>
@@ -357,13 +357,14 @@
   </main>
 
   <footer class="site-footer">
-    <p class="site-footer-tagline"><span>BehördenKlar</span> – Dokumente verstehen, einfach gemacht</p>
+    <p class="site-footer-tagline" id="legalFooterTagline"><span>BehördenKlar</span> – Dokumente verstehen, einfach gemacht</p>
     <nav class="footer-links" aria-label="Rechtliches">
-      <a href="impressum.html">Impressum</a>
-      <a href="agb.html">AGB</a>
-      <a href="datenschutz.html" aria-current="page">Datenschutz</a>
+      <a id="legalNavImpressum" href="impressum.html">Impressum</a>
+      <a id="legalNavAgb" href="agb.html">AGB</a>
+      <a id="legalNavDatenschutz" href="datenschutz.html" aria-current="page">Datenschutz</a>
     </nav>
-    <p class="footer-owner">Inhaber: Yusuf Coban · <a href="mailto:info@behördenklar.de">info@behördenklar.de</a></p>
+    <p class="footer-owner"><span id="legalFooterOwnerLabel">Inhaber: Yusuf Coban</span> · <a href="mailto:info@behördenklar.de">info@behördenklar.de</a></p>
   </footer>
+  <script src="landing-i18n-runtime.js"></script>
 </body>
 </html>

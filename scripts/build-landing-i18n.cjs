@@ -74,6 +74,10 @@ const LP_EN = {
   lpNavAgb: "Terms",
   lpNavDatenschutz: "Privacy",
   lpFooterOwnerLabel: "Owner: Yusuf Coban",
+  lpLegalImprintHeading: "Imprint",
+  lpLegalAgbHeading: "General Terms and Conditions (GTC)",
+  lpLegalPrivacyHeading: "Privacy policy",
+  lpLegalAsOf: "As of: May 2026",
 };
 
 const LP_DE = {
@@ -115,6 +119,10 @@ const LP_DE = {
   lpNavAgb: "AGB",
   lpNavDatenschutz: "Datenschutz",
   lpFooterOwnerLabel: "Inhaber: Yusuf Coban",
+  lpLegalImprintHeading: "Impressum",
+  lpLegalAgbHeading: "Allgemeine Geschäftsbedingungen (AGB)",
+  lpLegalPrivacyHeading: "Datenschutzerklärung",
+  lpLegalAsOf: "Stand: Mai 2026",
 };
 
 const LP_TR = {
@@ -156,6 +164,10 @@ const LP_TR = {
   lpNavAgb: "Şartlar",
   lpNavDatenschutz: "Gizlilik",
   lpFooterOwnerLabel: "İşleten: Yusuf Coban",
+  lpLegalImprintHeading: "Künye",
+  lpLegalAgbHeading: "Genel Kullanım Koşulları (GKK)",
+  lpLegalPrivacyHeading: "Gizlilik bildirimi",
+  lpLegalAsOf: "Mayıs 2026 itibarıyla",
 };
 
 const LP_AR = {
@@ -197,6 +209,10 @@ const LP_AR = {
   lpNavAgb: "الشروط",
   lpNavDatenschutz: "الخصوصية",
   lpFooterOwnerLabel: "المُدير: Yusuf Coban",
+  lpLegalImprintHeading: "بيانات النشر",
+  lpLegalAgbHeading: "الشروط العامة للاستخدام",
+  lpLegalPrivacyHeading: "سياسة الخصوصية",
+  lpLegalAsOf: "اعتبارًا من مايو 2026",
 };
 
 const LP_RU = {
@@ -238,6 +254,10 @@ const LP_RU = {
   lpNavAgb: "Условия",
   lpNavDatenschutz: "Конфиденциальность",
   lpFooterOwnerLabel: "Владелец: Yusuf Coban",
+  lpLegalImprintHeading: "Выходные данные",
+  lpLegalAgbHeading: "Общие условия использования",
+  lpLegalPrivacyHeading: "Политика конфиденциальности",
+  lpLegalAsOf: "По состоянию на май 2026 г.",
 };
 
 const LANG_ORDER = [
@@ -277,12 +297,26 @@ const LP_OVERRIDES = {
   Arabisch: LP_AR,
   Russisch: LP_RU,
 };
+let landingLpExtras = {};
+try {
+  landingLpExtras = require(path.join(__dirname, "landing-lp-extra.cjs"))(LP_EN);
+} catch (e) {
+  console.warn("landing-lp-extra.cjs:", e.message);
+}
+Object.assign(LP_OVERRIDES, landingLpExtras);
 
 const bootSnippet = `
 (function () {
   "use strict";
 
   function $(id) { return document.getElementById(id); }
+
+  function tx(id, v) {
+    var el = $(id);
+    if (el) el.textContent = v;
+  }
+
+  var legalShell = document.body && document.body.getAttribute("data-site-shell") === "legal";
 
   var uiLangModal = $("uiLangModal");
   var uiLangModalClose = $("uiLangModalClose");
@@ -408,6 +442,7 @@ const bootSnippet = `
   }
 
   function updateUiLangTrigger(lang) {
+    if (!uiLangMobileTriggerText) return;
     var t = uiTranslations[lang] || uiTranslations["Deutsch"];
     if (t.lpUiLangTrigger) {
       uiLangMobileTriggerText.textContent = t.lpUiLangTrigger;
@@ -428,6 +463,42 @@ const bootSnippet = `
     return m ? m.getAttribute("data-ui-lang") : "Deutsch";
   }
 
+  function applyLegalShell(lang) {
+    var t = uiTranslations[lang] || uiTranslations["Deutsch"];
+    var iso = LOCALE_FOR_UI_LANG[lang] || "de";
+    document.documentElement.setAttribute("lang", iso.split("-")[0]);
+    var brand = document.querySelector(".brand");
+    if (brand) {
+      brand.setAttribute("aria-label", t.lpBrandAria || "BehördenKlar");
+    }
+    tx("legalNavCta", t.lpNavCta);
+    var ft = $("legalFooterTagline");
+    if (ft) ft.innerHTML = t.footerTagline || "";
+    tx("legalNavImpressum", t.lpNavImpressum);
+    tx("legalNavAgb", t.lpNavAgb);
+    tx("legalNavDatenschutz", t.lpNavDatenschutz);
+    tx("legalFooterOwnerLabel", t.lpFooterOwnerLabel);
+    var page = document.body.getAttribute("data-legal-page");
+    var mh = $("legalMainHeading");
+    if (mh) {
+      if (page === "impressum") mh.textContent = t.lpLegalImprintHeading || t.lpNavImpressum;
+      else if (page === "agb") mh.textContent = t.lpLegalAgbHeading || t.lpNavAgb;
+      else if (page === "datenschutz") mh.textContent = t.lpLegalPrivacyHeading || t.lpNavDatenschutz;
+    }
+    tx("legalAsOf", t.lpLegalAsOf || "");
+    var titles = {
+      impressum: t.lpLegalImprintHeading || t.lpNavImpressum,
+      agb: t.lpLegalAgbHeading || t.lpNavAgb,
+      datenschutz: t.lpLegalPrivacyHeading || t.lpNavDatenschutz
+    };
+    if (page && titles[page]) {
+      document.title = titles[page] + " – BehördenKlar";
+    }
+    try {
+      localStorage.setItem("behordenklar-ui-lang", lang);
+    } catch (e) {}
+  }
+
   function applyLandingLanguage(lang) {
     var t = uiTranslations[lang] || uiTranslations["Deutsch"];
     var iso = LOCALE_FOR_UI_LANG[lang] || "de";
@@ -446,44 +517,46 @@ const bootSnippet = `
       brand.setAttribute("aria-label", t.lpBrandAria || "BehördenKlar");
     }
 
+    var navCta = $("lpNavCta");
+    if (navCta) navCta.textContent = t.lpNavCta;
     var heroCta = $("lpHeroCta");
     if (heroCta) heroCta.textContent = t.lpNavCta;
-    $("hero-heading").textContent = t.lpHeroTitle;
-    $("lpHeroLead").textContent = t.lpHeroLead;
-    $("lpFlagsCaption").textContent = t.lpFlagsCaption;
-    $("steps-heading").textContent = t.lpStepsHeading;
-    $("lpStepsIntro").textContent = t.lpStepsIntro;
-    $("lpStep1Num").textContent = t.lpStep1Num;
-    $("lpStep1Title").textContent = t.lpStep1Title;
-    $("lpStep1Body").textContent = t.lpStep1Body;
-    $("lpStep2Num").textContent = t.lpStep2Num;
-    $("lpStep2Title").textContent = t.lpStep2Title;
-    $("lpStep2Body").textContent = t.lpStep2Body;
-    $("lpStep3Num").textContent = t.lpStep3Num;
-    $("lpStep3Title").textContent = t.lpStep3Title;
-    $("lpStep3Body").textContent = t.lpStep3Body;
-    $("lpStep4Num").textContent = t.lpStep4Num;
-    $("lpStep4Title").textContent = t.lpStep4Title;
-    $("lpStep4Body").textContent = t.lpStep4Body;
-    $("features-heading").textContent = t.lpFeaturesHeading;
-    $("lpFeaturesIntro").textContent = t.lpFeaturesIntro;
-    $("lpFeat1Title").textContent = t.lpFeat1Title;
-    $("lpFeat1Body").textContent = t.lpFeat1Body;
-    $("lpFeat2Title").textContent = t.lpFeat2Title;
-    $("lpFeat2Body").textContent = t.lpFeat2Body;
-    $("lpFeat3Title").textContent = t.lpFeat3Title;
-    $("lpFeat3Body").textContent = t.lpFeat3Body;
-    $("lpFeat4Title").textContent = t.lpFeat4Title;
-    $("lpFeat4Body").textContent = t.lpFeat4Body;
-    $("contact-heading").textContent = t.lpContactHeading;
-    $("lpContactText").textContent = t.lpContactText;
-    $("lpContactBtn").textContent = t.lpContactBtn;
+    tx("hero-heading", t.lpHeroTitle);
+    tx("lpHeroLead", t.lpHeroLead);
+    tx("lpFlagsCaption", t.lpFlagsCaption);
+    tx("steps-heading", t.lpStepsHeading);
+    tx("lpStepsIntro", t.lpStepsIntro);
+    tx("lpStep1Num", t.lpStep1Num);
+    tx("lpStep1Title", t.lpStep1Title);
+    tx("lpStep1Body", t.lpStep1Body);
+    tx("lpStep2Num", t.lpStep2Num);
+    tx("lpStep2Title", t.lpStep2Title);
+    tx("lpStep2Body", t.lpStep2Body);
+    tx("lpStep3Num", t.lpStep3Num);
+    tx("lpStep3Title", t.lpStep3Title);
+    tx("lpStep3Body", t.lpStep3Body);
+    tx("lpStep4Num", t.lpStep4Num);
+    tx("lpStep4Title", t.lpStep4Title);
+    tx("lpStep4Body", t.lpStep4Body);
+    tx("features-heading", t.lpFeaturesHeading);
+    tx("lpFeaturesIntro", t.lpFeaturesIntro);
+    tx("lpFeat1Title", t.lpFeat1Title);
+    tx("lpFeat1Body", t.lpFeat1Body);
+    tx("lpFeat2Title", t.lpFeat2Title);
+    tx("lpFeat2Body", t.lpFeat2Body);
+    tx("lpFeat3Title", t.lpFeat3Title);
+    tx("lpFeat3Body", t.lpFeat3Body);
+    tx("lpFeat4Title", t.lpFeat4Title);
+    tx("lpFeat4Body", t.lpFeat4Body);
+    tx("contact-heading", t.lpContactHeading);
+    tx("lpContactText", t.lpContactText);
+    tx("lpContactBtn", t.lpContactBtn);
     var ft = $("lpFooterTagline");
     if (ft) ft.innerHTML = t.footerTagline || "";
-    $("lpNavImpressum").textContent = t.lpNavImpressum;
-    $("lpNavAgb").textContent = t.lpNavAgb;
-    $("lpNavDatenschutz").textContent = t.lpNavDatenschutz;
-    $("lpFooterOwnerLabel").textContent = t.lpFooterOwnerLabel;
+    tx("lpNavImpressum", t.lpNavImpressum);
+    tx("lpNavAgb", t.lpNavAgb);
+    tx("lpNavDatenschutz", t.lpNavDatenschutz);
+    tx("lpFooterOwnerLabel", t.lpFooterOwnerLabel);
 
     try {
       localStorage.setItem("behordenklar-ui-lang", lang);
@@ -491,52 +564,62 @@ const bootSnippet = `
   }
 
   function openUiLangModal() {
+    if (!uiLangModal || !uiLangMobileTrigger) return;
     uiLangModal.classList.add("visible");
     uiLangModal.setAttribute("aria-hidden", "false");
     uiLangMobileTrigger.setAttribute("aria-expanded", "true");
   }
 
   function closeUiLangModal() {
+    if (!uiLangModal || !uiLangMobileTrigger) return;
     uiLangModal.classList.remove("visible");
     uiLangModal.setAttribute("aria-hidden", "true");
     uiLangMobileTrigger.setAttribute("aria-expanded", "false");
   }
 
-  document.querySelectorAll(".ui-modal-lang-btn").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      applyLandingLanguage(btn.getAttribute("data-ui-lang"));
+  if (legalShell) {
+    var savedLegal = null;
+    try {
+      savedLegal = localStorage.getItem("behordenklar-ui-lang");
+    } catch (e) {}
+    applyLegalShell(savedLegal && uiTranslations[savedLegal] ? savedLegal : "Deutsch");
+  } else if (uiLangModal && uiLangMobileTrigger && uiLangModalClose) {
+    document.querySelectorAll(".ui-modal-lang-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        applyLandingLanguage(btn.getAttribute("data-ui-lang"));
+        closeUiLangModal();
+      });
+    });
+
+    uiLangMobileTrigger.addEventListener("click", function () {
+      openUiLangModal();
+    });
+
+    uiLangModalClose.addEventListener("click", function () {
       closeUiLangModal();
     });
-  });
 
-  uiLangMobileTrigger.addEventListener("click", function () {
-    openUiLangModal();
-  });
+    uiLangModal.addEventListener("click", function (e) {
+      if (e.target === uiLangModal) closeUiLangModal();
+    });
 
-  uiLangModalClose.addEventListener("click", function () {
-    closeUiLangModal();
-  });
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") return;
+      if (uiLangModal.classList.contains("visible")) {
+        closeUiLangModal();
+        e.preventDefault();
+      }
+    });
 
-  uiLangModal.addEventListener("click", function (e) {
-    if (e.target === uiLangModal) closeUiLangModal();
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key !== "Escape") return;
-    if (uiLangModal.classList.contains("visible")) {
-      closeUiLangModal();
-      e.preventDefault();
+    var saved = null;
+    try {
+      saved = localStorage.getItem("behordenklar-ui-lang");
+    } catch (e) {}
+    if (saved && uiTranslations[saved]) {
+      applyLandingLanguage(saved);
+    } else {
+      applyLandingLanguage("Deutsch");
     }
-  });
-
-  var saved = null;
-  try {
-    saved = localStorage.getItem("behordenklar-ui-lang");
-  } catch (e) {}
-  if (saved && uiTranslations[saved]) {
-    applyLandingLanguage(saved);
-  } else {
-    applyLandingLanguage("Deutsch");
   }
 })();
 `;

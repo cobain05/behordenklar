@@ -132,6 +132,15 @@
       letter-spacing: -0.02em;
     }
 
+    .legal-stand {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin: 0 0 1.1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
     .legal-inner p,
     .legal-inner address {
       margin: 0 0 0.75rem;
@@ -230,7 +239,7 @@
     }
   </style>
 </head>
-<body>
+<body data-site-shell="legal" data-legal-page="impressum">
   <header class="site-nav">
     <div class="container site-nav-inner">
       <a class="brand" href="landingpage.html" aria-label="BehördenKlar – Zur Startseite">
@@ -254,14 +263,15 @@
           <text x="58" y="54" class="logo-word-klar">Klar</text>
         </svg>
       </a>
-      <a class="btn-cta" href="index.html">Jetzt kostenlos testen</a>
+      <a class="btn-cta" id="legalNavCta" href="index.html">Jetzt kostenlos testen</a>
     </div>
   </header>
 
   <main class="legal-main" id="main">
     <div class="container">
       <article class="legal-inner">
-        <h2>Impressum</h2>
+        <h2 id="legalMainHeading">Impressum</h2>
+        <p class="legal-stand"><span>BehördenKlar</span> – <span id="legalAsOf">Stand: Mai 2026</span></p>
         <address>
           BehördenKlar<br />
           Inhaber: Yusuf Coban<br />
@@ -277,13 +287,14 @@
   </main>
 
   <footer class="site-footer">
-    <p class="site-footer-tagline"><span>BehördenKlar</span> – Dokumente verstehen, einfach gemacht</p>
+    <p class="site-footer-tagline" id="legalFooterTagline"><span>BehördenKlar</span> – Dokumente verstehen, einfach gemacht</p>
     <nav class="footer-links" aria-label="Rechtliches">
-      <a href="impressum.html" aria-current="page">Impressum</a>
-      <a href="agb.html">AGB</a>
-      <a href="datenschutz.html">Datenschutz</a>
+      <a id="legalNavImpressum" href="impressum.html" aria-current="page">Impressum</a>
+      <a id="legalNavAgb" href="agb.html">AGB</a>
+      <a id="legalNavDatenschutz" href="datenschutz.html">Datenschutz</a>
     </nav>
-    <p class="footer-owner">Inhaber: Yusuf Coban · <a href="mailto:info@behördenklar.de">info@behördenklar.de</a></p>
+    <p class="footer-owner"><span id="legalFooterOwnerLabel">Inhaber: Yusuf Coban</span> · <a href="mailto:info@behördenklar.de">info@behördenklar.de</a></p>
   </footer>
+  <script src="landing-i18n-runtime.js"></script>
 </body>
 </html>

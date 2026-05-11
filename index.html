@@ -1504,12 +1504,29 @@
         uiTranslations[langKey].loadingSteps = localizedLoadingSteps[langKey] || localizedLoadingSteps["Deutsch"];
       });
 
+      (function syncUiLangFromStorage() {
+        try {
+          var savedUi = localStorage.getItem("behordenklar-ui-lang");
+          if (savedUi && uiTranslations[savedUi]) {
+            document.querySelectorAll(".ui-lang-btn, .ui-modal-lang-btn").forEach(function (b) {
+              b.classList.toggle("is-active", b.getAttribute("data-ui-lang") === savedUi);
+            });
+          }
+        } catch (e) {}
+      })();
+
       function getTargetLang() {
         var active = document.querySelector(".target-lang-btn.is-active");
         return active ? active.getAttribute("data-lang") : "Arabisch";
       }
 
       function getUiLang() {
+        try {
+          var savedUi = localStorage.getItem("behordenklar-ui-lang");
+          if (savedUi && uiTranslations[savedUi]) {
+            return savedUi;
+          }
+        } catch (e) {}
         var active = document.querySelector(".ui-lang-btn.is-active");
         return active ? active.getAttribute("data-ui-lang") : "Deutsch";
       }
@@ -1578,6 +1595,9 @@
           renderLetterFilePreviews();
           updateDropFileNameSummary();
         }
+        try {
+          localStorage.setItem("behordenklar-ui-lang", lang);
+        } catch (e) {}
       }
 
       function getUiLangEmoji(lang) {
