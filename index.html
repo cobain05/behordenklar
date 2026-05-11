@@ -1243,7 +1243,16 @@
 
   <script>
     (function () {
-      const API_URL = "/api/claude";
+      // Lokaler server.py und Vercel Serverless: POST /api/claude. Bei file:// auf server.py (Port 8765) zeigen.
+      const API_URL = (function () {
+        if (typeof window === "undefined") {
+          return "/api/claude";
+        }
+        if (window.location.protocol === "file:") {
+          return "http://127.0.0.1:8765/api/claude";
+        }
+        return new URL("/api/claude", window.location.origin).href;
+      })();
       const MODEL = "claude-sonnet-4-5";
       const ANTHROPIC_VERSION = "2023-06-01";
 
