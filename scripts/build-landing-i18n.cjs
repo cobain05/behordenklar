@@ -37,7 +37,7 @@ const uiTranslations = vm.runInNewContext("(" + objSrc + ")");
 
 const LP_EN = {
   lpBrandAria: "BehördenKlar – Home",
-  lpUiLangTrigger: "🌐 Choose language ▼",
+  lpUiLangTrigger: "🌐 Choose language",
   lpNavCta: "Try it free now",
   lpHeroTitle: "Understand official letters – in your language",
   lpHeroLead:
@@ -78,7 +78,7 @@ const LP_EN = {
 
 const LP_DE = {
   lpBrandAria: "BehördenKlar – Startseite",
-  lpUiLangTrigger: "🌐 Sprache wählen ▼",
+  lpUiLangTrigger: "🌐 Sprache wählen",
   lpNavCta: "Jetzt kostenlos testen",
   lpHeroTitle: "Behördenbriefe verstehen – in deiner Sprache",
   lpHeroLead:
@@ -119,7 +119,7 @@ const LP_DE = {
 
 const LP_TR = {
   lpBrandAria: "BehördenKlar – Ana sayfa",
-  lpUiLangTrigger: "🌐 Dil seçin ▼",
+  lpUiLangTrigger: "🌐 Dil seçin",
   lpNavCta: "Ücretsiz dene",
   lpHeroTitle: "Resmi yazıları anlayın – kendi dilinizde",
   lpHeroLead:
@@ -160,7 +160,7 @@ const LP_TR = {
 
 const LP_AR = {
   lpBrandAria: "BehördenKlar – الصفحة الرئيسية",
-  lpUiLangTrigger: "🌐 اختر اللغة ▼",
+  lpUiLangTrigger: "🌐 اختر اللغة",
   lpNavCta: "جرّب مجانًا",
   lpHeroTitle: "افهم الخطابات الرسمية – بلغتك",
   lpHeroLead:
@@ -201,7 +201,7 @@ const LP_AR = {
 
 const LP_RU = {
   lpBrandAria: "BehördenKlar – Главная",
-  lpUiLangTrigger: "🌐 Выберите язык ▼",
+  lpUiLangTrigger: "🌐 Выберите язык",
   lpNavCta: "Попробовать бесплатно",
   lpHeroTitle: "Понимайте официальные письма – на вашем языке",
   lpHeroLead:
@@ -413,7 +413,7 @@ const bootSnippet = `
       uiLangMobileTriggerText.textContent = t.lpUiLangTrigger;
     } else {
       var shortUi = (t.uiLangLabel || "").replace(/^🌐\\s*/, "").replace(/:\\s*$/, "").trim();
-      uiLangMobileTriggerText.textContent = "🌐 " + getUiLangEmoji(lang) + " " + shortUi + " ▼";
+      uiLangMobileTriggerText.textContent = "🌐 " + getUiLangEmoji(lang) + " " + shortUi;
     }
   }
 
