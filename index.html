@@ -717,6 +717,11 @@
       margin-bottom: 1.25rem;
       display: none;
       box-shadow: var(--shadow);
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      max-height: min(75vh, 32rem);
+      overflow-y: auto;
     }
 
     .error.visible {
@@ -2016,9 +2021,21 @@
         };
       }
 
+      function truncateForErrorDisplay(text, maxLen) {
+        if (text == null) {
+          return "";
+        }
+        var s = String(text);
+        maxLen = maxLen || 150000;
+        if (s.length <= maxLen) {
+          return s;
+        }
+        return s.slice(0, maxLen) + "\n\n… (" + (s.length - maxLen) + " weitere Zeichen, Anzeige gekürzt.)";
+      }
+
       function formatAnthropicError(data, httpStatus) {
         if (!data || typeof data !== "object") {
-          return "API-Fehler" + (httpStatus ? " (" + httpStatus + ")" : "") + ".";
+          return "API-Fehler" + (httpStatus ? " (HTTP " + httpStatus + ")" : "") + ".";
         }
         var reqId = data.request_id;
         if (data.type === "error" && data.error) {
@@ -2032,6 +2049,9 @@
           parts.push(String(data.type));
         }
         var msg = data.message;
+        if (msg == null && typeof data.error === "string") {
+          msg = data.error;
+        }
         if (msg != null) {
           if (typeof msg === "string") {
             parts.push(msg);
@@ -2049,13 +2069,20 @@
             parts.push(String(msg));
           }
         }
+        if (data.detail != null && String(data.detail) !== String(msg)) {
+          parts.push(typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail));
+        }
         if (reqId) {
           parts.push("Request-ID: " + reqId);
         }
         if (parts.length) {
           return parts.join(" — ");
         }
-        return "API-Fehler" + (httpStatus ? " (" + httpStatus + ")" : "") + ".";
+        try {
+          return "API-Fehler (HTTP " + (httpStatus || "?") + "): " + JSON.stringify(data);
+        } catch (e) {
+          return "API-Fehler" + (httpStatus ? " (HTTP " + httpStatus + ")" : "") + ".";
+        }
       }
 
       analyzeBtn.addEventListener("click", async function () {
@@ -2179,21 +2206,41 @@
           var data;
           try {
             data = JSON.parse(rawText);
-          } catch (e) {
-            throw new Error("Ungültige Server-Antwort.");
+          } catch (parseErr) {
+            var parseHint = parseErr && parseErr.message ? parseErr.message : "Parse-Fehler";
+            throw new Error(
+              "Die Serverantwort ist kein gültiges JSON (" +
+                parseHint +
+                ", HTTP " +
+                res.status +
+                ").\n\n— Vollständige Rohantwort —\n\n" +
+                truncateForErrorDisplay(rawText)
+            );
           }
 
           if (!res.ok) {
             var errMsg = formatAnthropicError(data, res.status);
-            if (!rawText) {
+            if (!rawText || !String(rawText).trim()) {
               errMsg =
-                "Keine Antwort vom lokalen Server. Läuft server.py? Seite unter http://127.0.0.1:8765/ öffnen.";
+                (errMsg ? errMsg + "\n\n" : "") +
+                "Keine Antwort vom Server (leerer Body). Läuft server.py bzw. ist die Vercel-Funktion /api/claude erreichbar?";
+            } else {
+              errMsg =
+                errMsg +
+                "\n\n— Vollständige Rohantwort (HTTP " +
+                res.status +
+                ") —\n\n" +
+                truncateForErrorDisplay(rawText);
             }
             throw new Error(errMsg);
           }
 
           if (data.type === "error") {
-            throw new Error(formatAnthropicError(data, res.status));
+            throw new Error(
+              formatAnthropicError(data, res.status) +
+                "\n\n— Vollständige Rohantwort —\n\n" +
+                truncateForErrorDisplay(rawText)
+            );
           }
 
           var parts = data.content || [];
@@ -2209,8 +2256,10 @@
             parsed = parseModelJson(textOut);
           } catch (pe) {
             throw new Error(
-              "Die KI-Antwort konnte nicht gelesen werden. Bitte erneut versuchen. Rohauszug: " +
-                textOut.slice(0, 400)
+              "Die KI-Antwort enthielt kein erwartetes JSON (" +
+                (pe && pe.message ? pe.message : "Parse-Fehler") +
+                ").\n\n— Vollständiger Modelltext (Rohauszug) —\n\n" +
+                truncateForErrorDisplay(textOut)
             );
           }
 
