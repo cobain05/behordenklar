@@ -337,71 +337,110 @@
       outline-offset: 3px;
     }
 
-    .preview-wrap {
-      position: relative;
+    .preview-strip-wrap {
       margin-top: 1rem;
     }
 
-    .preview-wrap[hidden] {
+    .preview-strip-wrap[hidden] {
       display: none !important;
     }
 
-    .preview-remove-btn {
+    .preview-strip {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      gap: 0.65rem;
+      overflow-x: auto;
+      padding: 0.2rem 0 0.35rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+
+    .preview-thumb {
+      position: relative;
+      flex: 0 0 auto;
+      width: 5.5rem;
+      height: 5.5rem;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: #e8eaed;
+    }
+
+    .preview-thumb img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-thumb--pdf {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2rem;
+      padding: 0.35rem;
+      background: linear-gradient(180deg, #fee2e2 0%, #fff 55%);
+    }
+
+    .preview-thumb-pdf-icon {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #b91c1c;
+      letter-spacing: 0.04em;
+    }
+
+    .preview-thumb-name {
+      font-size: 0.62rem;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+      line-height: 1.2;
+      max-width: 100%;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      word-break: break-word;
+    }
+
+    .preview-thumb-remove {
       position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      z-index: 4;
-      width: 2.35rem;
-      height: 2.35rem;
+      top: 2px;
+      right: 2px;
+      z-index: 3;
+      width: 1.45rem;
+      height: 1.45rem;
       padding: 0;
       border-radius: 50%;
       border: 2px solid #fff;
       background: #dc2626;
       color: #fff;
-      font-size: 1.15rem;
+      font-size: 0.95rem;
       font-weight: 700;
       line-height: 1;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
-      transition: transform 0.12s, filter 0.15s, box-shadow 0.15s;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+      transition: transform 0.12s, filter 0.15s;
     }
 
-    .preview-remove-btn:hover {
+    .preview-thumb-remove:hover {
       filter: brightness(1.08);
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
     }
 
-    .preview-remove-btn:active {
-      transform: scale(0.96);
+    .preview-thumb-remove:active {
+      transform: scale(0.94);
     }
 
-    .preview-remove-btn:focus-visible {
+    .preview-thumb-remove:focus-visible {
       outline: 2px solid #fff;
-      outline-offset: 2px;
-    }
-
-    .preview-remove-btn[hidden] {
-      display: none !important;
-    }
-
-    .preview {
-      max-height: 200px;
-      border-radius: var(--radius-sm);
-      overflow: hidden;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-    }
-
-    .preview img {
-      display: block;
-      width: 100%;
-      height: auto;
-      max-height: 200px;
-      object-fit: contain;
-      background: #e8eaed;
+      outline-offset: 1px;
     }
 
     .hint {
@@ -947,7 +986,7 @@
           <span class="field-label" id="uploadLabel">Datei hochladen</span>
           <div class="drop-zone-wrap">
             <div class="drop-zone" id="dropZone" aria-hidden="false">
-              <input type="file" id="letterFile" class="drop-zone-input" accept="image/*,application/pdf" capture="environment" />
+              <input type="file" id="letterFile" class="drop-zone-input" accept="image/*,application/pdf" multiple capture="environment" />
               <div class="drop-zone-icon" aria-hidden="true">📄</div>
               <p class="drop-zone-title" id="dropTitle">Datei hierher ziehen</p>
               <p class="drop-zone-hint" id="dropHint">oder klicken und JPG, PNG oder PDF wählen</p>
@@ -957,10 +996,9 @@
           <button type="button" class="btn-take-photo" id="btnTakePhoto" aria-label="Foto mit der Kamera aufnehmen">
             <span aria-hidden="true">📷</span> <span id="takePhotoLabel">Foto aufnehmen</span>
           </button>
-          <p class="hint" id="uploadHint">Max. ca. 32&nbsp;MB. Passwortgeschützte PDFs werden nicht unterstützt.</p>
-          <div class="preview-wrap" id="previewWrap" hidden>
-            <button type="button" class="preview-remove-btn" id="previewRemoveBtn" hidden aria-label="Foto entfernen">×</button>
-            <div id="preview" class="preview"></div>
+          <p class="hint" id="uploadHint">Bis zu 5 Dateien gleichzeitig. Max. ca. 32&nbsp;MB pro Datei. Passwortgeschützte PDFs werden nicht unterstützt.</p>
+          <div class="preview-strip-wrap" id="previewStripWrap" hidden>
+            <div class="preview-strip" id="previewStrip" role="list" aria-label="Ausgewählte Dateien"></div>
           </div>
         </div>
 
@@ -1219,9 +1257,8 @@
       const letterText = $("letterText");
       const letterFile = $("letterFile");
       const btnTakePhoto = $("btnTakePhoto");
-      const previewWrap = $("previewWrap");
-      const preview = $("preview");
-      const previewRemoveBtn = $("previewRemoveBtn");
+      const previewStripWrap = $("previewStripWrap");
+      const previewStrip = $("previewStrip");
       const dropZone = $("dropZone");
       const dropFileName = $("dropFileName");
       const btnBack = $("btnBack");
@@ -1256,9 +1293,12 @@
       const apiHint = $("apiHint");
       const resultsHeading = $("resultsHeading");
 
+      const MAX_LETTER_FILES = 5;
+      var stagedLetterFiles = [];
+
       const uiTranslations = {
-        "Deutsch": { uiLangLabel: "🌐 Sprache der Seite wählen:", targetLangLabel: "Zielsprache für die Übersetzung des Dokuments:", modeFile: "Foto oder PDF", modeText: "Text eingeben", uploadLabel: "Datei hochladen", dropTitle: "Datei hierher ziehen", dropHint: "oder klicken und Bild oder PDF wählen", takePhoto: "Foto aufnehmen", uploadHint: "Max. ca. 32 MB. Passwortgeschützte PDFs werden nicht unterstützt.", textInputLabel: "Behördenbrief (Deutsch)", textPlaceholder: "Brief hier einfügen oder abtippen…", analyzeText: "Brief analysieren", apiHeading: "API-Schlüssel", apiKeyLabel: "Anthropic API Key", apiHint: "Der Schlüssel wird nur in Ihrem Browser verwendet und nicht gespeichert.", resultsHeading: "Ergebnis", toggleShow: "Anzeigen", toggleHide: "Verbergen", removePhoto: "Foto entfernen" },
-        "Englisch": { uiLangLabel: "🌐 Choose page language:", targetLangLabel: "Target language for document translation:", modeFile: "Photo or PDF", modeText: "Enter text", uploadLabel: "Upload document", dropTitle: "Drop file here", dropHint: "or click and choose image or PDF", takePhoto: "Take photo", uploadHint: "Max. about 32 MB. Password-protected PDFs are not supported.", textInputLabel: "Official letter (German)", textPlaceholder: "Paste or type the letter here…", analyzeText: "Analyze letter", apiHeading: "API key", apiKeyLabel: "Anthropic API Key", apiHint: "The key is only used in your browser and is not stored.", resultsHeading: "Result", toggleShow: "Show", toggleHide: "Hide", removePhoto: "Remove photo" },
+        "Deutsch": { uiLangLabel: "🌐 Sprache der Seite wählen:", targetLangLabel: "Zielsprache für die Übersetzung des Dokuments:", modeFile: "Foto oder PDF", modeText: "Text eingeben", uploadLabel: "Datei hochladen", dropTitle: "Datei hierher ziehen", dropHint: "oder klicken und eine oder mehrere JPG-, PNG- oder PDF-Dateien wählen (max. 5)", takePhoto: "Foto aufnehmen", uploadHint: "Bis zu 5 Dateien gleichzeitig, je max. ca. 32 MB. Passwortgeschützte PDFs werden nicht unterstützt.", textInputLabel: "Behördenbrief (Deutsch)", textPlaceholder: "Brief hier einfügen oder abtippen…", analyzeText: "Brief analysieren", apiHeading: "API-Schlüssel", apiKeyLabel: "Anthropic API Key", apiHint: "Der Schlüssel wird nur in Ihrem Browser verwendet und nicht gespeichert.", resultsHeading: "Ergebnis", toggleShow: "Anzeigen", toggleHide: "Verbergen", removeFile: "Datei entfernen", filesSelectedMany: "{n} Dateien ausgewählt" },
+        "Englisch": { uiLangLabel: "🌐 Choose page language:", targetLangLabel: "Target language for document translation:", modeFile: "Photo or PDF", modeText: "Enter text", uploadLabel: "Upload document", dropTitle: "Drop file here", dropHint: "or click and choose one or more JPG, PNG or PDF files (max. 5)", takePhoto: "Take photo", uploadHint: "Up to 5 files at once, max. about 32 MB each. Password-protected PDFs are not supported.", textInputLabel: "Official letter (German)", textPlaceholder: "Paste or type the letter here…", analyzeText: "Analyze letter", apiHeading: "API key", apiKeyLabel: "Anthropic API Key", apiHint: "The key is only used in your browser and is not stored.", resultsHeading: "Result", toggleShow: "Show", toggleHide: "Hide", removeFile: "Remove file", filesSelectedMany: "{n} files selected" },
         "Türkisch": { uiLangLabel: "🌐 Sayfa dilini seçin:", targetLangLabel: "Belge çevirisi için hedef dil:", modeFile: "Fotoğraf veya PDF", modeText: "Metin girin", uploadLabel: "Belge yükle", dropTitle: "Dosyayı buraya bırakın", dropHint: "veya tıklayıp görsel ya da PDF seçin", takePhoto: "Fotoğraf çek", uploadHint: "Maks. yaklaşık 32 MB. Şifreli PDF desteklenmez.", textInputLabel: "Resmi mektup (Almanca)", textPlaceholder: "Mektubu buraya yapıştırın veya yazın…", analyzeText: "Mektubu analiz et", apiHeading: "API anahtarı", apiKeyLabel: "Anthropic API Key", apiHint: "Anahtar yalnızca tarayıcınızda kullanılır ve kaydedilmez.", resultsHeading: "Sonuç" },
         "Arabisch": { uiLangLabel: "🌐 اختر لغة الصفحة:", targetLangLabel: "لغة ترجمة المستند:", modeFile: "صورة أو PDF", modeText: "إدخال نص", uploadLabel: "رفع المستند", dropTitle: "اسحب الملف هنا", dropHint: "أو انقر واختر صورة أو PDF", takePhoto: "التقاط صورة", uploadHint: "الحد الأقصى حوالي 32 ميغابايت. ملفات PDF المحمية غير مدعومة.", textInputLabel: "الخطاب الرسمي (بالألمانية)", textPlaceholder: "ألصق الرسالة أو اكتبها هنا…", analyzeText: "تحليل الخطاب", apiHeading: "مفتاح API", apiKeyLabel: "Anthropic API Key", apiHint: "يُستخدم المفتاح في متصفحك فقط ولا يتم حفظه.", resultsHeading: "النتيجة" },
         "Russisch": { uiLangLabel: "🌐 Выберите язык страницы:", targetLangLabel: "Язык перевода документа:", modeFile: "Фото или PDF", modeText: "Ввести текст", uploadLabel: "Загрузить документ", dropTitle: "Перетащите файл сюда", dropHint: "или нажмите и выберите изображение или PDF", takePhoto: "Сделать фото", uploadHint: "Макс. около 32 МБ. Защищенные PDF не поддерживаются.", textInputLabel: "Официальное письмо (нем.)", textPlaceholder: "Вставьте или введите письмо здесь…", analyzeText: "Анализировать письмо", apiHeading: "API-ключ", apiKeyLabel: "Anthropic API Key", apiHint: "Ключ используется только в браузере и не сохраняется.", resultsHeading: "Результат" },
@@ -1342,7 +1382,6 @@
         dropHint.textContent = t.dropHint;
         takePhotoLabel.textContent = t.takePhoto;
         uploadHint.textContent = t.uploadHint;
-        previewRemoveBtn.setAttribute("aria-label", t.removePhoto || "Remove photo");
         textInputLabel.textContent = t.textInputLabel;
         letterText.placeholder = t.textPlaceholder;
         analyzeText.textContent = t.analyzeText;
@@ -1360,6 +1399,10 @@
         updateUiLangTrigger(lang);
         syncActiveUiLangButtons(lang);
         updateTargetLangTrigger();
+        if (stagedLetterFiles.length) {
+          renderLetterFilePreviews();
+          updateDropFileNameSummary();
+        }
       }
 
       function getUiLangEmoji(lang) {
@@ -1643,11 +1686,11 @@
       dropZone.addEventListener("drop", function (e) {
         var dt = e.dataTransfer;
         if (!dt || !dt.files || !dt.files.length) return;
-        var f = dt.files[0];
-        var d = new DataTransfer();
-        d.items.add(f);
-        letterFile.files = d.files;
-        letterFile.dispatchEvent(new Event("change", { bubbles: true }));
+        var incoming = Array.from(dt.files);
+        mergeLetterFilesIntoStaged(incoming);
+        syncLetterInputFromStaged();
+        renderLetterFilePreviews();
+        updateDropFileNameSummary();
       });
 
       function fileToBase64(file) {
@@ -1686,37 +1729,133 @@
         return mime.indexOf("image/") === 0;
       }
 
-      letterFile.addEventListener("change", function () {
-        previewWrap.hidden = true;
-        previewRemoveBtn.hidden = true;
-        preview.innerHTML = "";
-        var f = letterFile.files[0];
-        if (!f) {
+      function syncLetterInputFromStaged() {
+        var dt = new DataTransfer();
+        stagedLetterFiles.forEach(function (f) {
+          dt.items.add(f);
+        });
+        letterFile.files = dt.files;
+      }
+
+      function getRemoveFileAriaLabel() {
+        var t = uiTranslations[getUiLang()] || uiTranslations["Deutsch"];
+        return t.removeFile || "Datei entfernen";
+      }
+
+      function updateDropFileNameSummary() {
+        if (!stagedLetterFiles.length) {
           dropFileName.hidden = true;
           dropFileName.textContent = "";
           return;
         }
-        dropFileName.textContent = f.name;
         dropFileName.hidden = false;
-        var mime = f.type || guessMimeFromName(f.name);
-        if (mime.indexOf("image/") === 0) {
-          var url = URL.createObjectURL(f);
-          var img = document.createElement("img");
-          img.src = url;
-          img.alt = "Vorschau";
-          img.onload = function () {
-            URL.revokeObjectURL(url);
-          };
-          preview.appendChild(img);
-          previewWrap.hidden = false;
-          previewRemoveBtn.hidden = false;
+        if (stagedLetterFiles.length === 1) {
+          dropFileName.textContent = stagedLetterFiles[0].name;
+          return;
         }
-      });
+        var t = uiTranslations[getUiLang()] || uiTranslations["Deutsch"];
+        var tpl = t.filesSelectedMany || uiTranslations["Englisch"].filesSelectedMany;
+        dropFileName.textContent = tpl.replace("{n}", String(stagedLetterFiles.length));
+      }
 
-      previewRemoveBtn.addEventListener("click", function () {
-        letterFile.value = "";
-        letterFile.dispatchEvent(new Event("change", { bubbles: true }));
+      function renderLetterFilePreviews() {
+        previewStrip.innerHTML = "";
+        if (!stagedLetterFiles.length) {
+          previewStripWrap.hidden = true;
+          updateDropFileNameSummary();
+          return;
+        }
+        previewStripWrap.hidden = false;
+        var ariaBase = getRemoveFileAriaLabel();
+        stagedLetterFiles.forEach(function (file, index) {
+          var thumb = document.createElement("div");
+          thumb.className = "preview-thumb";
+          thumb.setAttribute("role", "listitem");
+          var removeBtn = document.createElement("button");
+          removeBtn.type = "button";
+          removeBtn.className = "preview-thumb-remove";
+          removeBtn.setAttribute("aria-label", ariaBase + ": " + file.name);
+          removeBtn.textContent = "×";
+          (function (idx) {
+            removeBtn.addEventListener("click", function () {
+              stagedLetterFiles.splice(idx, 1);
+              syncLetterInputFromStaged();
+              renderLetterFilePreviews();
+              updateDropFileNameSummary();
+              clearError();
+            });
+          })(index);
+          var mime = file.type || guessMimeFromName(file.name);
+          if (mime.indexOf("image/") === 0) {
+            var url = URL.createObjectURL(file);
+            var img = document.createElement("img");
+            img.src = url;
+            img.alt = file.name;
+            img.onload = function () {
+              URL.revokeObjectURL(url);
+            };
+            thumb.appendChild(img);
+          } else {
+            thumb.classList.add("preview-thumb--pdf");
+            var pdfLab = document.createElement("span");
+            pdfLab.className = "preview-thumb-pdf-icon";
+            pdfLab.setAttribute("aria-hidden", "true");
+            pdfLab.textContent = "PDF";
+            var nameEl = document.createElement("span");
+            nameEl.className = "preview-thumb-name";
+            var baseName = file.name.replace(/\.[^/.]+$/, "");
+            nameEl.textContent = baseName || file.name;
+            thumb.appendChild(pdfLab);
+            thumb.appendChild(nameEl);
+          }
+          thumb.appendChild(removeBtn);
+          previewStrip.appendChild(thumb);
+        });
+      }
+
+      function mergeLetterFilesIntoStaged(incoming) {
+        if (!incoming || !incoming.length) {
+          return;
+        }
         clearError();
+        var countBefore = stagedLetterFiles.length;
+        var skippedInvalid = 0;
+        var capped = false;
+        var i;
+        for (i = 0; i < incoming.length; i++) {
+          if (stagedLetterFiles.length >= MAX_LETTER_FILES) {
+            capped = true;
+            break;
+          }
+          var file = incoming[i];
+          var mime = file.type || guessMimeFromName(file.name);
+          if (!isAllowedMime(mime)) {
+            skippedInvalid += 1;
+            continue;
+          }
+          if (file.size > 32 * 1024 * 1024) {
+            skippedInvalid += 1;
+            continue;
+          }
+          stagedLetterFiles.push(file);
+        }
+        if (capped) {
+          showError("Maximal 5 Dateien gleichzeitig.");
+        } else if (skippedInvalid > 0 && stagedLetterFiles.length === countBefore) {
+          showError("Mindestens eine Datei wurde nicht übernommen (nur JPG, PNG oder PDF, je max. ca. 32 MB).");
+        }
+      }
+
+      letterFile.addEventListener("change", function () {
+        var incoming = Array.from(letterFile.files || []);
+        letterFile.value = "";
+        if (!incoming.length) {
+          return;
+        }
+        mergeLetterFilesIntoStaged(incoming);
+        syncLetterInputFromStaged();
+        renderLetterFilePreviews();
+        updateDropFileNameSummary();
       });
 
       function buildInstructionPrompt(langLabel) {
@@ -1939,48 +2078,62 @@
               text,
           });
         } else {
-          var file = letterFile.files[0];
-          if (!file) {
-            showError("Bitte wählen Sie eine Bilddatei oder PDF aus.");
+          var filesToSend = stagedLetterFiles.slice();
+          if (!filesToSend.length) {
+            showError("Bitte wählen Sie mindestens eine Bilddatei oder PDF aus.");
             return;
           }
-          var mime = file.type || guessMimeFromName(file.name);
-          if (!isAllowedMime(mime)) {
-            showError("Nur Bilder (z. B. JPG, PNG) oder PDF sind erlaubt.");
+          if (filesToSend.length > MAX_LETTER_FILES) {
+            showError("Maximal 5 Dateien gleichzeitig.");
             return;
           }
-          if (file.size > 32 * 1024 * 1024) {
-            showError("Die Datei ist zu groß (max. ca. 32 MB).");
-            return;
-          }
-
           try {
-            var encoded = await fileToBase64(file);
-            if (mime === "application/pdf") {
-              content.push({
-                type: "document",
-                source: {
-                  type: "base64",
-                  media_type: "application/pdf",
-                  data: encoded.base64,
-                },
-              });
-            } else {
-              content.push({
-                type: "image",
-                source: {
-                  type: "base64",
-                  media_type: mime,
-                  data: encoded.base64,
-                },
-              });
+            var fi;
+            for (fi = 0; fi < filesToSend.length; fi++) {
+              var file = filesToSend[fi];
+              var mime = file.type || guessMimeFromName(file.name);
+              if (!isAllowedMime(mime)) {
+                showError("Nur Bilder (z. B. JPG, PNG) oder PDF sind erlaubt.");
+                return;
+              }
+              if (file.size > 32 * 1024 * 1024) {
+                showError("Eine Datei ist zu groß (max. ca. 32 MB pro Datei).");
+                return;
+              }
             }
+            var fj;
+            for (fj = 0; fj < filesToSend.length; fj++) {
+              var fEnc = filesToSend[fj];
+              var mimeEnc = fEnc.type || guessMimeFromName(fEnc.name);
+              var encoded = await fileToBase64(fEnc);
+              if (mimeEnc === "application/pdf") {
+                content.push({
+                  type: "document",
+                  source: {
+                    type: "base64",
+                    media_type: "application/pdf",
+                    data: encoded.base64,
+                  },
+                });
+              } else {
+                content.push({
+                  type: "image",
+                  source: {
+                    type: "base64",
+                    media_type: mimeEnc,
+                    data: encoded.base64,
+                  },
+                });
+              }
+            }
+            var nFiles = filesToSend.length;
             content.push({
               type: "text",
               text:
                 instruction +
-                "\n\nDer Behördenbrief liegt als Datei bei (Bild oder PDF). " +
-                "Analysieren Sie den sichtbaren Inhalt und füllen Sie das JSON wie beschrieben aus.",
+                "\n\nEs liegen " +
+                nFiles +
+                " Datei(en) vor (Bilder und/oder PDFs). Betrachten Sie alle zusammen als zugehörige Behördenpost (ein Schreiben oder zusammengehörige Unterlagen) und füllen Sie das JSON wie beschrieben aus.",
             });
           } catch (e) {
             showError(e.message || "Datei konnte nicht verarbeitet werden.");
