@@ -119,6 +119,8 @@ const LP_DE = {
   lpNavAgb: "AGB",
   lpNavDatenschutz: "Datenschutz",
   lpFooterOwnerLabel: "Inhaber: Yusuf Coban",
+  lpFooterTagline:
+    "<span>BehördenKlar</span> – Dokumente verstehen, einfach gemacht",
   lpLegalImprintHeading: "Impressum",
   lpLegalAgbHeading: "Allgemeine Geschäftsbedingungen (AGB)",
   lpLegalPrivacyHeading: "Datenschutzerklärung",
@@ -164,6 +166,7 @@ const LP_TR = {
   lpNavAgb: "Şartlar",
   lpNavDatenschutz: "Gizlilik",
   lpFooterOwnerLabel: "İşleten: Yusuf Coban",
+  lpFooterTagline: "<span>BehördenKlar</span> – Belgeleri anlamak, artık kolay",
   lpLegalImprintHeading: "Künye",
   lpLegalAgbHeading: "Genel Kullanım Koşulları (GKK)",
   lpLegalPrivacyHeading: "Gizlilik bildirimi",
@@ -209,6 +212,7 @@ const LP_AR = {
   lpNavAgb: "الشروط",
   lpNavDatenschutz: "الخصوصية",
   lpFooterOwnerLabel: "المُدير: Yusuf Coban",
+  lpFooterTagline: "<span>BehördenKlar</span> – فهم المستندات ببساطة",
   lpLegalImprintHeading: "بيانات النشر",
   lpLegalAgbHeading: "الشروط العامة للاستخدام",
   lpLegalPrivacyHeading: "سياسة الخصوصية",
@@ -254,6 +258,7 @@ const LP_RU = {
   lpNavAgb: "Условия",
   lpNavDatenschutz: "Конфиденциальность",
   lpFooterOwnerLabel: "Владелец: Yusuf Coban",
+  lpFooterTagline: "<span>BehördenKlar</span> – Понимать документы проще",
   lpLegalImprintHeading: "Выходные данные",
   lpLegalAgbHeading: "Общие условия использования",
   lpLegalPrivacyHeading: "Политика конфиденциальности",
@@ -521,8 +526,6 @@ const bootSnippet = `
       brand.setAttribute("aria-label", t.lpBrandAria || "BehördenKlar");
     }
 
-    var navCta = $("lpNavCta");
-    if (navCta) navCta.textContent = t.lpNavCta;
     var heroCta = $("lpHeroCta");
     if (heroCta) heroCta.textContent = t.lpNavCta;
     tx("hero-heading", t.lpHeroTitle);
@@ -556,7 +559,7 @@ const bootSnippet = `
     tx("lpContactText", t.lpContactText);
     tx("lpContactBtn", t.lpContactBtn);
     var ft = $("lpFooterTagline");
-    if (ft) ft.innerHTML = t.footerTagline || "";
+    if (ft) ft.innerHTML = t.lpFooterTagline || t.footerTagline || "";
     tx("lpNavImpressum", t.lpNavImpressum);
     tx("lpNavAgb", t.lpNavAgb);
     tx("lpNavDatenschutz", t.lpNavDatenschutz);
