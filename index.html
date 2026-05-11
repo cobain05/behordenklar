@@ -108,24 +108,39 @@
 
     .hero-flags {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 0.28rem;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.45rem;
       max-width: 100%;
-      font-size: clamp(1.05rem, 2.4vw, 1.42rem);
-      line-height: 1;
       padding: 0.45rem 0.65rem;
       background: rgba(255, 255, 255, 0.75);
       border: 1px solid rgba(26, 115, 232, 0.14);
       border-radius: 14px;
       box-shadow: 0 2px 14px rgba(26, 115, 232, 0.1);
+    }
+
+    .hero-flags-emojis {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.28rem;
+      font-size: clamp(1.05rem, 2.4vw, 1.42rem);
+      line-height: 1;
       user-select: none;
     }
 
     .hero-flags .hero-flag {
       display: inline-block;
       line-height: 1;
+    }
+
+    .hero-flags .ui-lang-mobile-trigger {
+      display: none;
+      flex-shrink: 0;
+      font-size: 0.88rem;
+      padding: 0.55rem 0.65rem;
+      background: rgba(255, 255, 255, 0.95);
     }
 
     .hero-text h1 {
@@ -465,7 +480,6 @@
 
     .ui-lang-mobile-trigger,
     .target-lang-mobile-trigger {
-      display: none;
       width: 100%;
       align-items: center;
       justify-content: center;
@@ -480,6 +494,10 @@
       background: var(--surface);
       box-shadow: 0 2px 8px rgba(26, 115, 232, 0.1);
       cursor: pointer;
+    }
+
+    .target-lang-mobile-trigger {
+      display: none;
     }
 
     .ui-lang-mobile-trigger:focus-visible,
@@ -819,8 +837,19 @@
       }
 
       .hero-flags {
-        justify-content: center;
         width: 100%;
+      }
+
+      .hero-flags-emojis {
+        justify-content: center;
+      }
+
+      .hero-flags .ui-lang-mobile-trigger {
+        display: inline-flex;
+      }
+
+      .lang-section-ui {
+        display: none !important;
       }
 
       .hero-card {
@@ -828,20 +857,13 @@
         flex-direction: column;
       }
 
-      .hero-card .lang-section-ui {
-        order: 1;
-        margin-top: 0;
-        padding-top: 0.35rem;
-        border-top: none;
-      }
-
       .hero-card .mode-toggle {
-        order: 2;
+        order: 1;
       }
 
       .hero-card #panelFile.panel,
       .hero-card #panelText.panel {
-        order: 2;
+        order: 1;
       }
 
       .hero-card #uiLangModal {
@@ -849,7 +871,7 @@
       }
 
       .hero-card .lang-section-target {
-        order: 3;
+        order: 2;
       }
 
       .hero-card #targetLangModal {
@@ -857,7 +879,7 @@
       }
 
       .hero-card .btn-analyze {
-        order: 4;
+        order: 3;
       }
 
       #uiLangGrid {
@@ -876,7 +898,6 @@
         display: none;
       }
 
-      .ui-lang-mobile-trigger,
       .target-lang-mobile-trigger {
         display: inline-flex;
       }
@@ -1003,8 +1024,13 @@
           </svg>
         </a>
         <div class="hero-welcome">
-          <div class="hero-flags" aria-hidden="true">
-            <span class="hero-flag">🇸🇦</span><span class="hero-flag">🇹🇷</span><span class="hero-flag">🇷🇺</span><span class="hero-flag">🇺🇦</span><span class="hero-flag">🇷🇴</span><span class="hero-flag">🇵🇱</span><span class="hero-flag">🇦🇫</span><span class="hero-flag">🇧🇬</span><span class="hero-flag">🇬🇪</span><span class="hero-flag">🇩🇪</span><span class="hero-flag">🇬🇧</span><span class="hero-flag">🇪🇸</span><span class="hero-flag">🇵🇹</span><span class="hero-flag">🇪🇬</span><span class="hero-flag">🇱🇹</span><span class="hero-flag">🇦🇱</span><span class="hero-flag">🇧🇦</span><span class="hero-flag">🇷🇸</span><span class="hero-flag">🇭🇷</span><span class="hero-flag">🇨🇳</span><span class="hero-flag">🇻🇳</span><span class="hero-flag">🇮🇹</span><span class="hero-flag">🇬🇷</span><span class="hero-flag">🇮🇷</span><span class="hero-flag">🇸🇴</span><span class="hero-flag">🇪🇷</span>
+          <div class="hero-flags">
+            <div class="hero-flags-emojis" aria-hidden="true">
+              <span class="hero-flag">🇸🇦</span><span class="hero-flag">🇹🇷</span><span class="hero-flag">🇷🇺</span><span class="hero-flag">🇺🇦</span><span class="hero-flag">🇷🇴</span><span class="hero-flag">🇵🇱</span><span class="hero-flag">🇦🇫</span><span class="hero-flag">🇧🇬</span><span class="hero-flag">🇬🇪</span><span class="hero-flag">🇩🇪</span><span class="hero-flag">🇬🇧</span><span class="hero-flag">🇪🇸</span><span class="hero-flag">🇵🇹</span><span class="hero-flag">🇪🇬</span><span class="hero-flag">🇱🇹</span><span class="hero-flag">🇦🇱</span><span class="hero-flag">🇧🇦</span><span class="hero-flag">🇷🇸</span><span class="hero-flag">🇭🇷</span><span class="hero-flag">🇨🇳</span><span class="hero-flag">🇻🇳</span><span class="hero-flag">🇮🇹</span><span class="hero-flag">🇬🇷</span><span class="hero-flag">🇮🇷</span><span class="hero-flag">🇸🇴</span><span class="hero-flag">🇪🇷</span>
+            </div>
+            <button type="button" class="ui-lang-mobile-trigger" id="uiLangMobileTrigger" aria-haspopup="dialog" aria-controls="uiLangModal" aria-expanded="false">
+              <span id="uiLangMobileTriggerText">🌐 Sprache wählen</span>
+            </button>
           </div>
           <div class="hero-text">
             <h1>Willkommen bei BehördenKlar</h1>
@@ -1052,9 +1078,6 @@
 
         <div class="lang-section lang-section-ui">
           <span class="field-label" id="uiLangLabel">🌐 Sprache der Seite wählen:</span>
-          <button type="button" class="ui-lang-mobile-trigger" id="uiLangMobileTrigger" aria-haspopup="dialog" aria-controls="uiLangModal" aria-expanded="false">
-            <span id="uiLangMobileTriggerText">🌐 Sprache wählen</span>
-          </button>
           <div class="lang-grid" id="uiLangGrid" role="group" aria-label="Sprache der Seite wählen">
             <button type="button" class="lang-btn ui-lang-btn is-active" data-ui-lang="Deutsch"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
             <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Englisch"><span aria-hidden="true">🇬🇧</span> Englisch</button>
