@@ -1488,6 +1488,7 @@
         uiLangModalTitle.textContent = (t.uiLangLabel || "").replace(/^🌐\s*/, "").replace(/:\s*$/, "").trim() || "Sprache wählen";
         updateUiLangTrigger(lang);
         syncActiveUiLangButtons(lang);
+        refreshLanguageGridsAfterUiLangChange(lang);
         updateTargetLangTrigger();
         if (stagedLetterFiles.length) {
           renderLetterFilePreviews();
@@ -1506,6 +1507,273 @@
           "Arabisch (Ägyptisch)": "🇪🇬"
         };
         return map[lang] || "🌐";
+      }
+
+      var LOCALE_FOR_UI_LANG = {
+        "Deutsch": "de",
+        "Englisch": "en",
+        "Türkisch": "tr",
+        "Arabisch": "ar",
+        "Russisch": "ru",
+        "Ukrainisch": "uk",
+        "Rumänisch": "ro",
+        "Polnisch": "pl",
+        "Dari": "fa-AF",
+        "Bulgarisch": "bg",
+        "Georgisch": "ka",
+        "Spanisch": "es",
+        "Portugiesisch": "pt",
+        "Französisch": "fr",
+        "Italienisch": "it",
+        "Griechisch": "el",
+        "Albanisch": "sq",
+        "Bosnisch": "bs",
+        "Serbisch": "sr",
+        "Kroatisch": "hr",
+        "Chinesisch": "zh-Hans",
+        "Vietnamesisch": "vi",
+        "Persisch": "fa",
+        "Somali": "so",
+        "Tigrinya": "ti",
+        "Litauisch": "lt",
+        "Arabisch (Ägyptisch)": "ar-EG"
+      };
+
+      var LANG_ISO_BY_UI_KEY = {
+        "Deutsch": "de",
+        "Englisch": "en",
+        "Türkisch": "tr",
+        "Arabisch": "ar",
+        "Russisch": "ru",
+        "Ukrainisch": "uk",
+        "Rumänisch": "ro",
+        "Polnisch": "pl",
+        "Dari": "fa-AF",
+        "Bulgarisch": "bg",
+        "Georgisch": "ka",
+        "Spanisch": "es",
+        "Portugiesisch": "pt",
+        "Französisch": "fr",
+        "Italienisch": "it",
+        "Griechisch": "el",
+        "Albanisch": "sq",
+        "Bosnisch": "bs",
+        "Serbisch": "sr",
+        "Kroatisch": "hr",
+        "Chinesisch": "zh-Hans",
+        "Vietnamesisch": "vi",
+        "Persisch": "fa",
+        "Somali": "so",
+        "Tigrinya": "ti",
+        "Litauisch": "lt",
+        "Arabisch (Ägyptisch)": "ar-EG"
+      };
+
+      var TARGET_ISO_BY_DATA_LANG = {
+        "Arabisch": "ar",
+        "Türkisch": "tr",
+        "Russisch": "ru",
+        "Ukrainisch": "uk",
+        "Rumänisch": "ro",
+        "Polnisch": "pl",
+        "Dari/Farsi (Afghanisch)": "fa-AF",
+        "Bulgarisch": "bg",
+        "Georgisch": "ka",
+        "Deutsch": "de",
+        "Englisch": "en",
+        "Französisch": "fr",
+        "Spanisch": "es",
+        "Portugiesisch": "pt",
+        "Arabisch (Ägyptisch)": "ar-EG",
+        "Litauisch": "lt",
+        "Albanisch": "sq",
+        "Bosnisch": "bs",
+        "Serbisch": "sr",
+        "Kroatisch": "hr",
+        "Chinesisch": "zh-Hans",
+        "Vietnamesisch": "vi",
+        "Italienisch": "it",
+        "Griechisch": "el",
+        "Persisch": "fa",
+        "Somali": "so",
+        "Tigrinya": "ti"
+      };
+
+      var UI_LANG_DE_LABEL = {
+        "Deutsch": "Deutsch",
+        "Englisch": "Englisch",
+        "Türkisch": "Türkisch",
+        "Arabisch": "Arabisch",
+        "Russisch": "Russisch",
+        "Ukrainisch": "Ukrainisch",
+        "Rumänisch": "Rumänisch",
+        "Polnisch": "Polnisch",
+        "Dari": "Dari",
+        "Bulgarisch": "Bulgarisch",
+        "Georgisch": "Georgisch",
+        "Spanisch": "Spanisch",
+        "Portugiesisch": "Portugiesisch",
+        "Französisch": "Französisch",
+        "Italienisch": "Italienisch",
+        "Griechisch": "Griechisch",
+        "Albanisch": "Albanisch",
+        "Bosnisch": "Bosnisch",
+        "Serbisch": "Serbisch",
+        "Kroatisch": "Kroatisch",
+        "Chinesisch": "Chinesisch",
+        "Vietnamesisch": "Vietnamesisch",
+        "Persisch": "Persisch",
+        "Somali": "Somali",
+        "Tigrinya": "Tigrinya",
+        "Litauisch": "Litauisch",
+        "Arabisch (Ägyptisch)": "Arabisch (Ägyptisch)"
+      };
+
+      var TARGET_DE_LABEL = {
+        "Arabisch": "Arabisch",
+        "Türkisch": "Türkisch",
+        "Russisch": "Russisch",
+        "Ukrainisch": "Ukrainisch",
+        "Rumänisch": "Rumänisch",
+        "Polnisch": "Polnisch",
+        "Dari/Farsi (Afghanisch)": "Dari/Farsi",
+        "Bulgarisch": "Bulgarisch",
+        "Georgisch": "Georgisch",
+        "Deutsch": "Deutsch",
+        "Englisch": "Englisch",
+        "Französisch": "Französisch",
+        "Spanisch": "Spanisch",
+        "Portugiesisch": "Portugiesisch",
+        "Arabisch (Ägyptisch)": "Arabisch (Ägyptisch)",
+        "Litauisch": "Litauisch",
+        "Albanisch": "Albanisch",
+        "Bosnisch": "Bosnisch",
+        "Serbisch": "Serbisch",
+        "Kroatisch": "Kroatisch",
+        "Chinesisch": "Chinesisch",
+        "Vietnamesisch": "Vietnamesisch",
+        "Italienisch": "Italienisch",
+        "Griechisch": "Griechisch",
+        "Persisch": "Persisch",
+        "Somali": "Somali",
+        "Tigrinya": "Tigrinya"
+      };
+
+      function localizedLanguageLabel(uiLangKey, isoCode, fallback) {
+        var loc = LOCALE_FOR_UI_LANG[uiLangKey] || "de";
+        if (typeof Intl !== "undefined" && Intl.DisplayNames) {
+          try {
+            var dn = new Intl.DisplayNames([loc], { type: "language" });
+            var s = dn.of(isoCode);
+            if (s) {
+              return s;
+            }
+          } catch (e) {}
+        }
+        return fallback || isoCode;
+      }
+
+      function langButtonSortKey(btn) {
+        var clone = btn.cloneNode(true);
+        var span = clone.querySelector("span[aria-hidden='true']");
+        if (span) {
+          span.remove();
+        }
+        return clone.textContent.replace(/\s+/g, " ").trim();
+      }
+
+      function sortLangButtonContainer(containerEl, childSelector, uiLangKey) {
+        if (!containerEl) {
+          return;
+        }
+        var locale = LOCALE_FOR_UI_LANG[uiLangKey] || "de";
+        var buttons = Array.prototype.slice.call(containerEl.querySelectorAll(":scope > " + childSelector));
+        if (!buttons.length) {
+          return;
+        }
+        buttons.sort(function (a, b) {
+          var ka = langButtonSortKey(a);
+          var kb = langButtonSortKey(b);
+          try {
+            return ka.localeCompare(kb, locale, { sensitivity: "base", numeric: true });
+          } catch (e) {
+            return ka.localeCompare(kb, undefined, { sensitivity: "base", numeric: true });
+          }
+        });
+        buttons.forEach(function (btn) {
+          containerEl.appendChild(btn);
+        });
+      }
+
+      function setUiLangButtonLabels(uiLangKey) {
+        function setOne(btn) {
+          var key = btn.getAttribute("data-ui-lang");
+          if (!key) {
+            return;
+          }
+          var iso = LANG_ISO_BY_UI_KEY[key];
+          var fallback = UI_LANG_DE_LABEL[key] || key;
+          var name = localizedLanguageLabel(uiLangKey, iso, fallback);
+          var emoji = getUiLangEmoji(key);
+          btn.replaceChildren();
+          var sp = document.createElement("span");
+          sp.setAttribute("aria-hidden", "true");
+          sp.textContent = emoji;
+          btn.appendChild(sp);
+          btn.appendChild(document.createTextNode(" "));
+          btn.appendChild(document.createTextNode(name));
+        }
+        document.querySelectorAll(".ui-lang-btn").forEach(setOne);
+        document.querySelectorAll(".ui-modal-lang-btn").forEach(setOne);
+      }
+
+      function setTargetLangButtonLabels(uiLangKey) {
+        function setOne(btn) {
+          var key = btn.getAttribute("data-lang");
+          if (!key) {
+            return;
+          }
+          var iso = TARGET_ISO_BY_DATA_LANG[key];
+          var fallback = TARGET_DE_LABEL[key] || key;
+          var name = localizedLanguageLabel(uiLangKey, iso, fallback);
+          var emoji = getTargetLangEmojiForDataLang(key);
+          btn.replaceChildren();
+          var sp = document.createElement("span");
+          sp.setAttribute("aria-hidden", "true");
+          sp.textContent = emoji;
+          btn.appendChild(sp);
+          btn.appendChild(document.createTextNode(" "));
+          btn.appendChild(document.createTextNode(name));
+        }
+        document.querySelectorAll(".target-lang-btn").forEach(setOne);
+        document.querySelectorAll(".target-modal-lang-btn").forEach(setOne);
+      }
+
+      function syncHeroFlagsEmojisOrder() {
+        var wrap = document.querySelector(".hero-flags-emojis");
+        var grid = $("uiLangGrid");
+        if (!wrap || !grid) {
+          return;
+        }
+        wrap.replaceChildren();
+        grid.querySelectorAll(".ui-lang-btn").forEach(function (btn) {
+          var langKey = btn.getAttribute("data-ui-lang");
+          var span = document.createElement("span");
+          span.className = "hero-flag";
+          span.setAttribute("aria-hidden", "true");
+          span.textContent = getUiLangEmoji(langKey);
+          wrap.appendChild(span);
+        });
+      }
+
+      function refreshLanguageGridsAfterUiLangChange(uiLangKey) {
+        setUiLangButtonLabels(uiLangKey);
+        setTargetLangButtonLabels(uiLangKey);
+        sortLangButtonContainer($("uiLangGrid"), "button.ui-lang-btn", uiLangKey);
+        sortLangButtonContainer($("uiLangModalGrid"), "button.ui-modal-lang-btn", uiLangKey);
+        sortLangButtonContainer($("targetLangGrid"), "button.target-lang-btn", uiLangKey);
+        sortLangButtonContainer($("targetLangModalGrid"), "button.target-modal-lang-btn", uiLangKey);
+        syncHeroFlagsEmojisOrder();
       }
 
       function updateUiLangTrigger(lang) {
