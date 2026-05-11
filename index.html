@@ -374,7 +374,8 @@
       gap: 0.45rem;
     }
 
-    .ui-lang-mobile-trigger {
+    .ui-lang-mobile-trigger,
+    .target-lang-mobile-trigger {
       display: none;
       width: 100%;
       align-items: center;
@@ -392,7 +393,8 @@
       cursor: pointer;
     }
 
-    .ui-lang-mobile-trigger:focus-visible {
+    .ui-lang-mobile-trigger:focus-visible,
+    .target-lang-mobile-trigger:focus-visible {
       outline: 2px solid var(--primary);
       outline-offset: 3px;
     }
@@ -731,7 +733,20 @@
         display: none;
       }
 
-      .ui-lang-mobile-trigger {
+      #uiLangLabel {
+        display: none;
+      }
+
+      #targetLangGrid {
+        display: none;
+      }
+
+      #targetLangLabel {
+        display: none;
+      }
+
+      .ui-lang-mobile-trigger,
+      .target-lang-mobile-trigger {
         display: inline-flex;
       }
     }
@@ -904,7 +919,7 @@
 
         <div class="lang-section">
           <span class="field-label" id="uiLangLabel">🌐 Sprache der Seite wählen:</span>
-          <button type="button" class="ui-lang-mobile-trigger" id="uiLangMobileTrigger" aria-haspopup="dialog" aria-controls="uiLangModal">
+          <button type="button" class="ui-lang-mobile-trigger" id="uiLangMobileTrigger" aria-haspopup="dialog" aria-controls="uiLangModal" aria-expanded="false">
             <span id="uiLangMobileTriggerText">🌐 Sprache wählen</span>
           </button>
           <div class="lang-grid" id="uiLangGrid" role="group" aria-label="Sprache der Seite wählen">
@@ -978,6 +993,9 @@
 
         <div class="lang-section">
           <span class="field-label" id="targetLangLabel">Zielsprache für die Übersetzung des Dokuments:</span>
+          <button type="button" class="target-lang-mobile-trigger" id="targetLangMobileTrigger" aria-haspopup="dialog" aria-controls="targetLangModal" aria-expanded="false">
+            <span id="targetLangMobileTriggerText">🌐 🇸🇦 Arabisch ▼</span>
+          </button>
           <div class="lang-grid" id="targetLangGrid" role="group" aria-label="Zielsprache für Übersetzung">
             <button type="button" class="lang-btn target-lang-btn is-active" data-lang="Arabisch"><span aria-hidden="true">🇸🇦</span> Arabisch</button>
             <button type="button" class="lang-btn target-lang-btn" data-lang="Türkisch"><span aria-hidden="true">🇹🇷</span> Türkisch</button>
@@ -1006,6 +1024,44 @@
             <button type="button" class="lang-btn target-lang-btn" data-lang="Persisch"><span aria-hidden="true">🇮🇷</span> Persisch</button>
             <button type="button" class="lang-btn target-lang-btn" data-lang="Somali"><span aria-hidden="true">🇸🇴</span> Somali</button>
             <button type="button" class="lang-btn target-lang-btn" data-lang="Tigrinya"><span aria-hidden="true">🇪🇷</span> Tigrinya</button>
+          </div>
+        </div>
+
+        <div class="ui-lang-modal" id="targetLangModal" aria-hidden="true">
+          <div class="ui-lang-modal-card" role="dialog" aria-modal="true" aria-labelledby="targetLangModalTitle">
+            <div class="ui-lang-modal-head">
+              <h3 class="ui-lang-modal-title" id="targetLangModalTitle">Zielsprache für die Übersetzung des Dokuments</h3>
+              <button type="button" class="ui-lang-modal-close" id="targetLangModalClose" aria-label="Schließen">×</button>
+            </div>
+            <div class="ui-lang-modal-grid" id="targetLangModalGrid">
+              <button type="button" class="lang-btn target-modal-lang-btn is-active" data-lang="Arabisch"><span aria-hidden="true">🇸🇦</span> Arabisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Türkisch"><span aria-hidden="true">🇹🇷</span> Türkisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Russisch"><span aria-hidden="true">🇷🇺</span> Russisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Ukrainisch"><span aria-hidden="true">🇺🇦</span> Ukrainisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Rumänisch"><span aria-hidden="true">🇷🇴</span> Rumänisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Polnisch"><span aria-hidden="true">🇵🇱</span> Polnisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Dari/Farsi (Afghanisch)"><span aria-hidden="true">🇦🇫</span> Dari/Farsi</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Bulgarisch"><span aria-hidden="true">🇧🇬</span> Bulgarisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Georgisch"><span aria-hidden="true">🇬🇪</span> Georgisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Deutsch"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Englisch"><span aria-hidden="true">🇬🇧</span> Englisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Französisch"><span aria-hidden="true">🇫🇷</span> Französisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Spanisch"><span aria-hidden="true">🇪🇸</span> Spanisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Portugiesisch"><span aria-hidden="true">🇵🇹</span> Portugiesisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Arabisch (Ägyptisch)"><span aria-hidden="true">🇪🇬</span> Arabisch (Ägyptisch)</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Litauisch"><span aria-hidden="true">🇱🇹</span> Litauisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Albanisch"><span aria-hidden="true">🇦🇱</span> Albanisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Bosnisch"><span aria-hidden="true">🇧🇦</span> Bosnisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Serbisch"><span aria-hidden="true">🇷🇸</span> Serbisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Kroatisch"><span aria-hidden="true">🇭🇷</span> Kroatisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Chinesisch"><span aria-hidden="true">🇨🇳</span> Chinesisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Vietnamesisch"><span aria-hidden="true">🇻🇳</span> Vietnamesisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Italienisch"><span aria-hidden="true">🇮🇹</span> Italienisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Griechisch"><span aria-hidden="true">🇬🇷</span> Griechisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Persisch"><span aria-hidden="true">🇮🇷</span> Persisch</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Somali"><span aria-hidden="true">🇸🇴</span> Somali</button>
+              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Tigrinya"><span aria-hidden="true">🇪🇷</span> Tigrinya</button>
+            </div>
           </div>
         </div>
 
@@ -1119,6 +1175,12 @@
       const uiLangModalClose = $("uiLangModalClose");
       const uiLangMobileTrigger = $("uiLangMobileTrigger");
       const uiLangMobileTriggerText = $("uiLangMobileTriggerText");
+      const uiLangModalTitle = $("uiLangModalTitle");
+      const targetLangMobileTrigger = $("targetLangMobileTrigger");
+      const targetLangMobileTriggerText = $("targetLangMobileTriggerText");
+      const targetLangModal = $("targetLangModal");
+      const targetLangModalClose = $("targetLangModalClose");
+      const targetLangModalTitle = $("targetLangModalTitle");
       const loadingScreen = $("loadingScreen");
       const loadingMessage = $("loadingMessage");
 
@@ -1218,6 +1280,7 @@
         var t = uiTranslations[lang] || uiTranslations["Deutsch"];
         uiLangLabel.textContent = t.uiLangLabel;
         targetLangLabel.textContent = t.targetLangLabel;
+        targetLangModalTitle.textContent = (t.targetLangLabel || "").replace(/:\s*$/, "").trim();
         modeFileLabel.textContent = t.modeFile;
         modeTextLabel.textContent = t.modeText;
         uploadLabel.textContent = t.uploadLabel;
@@ -1238,8 +1301,10 @@
           var idx = Math.min(loadingStepIndex, loadingSteps.length - 1);
           loadingMessage.textContent = loadingSteps[idx];
         }
+        uiLangModalTitle.textContent = (t.uiLangLabel || "").replace(/^🌐\s*/, "").replace(/:\s*$/, "").trim() || "Sprache wählen";
         updateUiLangTrigger(lang);
         syncActiveUiLangButtons(lang);
+        updateTargetLangTrigger();
       }
 
       function getUiLangEmoji(lang) {
@@ -1256,8 +1321,74 @@
       }
 
       function updateUiLangTrigger(lang) {
-        var triggerLabel = (uiTranslations[lang] && uiTranslations[lang].uiLangLabel) || "🌐 Sprache wählen:";
-        uiLangMobileTriggerText.textContent = "🌐 " + getUiLangEmoji(lang) + " " + triggerLabel.replace(/^🌐\s*/, "").replace(/:$/, "");
+        var t = uiTranslations[lang] || uiTranslations["Deutsch"];
+        var shortUi = (t.uiLangLabel || "").replace(/^🌐\s*/, "").replace(/:\s*$/, "").trim();
+        uiLangMobileTriggerText.textContent = "🌐 " + getUiLangEmoji(lang) + " " + shortUi + " ▼";
+      }
+
+      function getTargetLangEmojiForDataLang(dataLang) {
+        var map = {
+          "Arabisch": "🇸🇦",
+          "Türkisch": "🇹🇷",
+          "Russisch": "🇷🇺",
+          "Ukrainisch": "🇺🇦",
+          "Rumänisch": "🇷🇴",
+          "Polnisch": "🇵🇱",
+          "Dari/Farsi (Afghanisch)": "🇦🇫",
+          "Bulgarisch": "🇧🇬",
+          "Georgisch": "🇬🇪",
+          "Deutsch": "🇩🇪",
+          "Englisch": "🇬🇧",
+          "Französisch": "🇫🇷",
+          "Spanisch": "🇪🇸",
+          "Portugiesisch": "🇵🇹",
+          "Arabisch (Ägyptisch)": "🇪🇬",
+          "Litauisch": "🇱🇹",
+          "Albanisch": "🇦🇱",
+          "Bosnisch": "🇧🇦",
+          "Serbisch": "🇷🇸",
+          "Kroatisch": "🇭🇷",
+          "Chinesisch": "🇨🇳",
+          "Vietnamesisch": "🇻🇳",
+          "Italienisch": "🇮🇹",
+          "Griechisch": "🇬🇷",
+          "Persisch": "🇮🇷",
+          "Somali": "🇸🇴",
+          "Tigrinya": "🇪🇷"
+        };
+        return map[dataLang] || "🌐";
+      }
+
+      function getTargetLangDisplayLabel(dataLang) {
+        var found = null;
+        document.querySelectorAll(".target-lang-btn").forEach(function (b) {
+          if (b.getAttribute("data-lang") === dataLang) {
+            found = b;
+          }
+        });
+        if (!found) {
+          return dataLang;
+        }
+        var clone = found.cloneNode(true);
+        var span = clone.querySelector("span[aria-hidden='true']");
+        if (span) {
+          span.remove();
+        }
+        return clone.textContent.replace(/\s+/g, " ").trim();
+      }
+
+      function updateTargetLangTrigger() {
+        var dl = getTargetLang();
+        var emoji = getTargetLangEmojiForDataLang(dl);
+        var name = getTargetLangDisplayLabel(dl);
+        targetLangMobileTriggerText.textContent = "🌐 " + emoji + " " + name + " ▼";
+      }
+
+      function setTargetLang(dataLang) {
+        document.querySelectorAll(".target-lang-btn, .target-modal-lang-btn").forEach(function (b) {
+          b.classList.toggle("is-active", b.getAttribute("data-lang") === dataLang);
+        });
+        updateTargetLangTrigger();
       }
 
       function syncActiveUiLangButtons(lang) {
@@ -1272,11 +1403,25 @@
       function openUiLangModal() {
         uiLangModal.classList.add("visible");
         uiLangModal.setAttribute("aria-hidden", "false");
+        uiLangMobileTrigger.setAttribute("aria-expanded", "true");
       }
 
       function closeUiLangModal() {
         uiLangModal.classList.remove("visible");
         uiLangModal.setAttribute("aria-hidden", "true");
+        uiLangMobileTrigger.setAttribute("aria-expanded", "false");
+      }
+
+      function openTargetLangModal() {
+        targetLangModal.classList.add("visible");
+        targetLangModal.setAttribute("aria-hidden", "false");
+        targetLangMobileTrigger.setAttribute("aria-expanded", "true");
+      }
+
+      function closeTargetLangModal() {
+        targetLangModal.classList.remove("visible");
+        targetLangModal.setAttribute("aria-hidden", "true");
+        targetLangMobileTrigger.setAttribute("aria-expanded", "false");
       }
 
       function showError(msg) {
@@ -1291,12 +1436,31 @@
 
       document.querySelectorAll(".target-lang-btn").forEach(function (btn) {
         btn.addEventListener("click", function () {
-          document.querySelectorAll(".target-lang-btn").forEach(function (b) {
-            b.classList.remove("is-active");
-          });
-          btn.classList.add("is-active");
+          setTargetLang(btn.getAttribute("data-lang"));
           clearError();
         });
+      });
+
+      document.querySelectorAll(".target-modal-lang-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          setTargetLang(btn.getAttribute("data-lang"));
+          closeTargetLangModal();
+          clearError();
+        });
+      });
+
+      targetLangMobileTrigger.addEventListener("click", function () {
+        openTargetLangModal();
+      });
+
+      targetLangModalClose.addEventListener("click", function () {
+        closeTargetLangModal();
+      });
+
+      targetLangModal.addEventListener("click", function (e) {
+        if (e.target === targetLangModal) {
+          closeTargetLangModal();
+        }
       });
 
       document.querySelectorAll(".ui-lang-btn").forEach(function (btn) {
@@ -1325,6 +1489,21 @@
       uiLangModal.addEventListener("click", function (e) {
         if (e.target === uiLangModal) {
           closeUiLangModal();
+        }
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key !== "Escape") {
+          return;
+        }
+        if (targetLangModal.classList.contains("visible")) {
+          closeTargetLangModal();
+          e.preventDefault();
+          return;
+        }
+        if (uiLangModal.classList.contains("visible")) {
+          closeUiLangModal();
+          e.preventDefault();
         }
       });
 
