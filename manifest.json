@@ -1,7 +1,7 @@
 {
   "name": "BehördenKlar",
   "short_name": "BehördenKlar",
-  "start_url": "index.html",
+  "start_url": "landingpage.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1a73e8",
