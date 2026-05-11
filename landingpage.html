@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BehördenKlar – Behördenbriefe verstehen</title>
   <meta name="description" content="Behördenbriefe verstehen, übersetzen und die nächsten Schritten – in deiner Sprache. Jetzt kostenlos testen." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="icon-blue.svg" />
+  <meta name="theme-color" content="#1a73e8" />
   <style>
     :root {
       --primary: #1a73e8;
@@ -61,7 +64,7 @@
     .site-nav-inner {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       gap: 1rem;
       padding: 0.85rem 0;
       min-height: 4rem;
@@ -70,17 +73,19 @@
     .brand {
       display: inline-flex;
       align-items: center;
+      gap: 0.7rem;
       text-decoration: none;
       color: inherit;
-      line-height: 0;
+      line-height: 1;
       filter: drop-shadow(0 2px 8px rgba(26, 115, 232, 0.12));
     }
 
     .brand svg {
       display: block;
-      height: 48px;
+      height: 80px;
       width: auto;
     }
+
 
     .brand:focus-visible {
       outline: 2px solid var(--primary);
@@ -234,14 +239,10 @@
       }
 
       .site-nav-inner {
-        flex-wrap: wrap;
-        justify-content: center;
+        justify-content: flex-start;
         padding: 0.65rem 0;
       }
 
-      .brand svg {
-        height: 40px;
-      }
     }
 
     .lp-card {
@@ -386,7 +387,6 @@
           <text x="58" y="54" class="logo-word-klar">Klar</text>
         </svg>
       </a>
-      <a class="btn-cta" href="index.html">Jetzt kostenlos testen</a>
     </div>
   </header>
 
@@ -402,7 +402,7 @@
             <a class="btn-cta btn-cta-lg" href="index.html">Jetzt kostenlos testen</a>
           </div>
           <div class="lp-flags" aria-hidden="true">
-            <span>🇸🇦</span><span>🇹🇷</span><span>🇷🇺</span><span>🇺🇦</span><span>🇷🇴</span><span>🇵🇱</span><span>🇦🇫</span><span>🇧🇬</span><span>🇬🇪</span><span>🇩🇪</span><span>🇬🇧</span><span>🇪🇸</span><span>🇵🇹</span><span>🇪🇬</span><span>🇱🇹</span><span>🇦🇱</span><span>🇧🇦</span><span>🇷🇸</span><span>🇭🇷</span><span>🇨🇳</span><span>🇻🇳</span><span>🇮🇹</span><span>🇬🇷</span><span>🇮🇷</span><span>🇸🇴</span><span>🇪🇷</span>
+            <span>🇸🇦</span><span>🇹🇷</span><span>🇷🇺</span><span>🇺🇦</span><span>🇷🇴</span><span>🇵🇱</span><span>🇦🇫</span><span>🇧🇬</span><span>🇬🇪</span><span>🇩🇪</span><span>🇬🇧</span><span>🇪🇸</span><span>🇵🇹</span><span>🇪🇬</span><span>🇱🇹</span><span>🇦🇱</span><span>🇧🇦</span><span>🇷🇸</span><span>🇭🇷</span><span>🇨🇳</span><span>🇻🇳</span><span>🇮🇹</span><span>🇬🇷</span><span>🇮🇷</span><span>🇸🇴</span><span>🇪🇷</span><span>🇫🇷</span>
           </div>
           <p class="lp-flags-caption">Viele Sprachen – eine klare Antwort</p>
         </div>
@@ -513,5 +513,14 @@
     </nav>
     <p class="footer-owner">Inhaber: Yusuf Coban · <a href="mailto:info@behördenklar.de">info@behördenklar.de</a></p>
   </footer>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("service-worker.js").catch(function () {
+          // no-op
+        });
+      });
+    }
+  </script>
 </body>
 </html>

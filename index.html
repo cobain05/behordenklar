@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BehördenKlar – Briefhilfe</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="icon-blue.svg" />
+  <meta name="theme-color" content="#1a73e8" />
   <style>
     :root {
       --primary: #1a73e8;
@@ -548,45 +551,79 @@
       display: block;
     }
 
-    /* Results grid */
+    /* Full-screen result view */
     #results {
       display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: #f7f9fc;
+      overflow-y: auto;
+      padding: 1.1rem;
     }
 
     #results.visible {
       display: block;
     }
 
-    .results-head {
-      margin-bottom: 1.25rem;
+    body.results-open {
+      overflow: hidden;
     }
 
-    .results-head h2 {
-      margin: 0;
-      font-size: 1.25rem;
+    .results-view {
+      width: min(100%, 1200px);
+      margin: 0 auto;
+      padding-bottom: 2rem;
+    }
+
+    .btn-back {
+      appearance: none;
+      border: none;
+      background: var(--surface);
+      color: var(--primary);
+      font: inherit;
+      font-size: 0.98rem;
       font-weight: 700;
-      color: var(--text);
+      border-radius: 12px;
+      padding: 0.62rem 0.95rem;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      margin: 0 0 1rem;
+    }
+
+    .results-page-title {
+      margin: 0 0 1rem;
+      font-size: clamp(1.3rem, 2.7vw, 1.9rem);
       letter-spacing: -0.02em;
     }
 
-    .results-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      align-items: stretch;
+    .result-section {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid rgba(218, 220, 224, 0.9);
+      box-shadow: var(--shadow);
+      padding: clamp(1.1rem, 2.8vw, 2rem);
+      margin-bottom: 1rem;
     }
 
-    @media (max-width: 1024px) {
-      .results-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .result-section h3 {
+      margin: 0 0 0.95rem;
+      font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+      font-weight: 800;
+      color: var(--primary);
+      padding-bottom: 0.7rem;
+      border-bottom: 2px solid var(--primary-soft);
+    }
+
+    .result-body {
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: clamp(1rem, 1.7vw, 1.18rem);
+      line-height: 1.75;
+      color: var(--text);
     }
 
     @media (max-width: 600px) {
-      .results-grid {
-        grid-template-columns: 1fr;
-      }
-
       .hero {
         padding: 1.5rem 0 2rem;
       }
@@ -605,45 +642,6 @@
         font-size: 0.78rem;
         padding: 0.45rem 0.6rem;
       }
-    }
-
-    .result-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 1.1rem 1.15rem;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(218, 220, 224, 0.9);
-      display: flex;
-      flex-direction: column;
-      min-height: 180px;
-      transition: box-shadow 0.2s, border-color 0.2s;
-    }
-
-    .result-card:hover {
-      box-shadow: var(--shadow-lg);
-      border-color: rgba(26, 115, 232, 0.2);
-    }
-
-    .result-card h3 {
-      margin: 0 0 0.65rem;
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--primary);
-      line-height: 1.3;
-      padding-bottom: 0.6rem;
-      border-bottom: 2px solid var(--primary-soft);
-    }
-
-    .result-body {
-      flex: 1;
-      white-space: pre-wrap;
-      word-break: break-word;
-      font-size: 0.86rem;
-      line-height: 1.5;
-      color: var(--text);
-      max-height: 420px;
-      overflow-y: auto;
-      padding-right: 0.25rem;
     }
 
     .site-footer {
@@ -671,6 +669,73 @@
       max-width: 640px;
       margin: 0 auto;
       line-height: 1.5;
+    }
+
+    .loading-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(240, 244, 249, 0.96);
+      backdrop-filter: blur(2px);
+      padding: 1.25rem;
+    }
+
+    .loading-brand {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      opacity: 0.82;
+      filter: drop-shadow(0 1px 4px rgba(26, 115, 232, 0.12));
+      pointer-events: none;
+    }
+
+    .loading-brand svg {
+      display: block;
+      width: auto;
+      height: 30px;
+    }
+
+    .loading-screen.visible {
+      display: flex;
+    }
+
+    .loading-card {
+      width: min(100%, 420px);
+      background: var(--surface);
+      border: 1px solid rgba(26, 115, 232, 0.18);
+      box-shadow: var(--shadow-lg);
+      border-radius: var(--radius);
+      text-align: center;
+      padding: 1.6rem 1.3rem;
+    }
+
+    .loading-spinner {
+      width: 3rem;
+      height: 3rem;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      border: 4px solid rgba(26, 115, 232, 0.22);
+      border-top-color: var(--primary);
+      animation: spin 0.9s linear infinite;
+    }
+
+    .loading-title {
+      margin: 0 0 0.45rem;
+      font-size: 1.12rem;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .loading-message {
+      margin: 0;
+      min-height: 1.5em;
+      font-size: 0.98rem;
+      color: var(--text);
+      line-height: 1.45;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -714,72 +779,106 @@
         <div class="mode-toggle" role="tablist" aria-label="Eingabeart">
           <label>
             <input type="radio" name="inputMode" value="file" checked />
-            <span class="mode-pill">Foto oder PDF</span>
+            <span class="mode-pill" id="modeFileLabel">Foto oder PDF</span>
           </label>
           <label>
             <input type="radio" name="inputMode" value="text" />
-            <span class="mode-pill">Text eingeben</span>
+            <span class="mode-pill" id="modeTextLabel">Text eingeben</span>
           </label>
         </div>
 
         <div id="panelFile" class="panel active">
-          <span class="field-label">Datei hochladen</span>
+          <span class="field-label" id="uploadLabel">Datei hochladen</span>
           <div class="drop-zone-wrap">
             <div class="drop-zone" id="dropZone" aria-hidden="false">
               <input type="file" id="letterFile" class="drop-zone-input" accept="image/*,application/pdf" capture="environment" />
               <div class="drop-zone-icon" aria-hidden="true">📄</div>
-              <p class="drop-zone-title">Datei hierher ziehen</p>
-              <p class="drop-zone-hint">oder klicken und JPG, PNG oder PDF wählen</p>
+              <p class="drop-zone-title" id="dropTitle">Datei hierher ziehen</p>
+              <p class="drop-zone-hint" id="dropHint">oder klicken und JPG, PNG oder PDF wählen</p>
               <p class="drop-file-name" id="dropFileName" hidden></p>
             </div>
           </div>
           <button type="button" class="btn-take-photo" id="btnTakePhoto" aria-label="Foto mit der Kamera aufnehmen">
-            <span aria-hidden="true">📷</span> Foto aufnehmen
+            <span aria-hidden="true">📷</span> <span id="takePhotoLabel">Foto aufnehmen</span>
           </button>
-          <p class="hint">Max. ca. 32&nbsp;MB. Passwortgeschützte PDFs werden nicht unterstützt.</p>
+          <p class="hint" id="uploadHint">Max. ca. 32&nbsp;MB. Passwortgeschützte PDFs werden nicht unterstützt.</p>
           <div id="preview" class="preview" hidden></div>
         </div>
 
         <div id="panelText" class="panel">
-          <span class="field-label">Behördenbrief (Deutsch)</span>
+          <span class="field-label" id="textInputLabel">Behördenbrief (Deutsch)</span>
           <textarea id="letterText" class="textarea-hero" placeholder="Brief hier einfügen oder abtippen…"></textarea>
         </div>
 
         <div class="lang-section">
-          <span class="field-label">Zielsprache</span>
-          <div class="lang-grid" id="langGrid" role="group" aria-label="Zielsprache wählen">
-            <button type="button" class="lang-btn is-active" data-lang="Arabisch"><span aria-hidden="true">🇸🇦</span> Arabisch</button>
-            <button type="button" class="lang-btn" data-lang="Türkisch"><span aria-hidden="true">🇹🇷</span> Türkisch</button>
-            <button type="button" class="lang-btn" data-lang="Russisch"><span aria-hidden="true">🇷🇺</span> Russisch</button>
-            <button type="button" class="lang-btn" data-lang="Ukrainisch"><span aria-hidden="true">🇺🇦</span> Ukrainisch</button>
-            <button type="button" class="lang-btn" data-lang="Rumänisch"><span aria-hidden="true">🇷🇴</span> Rumänisch</button>
-            <button type="button" class="lang-btn" data-lang="Polnisch"><span aria-hidden="true">🇵🇱</span> Polnisch</button>
-            <button type="button" class="lang-btn" data-lang="Dari/Farsi (Afghanisch)"><span aria-hidden="true">🇦🇫</span> Dari/Farsi</button>
-            <button type="button" class="lang-btn" data-lang="Bulgarisch"><span aria-hidden="true">🇧🇬</span> Bulgarisch</button>
-            <button type="button" class="lang-btn" data-lang="Georgisch"><span aria-hidden="true">🇬🇪</span> Georgisch</button>
-            <button type="button" class="lang-btn" data-lang="Deutsch"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
-            <button type="button" class="lang-btn" data-lang="Englisch"><span aria-hidden="true">🇬🇧</span> Englisch</button>
-            <button type="button" class="lang-btn" data-lang="Spanisch"><span aria-hidden="true">🇪🇸</span> Spanisch</button>
-            <button type="button" class="lang-btn" data-lang="Portugiesisch"><span aria-hidden="true">🇵🇹</span> Portugiesisch</button>
-            <button type="button" class="lang-btn" data-lang="Arabisch (Ägyptisch)"><span aria-hidden="true">🇪🇬</span> Arabisch (Ägyptisch)</button>
-            <button type="button" class="lang-btn" data-lang="Litauisch"><span aria-hidden="true">🇱🇹</span> Litauisch</button>
-            <button type="button" class="lang-btn" data-lang="Albanisch"><span aria-hidden="true">🇦🇱</span> Albanisch</button>
-            <button type="button" class="lang-btn" data-lang="Bosnisch"><span aria-hidden="true">🇧🇦</span> Bosnisch</button>
-            <button type="button" class="lang-btn" data-lang="Serbisch"><span aria-hidden="true">🇷🇸</span> Serbisch</button>
-            <button type="button" class="lang-btn" data-lang="Kroatisch"><span aria-hidden="true">🇭🇷</span> Kroatisch</button>
-            <button type="button" class="lang-btn" data-lang="Chinesisch"><span aria-hidden="true">🇨🇳</span> Chinesisch</button>
-            <button type="button" class="lang-btn" data-lang="Vietnamesisch"><span aria-hidden="true">🇻🇳</span> Vietnamesisch</button>
-            <button type="button" class="lang-btn" data-lang="Italienisch"><span aria-hidden="true">🇮🇹</span> Italienisch</button>
-            <button type="button" class="lang-btn" data-lang="Griechisch"><span aria-hidden="true">🇬🇷</span> Griechisch</button>
-            <button type="button" class="lang-btn" data-lang="Persisch"><span aria-hidden="true">🇮🇷</span> Persisch</button>
-            <button type="button" class="lang-btn" data-lang="Somali"><span aria-hidden="true">🇸🇴</span> Somali</button>
-            <button type="button" class="lang-btn" data-lang="Tigrinya"><span aria-hidden="true">🇪🇷</span> Tigrinya</button>
+          <span class="field-label" id="uiLangLabel">🌐 Sprache der Seite wählen:</span>
+          <div class="lang-grid" id="uiLangGrid" role="group" aria-label="Sprache der Seite wählen">
+            <button type="button" class="lang-btn ui-lang-btn is-active" data-ui-lang="Deutsch"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Englisch"><span aria-hidden="true">🇬🇧</span> Englisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Türkisch"><span aria-hidden="true">🇹🇷</span> Türkisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Arabisch"><span aria-hidden="true">🇸🇦</span> Arabisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Russisch"><span aria-hidden="true">🇷🇺</span> Russisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Ukrainisch"><span aria-hidden="true">🇺🇦</span> Ukrainisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Rumänisch"><span aria-hidden="true">🇷🇴</span> Rumänisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Polnisch"><span aria-hidden="true">🇵🇱</span> Polnisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Dari"><span aria-hidden="true">🇦🇫</span> Dari</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Bulgarisch"><span aria-hidden="true">🇧🇬</span> Bulgarisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Georgisch"><span aria-hidden="true">🇬🇪</span> Georgisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Spanisch"><span aria-hidden="true">🇪🇸</span> Spanisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Portugiesisch"><span aria-hidden="true">🇵🇹</span> Portugiesisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Französisch"><span aria-hidden="true">🇫🇷</span> Französisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Italienisch"><span aria-hidden="true">🇮🇹</span> Italienisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Griechisch"><span aria-hidden="true">🇬🇷</span> Griechisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Albanisch"><span aria-hidden="true">🇦🇱</span> Albanisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Bosnisch"><span aria-hidden="true">🇧🇦</span> Bosnisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Serbisch"><span aria-hidden="true">🇷🇸</span> Serbisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Kroatisch"><span aria-hidden="true">🇭🇷</span> Kroatisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Chinesisch"><span aria-hidden="true">🇨🇳</span> Chinesisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Vietnamesisch"><span aria-hidden="true">🇻🇳</span> Vietnamesisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Persisch"><span aria-hidden="true">🇮🇷</span> Persisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Somali"><span aria-hidden="true">🇸🇴</span> Somali</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Tigrinya"><span aria-hidden="true">🇪🇷</span> Tigrinya</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Litauisch"><span aria-hidden="true">🇱🇹</span> Litauisch</button>
+            <button type="button" class="lang-btn ui-lang-btn" data-ui-lang="Arabisch (Ägyptisch)"><span aria-hidden="true">🇪🇬</span> Arabisch (Ägyptisch)</button>
+          </div>
+        </div>
+
+        <div class="lang-section">
+          <span class="field-label" id="targetLangLabel">Zielsprache für die Übersetzung des Dokuments:</span>
+          <div class="lang-grid" id="targetLangGrid" role="group" aria-label="Zielsprache für Übersetzung">
+            <button type="button" class="lang-btn target-lang-btn is-active" data-lang="Arabisch"><span aria-hidden="true">🇸🇦</span> Arabisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Türkisch"><span aria-hidden="true">🇹🇷</span> Türkisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Russisch"><span aria-hidden="true">🇷🇺</span> Russisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Ukrainisch"><span aria-hidden="true">🇺🇦</span> Ukrainisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Rumänisch"><span aria-hidden="true">🇷🇴</span> Rumänisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Polnisch"><span aria-hidden="true">🇵🇱</span> Polnisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Dari/Farsi (Afghanisch)"><span aria-hidden="true">🇦🇫</span> Dari/Farsi</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Bulgarisch"><span aria-hidden="true">🇧🇬</span> Bulgarisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Georgisch"><span aria-hidden="true">🇬🇪</span> Georgisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Deutsch"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Englisch"><span aria-hidden="true">🇬🇧</span> Englisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Französisch"><span aria-hidden="true">🇫🇷</span> Französisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Spanisch"><span aria-hidden="true">🇪🇸</span> Spanisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Portugiesisch"><span aria-hidden="true">🇵🇹</span> Portugiesisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Arabisch (Ägyptisch)"><span aria-hidden="true">🇪🇬</span> Arabisch (Ägyptisch)</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Litauisch"><span aria-hidden="true">🇱🇹</span> Litauisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Albanisch"><span aria-hidden="true">🇦🇱</span> Albanisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Bosnisch"><span aria-hidden="true">🇧🇦</span> Bosnisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Serbisch"><span aria-hidden="true">🇷🇸</span> Serbisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Kroatisch"><span aria-hidden="true">🇭🇷</span> Kroatisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Chinesisch"><span aria-hidden="true">🇨🇳</span> Chinesisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Vietnamesisch"><span aria-hidden="true">🇻🇳</span> Vietnamesisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Italienisch"><span aria-hidden="true">🇮🇹</span> Italienisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Griechisch"><span aria-hidden="true">🇬🇷</span> Griechisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Persisch"><span aria-hidden="true">🇮🇷</span> Persisch</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Somali"><span aria-hidden="true">🇸🇴</span> Somali</button>
+            <button type="button" class="lang-btn target-lang-btn" data-lang="Tigrinya"><span aria-hidden="true">🇪🇷</span> Tigrinya</button>
           </div>
         </div>
 
         <button type="button" class="btn-analyze" id="analyzeBtn">
           <span class="spinner" aria-hidden="true"></span>
-          <span class="btn-text">Brief analysieren</span>
+          <span class="btn-text" id="analyzeText">Brief analysieren</span>
         </button>
       </div>
     </div>
@@ -793,32 +892,31 @@
         <h2 id="api-heading">API-Schlüssel</h2>
         <div class="key-row">
           <div class="field">
-            <label for="apiKey">Anthropic API Key</label>
+            <label for="apiKey" id="apiKeyLabel">Anthropic API Key</label>
             <input type="password" id="apiKey" autocomplete="off" placeholder="sk-ant-api03-…" />
           </div>
           <button type="button" class="toggle-key" id="toggleKey">Anzeigen</button>
         </div>
-        <p class="hint">Der Schlüssel wird nur in Ihrem Browser verwendet und nicht gespeichert.</p>
+        <p class="hint" id="apiHint">Der Schlüssel wird nur in Ihrem Browser verwendet und nicht gespeichert.</p>
       </section>
 
       <section id="results" aria-live="polite">
-        <div class="results-head">
-          <h2>Ergebnis</h2>
-        </div>
-        <div class="results-grid">
-          <article class="result-card">
+        <div class="results-view">
+          <button type="button" class="btn-back" id="btnBack">← Zurück</button>
+          <h2 class="results-page-title" id="resultsHeading">Ergebnis</h2>
+          <article class="result-section">
             <h3 id="h3TitleTranslation">Übersetzung</h3>
             <div class="result-body" id="outTranslation"></div>
           </article>
-          <article class="result-card">
+          <article class="result-section">
             <h3 id="h3TitleExplain">Erklärung</h3>
             <div class="result-body" id="outExplain"></div>
           </article>
-          <article class="result-card">
+          <article class="result-section">
             <h3 id="h3TitleSteps">Nächste Schritte</h3>
             <div class="result-body" id="outSteps"></div>
           </article>
-          <article class="result-card">
+          <article class="result-section">
             <h3 id="h3TitleBriefkopf">Briefkopf</h3>
             <div class="result-body" id="outTemplate"></div>
           </article>
@@ -834,6 +932,35 @@
       Die App über den lokalen Server öffnen (siehe <code>server.py</code>), damit Anfragen ohne CORS-Probleme funktionieren.
     </p>
   </footer>
+
+  <div class="loading-screen" id="loadingScreen" aria-live="polite" aria-hidden="true">
+    <div class="loading-brand" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 70" width="200" height="70" focusable="false">
+        <defs>
+          <style>
+            .logo-word-behorden-loading { fill: #1a73e8; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 17px; font-weight: 700; }
+            .logo-word-klar-loading { fill: #202124; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 17px; font-weight: 700; }
+          </style>
+        </defs>
+        <g>
+          <rect x="8" y="6" width="40" height="58" rx="4" ry="4" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+          <rect x="10" y="8" width="36" height="9" rx="2" fill="#1a73e8"/>
+          <rect x="14" y="24" width="28" height="3" rx="1" fill="#1a73e8" opacity="0.35"/>
+          <rect x="14" y="31" width="22" height="3" rx="1" fill="#1a73e8" opacity="0.35"/>
+          <rect x="14" y="38" width="26" height="3" rx="1" fill="#1a73e8" opacity="0.35"/>
+          <circle cx="40" cy="56" r="9" fill="#1a73e8"/>
+          <path d="M 35.2 56 L 38.4 59.1 L 44.8 51.8" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <text x="58" y="34" class="logo-word-behorden-loading">Behörden</text>
+        <text x="58" y="54" class="logo-word-klar-loading">Klar</text>
+      </svg>
+    </div>
+    <div class="loading-card" role="status">
+      <div class="loading-spinner" aria-hidden="true"></div>
+      <p class="loading-title">BehördenKlar analysiert</p>
+      <p class="loading-message" id="loadingMessage">Dokument wird gelesen...</p>
+    </div>
+  </div>
 
   <script>
     (function () {
@@ -854,10 +981,126 @@
       const preview = $("preview");
       const dropZone = $("dropZone");
       const dropFileName = $("dropFileName");
+      const btnBack = $("btnBack");
+      const loadingScreen = $("loadingScreen");
+      const loadingMessage = $("loadingMessage");
+
+      let loadingIntervalId = null;
+      let loadingStepIndex = 0;
+      const uiLangLabel = $("uiLangLabel");
+      const targetLangLabel = $("targetLangLabel");
+      const modeFileLabel = $("modeFileLabel");
+      const modeTextLabel = $("modeTextLabel");
+      const uploadLabel = $("uploadLabel");
+      const dropTitle = $("dropTitle");
+      const dropHint = $("dropHint");
+      const takePhotoLabel = $("takePhotoLabel");
+      const uploadHint = $("uploadHint");
+      const textInputLabel = $("textInputLabel");
+      const analyzeText = $("analyzeText");
+      const apiHeading = $("api-heading");
+      const apiKeyLabel = $("apiKeyLabel");
+      const apiHint = $("apiHint");
+      const resultsHeading = $("resultsHeading");
+
+      const uiTranslations = {
+        "Deutsch": { uiLangLabel: "🌐 Sprache der Seite wählen:", targetLangLabel: "Zielsprache für die Übersetzung des Dokuments:", modeFile: "Foto oder PDF", modeText: "Text eingeben", uploadLabel: "Datei hochladen", dropTitle: "Datei hierher ziehen", dropHint: "oder klicken und Bild oder PDF wählen", takePhoto: "Foto aufnehmen", uploadHint: "Max. ca. 32 MB. Passwortgeschützte PDFs werden nicht unterstützt.", textInputLabel: "Behördenbrief (Deutsch)", textPlaceholder: "Brief hier einfügen oder abtippen…", analyzeText: "Brief analysieren", apiHeading: "API-Schlüssel", apiKeyLabel: "Anthropic API Key", apiHint: "Der Schlüssel wird nur in Ihrem Browser verwendet und nicht gespeichert.", resultsHeading: "Ergebnis", toggleShow: "Anzeigen", toggleHide: "Verbergen" },
+        "Englisch": { uiLangLabel: "🌐 Choose page language:", targetLangLabel: "Target language for document translation:", modeFile: "Photo or PDF", modeText: "Enter text", uploadLabel: "Upload document", dropTitle: "Drop file here", dropHint: "or click and choose image or PDF", takePhoto: "Take photo", uploadHint: "Max. about 32 MB. Password-protected PDFs are not supported.", textInputLabel: "Official letter (German)", textPlaceholder: "Paste or type the letter here…", analyzeText: "Analyze letter", apiHeading: "API key", apiKeyLabel: "Anthropic API Key", apiHint: "The key is only used in your browser and is not stored.", resultsHeading: "Result", toggleShow: "Show", toggleHide: "Hide" },
+        "Türkisch": { uiLangLabel: "🌐 Sayfa dilini seçin:", targetLangLabel: "Belge çevirisi için hedef dil:", modeFile: "Fotoğraf veya PDF", modeText: "Metin girin", uploadLabel: "Belge yükle", dropTitle: "Dosyayı buraya bırakın", dropHint: "veya tıklayıp görsel ya da PDF seçin", takePhoto: "Fotoğraf çek", uploadHint: "Maks. yaklaşık 32 MB. Şifreli PDF desteklenmez.", textInputLabel: "Resmi mektup (Almanca)", textPlaceholder: "Mektubu buraya yapıştırın veya yazın…", analyzeText: "Mektubu analiz et", apiHeading: "API anahtarı", apiKeyLabel: "Anthropic API Key", apiHint: "Anahtar yalnızca tarayıcınızda kullanılır ve kaydedilmez.", resultsHeading: "Sonuç" },
+        "Arabisch": { uiLangLabel: "🌐 اختر لغة الصفحة:", targetLangLabel: "لغة ترجمة المستند:", modeFile: "صورة أو PDF", modeText: "إدخال نص", uploadLabel: "رفع المستند", dropTitle: "اسحب الملف هنا", dropHint: "أو انقر واختر صورة أو PDF", takePhoto: "التقاط صورة", uploadHint: "الحد الأقصى حوالي 32 ميغابايت. ملفات PDF المحمية غير مدعومة.", textInputLabel: "الخطاب الرسمي (بالألمانية)", textPlaceholder: "ألصق الرسالة أو اكتبها هنا…", analyzeText: "تحليل الخطاب", apiHeading: "مفتاح API", apiKeyLabel: "Anthropic API Key", apiHint: "يُستخدم المفتاح في متصفحك فقط ولا يتم حفظه.", resultsHeading: "النتيجة" },
+        "Russisch": { uiLangLabel: "🌐 Выберите язык страницы:", targetLangLabel: "Язык перевода документа:", modeFile: "Фото или PDF", modeText: "Ввести текст", uploadLabel: "Загрузить документ", dropTitle: "Перетащите файл сюда", dropHint: "или нажмите и выберите изображение или PDF", takePhoto: "Сделать фото", uploadHint: "Макс. около 32 МБ. Защищенные PDF не поддерживаются.", textInputLabel: "Официальное письмо (нем.)", textPlaceholder: "Вставьте или введите письмо здесь…", analyzeText: "Анализировать письмо", apiHeading: "API-ключ", apiKeyLabel: "Anthropic API Key", apiHint: "Ключ используется только в браузере и не сохраняется.", resultsHeading: "Результат" },
+        "Ukrainisch": { uiLangLabel: "🌐 Виберіть мову сторінки:", targetLangLabel: "Цільова мова перекладу документа:", modeFile: "Фото або PDF", modeText: "Ввести текст", uploadLabel: "Завантажити документ", dropTitle: "Перетягніть файл сюди", dropHint: "або натисніть і виберіть зображення чи PDF", takePhoto: "Зробити фото", uploadHint: "Макс. близько 32 МБ. Захищені PDF не підтримуються.", textInputLabel: "Офіційний лист (німецькою)", textPlaceholder: "Вставте або введіть лист тут…", analyzeText: "Аналізувати лист", apiHeading: "API-ключ", apiKeyLabel: "Anthropic API Key", apiHint: "Ключ використовується лише у браузері та не зберігається.", resultsHeading: "Результат" },
+        "Rumänisch": { uiLangLabel: "🌐 Alege limba paginii:", targetLangLabel: "Limba țintă pentru traducerea documentului:", modeFile: "Foto sau PDF", modeText: "Introdu text", uploadLabel: "Încarcă document", dropTitle: "Trage fișierul aici", dropHint: "sau apasă și alege imagine ori PDF", takePhoto: "Fă o fotografie", uploadHint: "Max. aprox. 32 MB. PDF-urile protejate nu sunt acceptate.", textInputLabel: "Scrisoare oficială (germană)", textPlaceholder: "Lipește sau scrie scrisoarea aici…", analyzeText: "Analizează scrisoarea", apiHeading: "Cheie API", apiKeyLabel: "Anthropic API Key", apiHint: "Cheia este folosită doar în browser și nu este salvată.", resultsHeading: "Rezultat" },
+        "Polnisch": { uiLangLabel: "🌐 Wybierz język strony:", targetLangLabel: "Język docelowy tłumaczenia dokumentu:", modeFile: "Zdjęcie lub PDF", modeText: "Wpisz tekst", uploadLabel: "Prześlij dokument", dropTitle: "Przeciągnij plik tutaj", dropHint: "lub kliknij i wybierz obraz lub PDF", takePhoto: "Zrób zdjęcie", uploadHint: "Maks. ok. 32 MB. Zabezpieczone PDF nie są obsługiwane.", textInputLabel: "Pismo urzędowe (niem.)", textPlaceholder: "Wklej lub wpisz pismo tutaj…", analyzeText: "Analizuj pismo", apiHeading: "Klucz API", apiKeyLabel: "Anthropic API Key", apiHint: "Klucz jest używany tylko w przeglądarce i nie jest zapisywany.", resultsHeading: "Wynik" },
+        "Dari": { uiLangLabel: "🌐 زبان صفحه را انتخاب کنید:", targetLangLabel: "زبان هدف برای ترجمه سند:", modeFile: "عکس یا PDF", modeText: "متن را وارد کنید", uploadLabel: "بارگذاری سند", dropTitle: "فایل را اینجا بکشید", dropHint: "یا کلیک کنید و تصویر یا PDF را انتخاب کنید", takePhoto: "گرفتن عکس", uploadHint: "حداکثر حدود ۳۲ مگابایت. فایل PDF رمزدار پشتیبانی نمی‌شود.", textInputLabel: "نامه اداری (آلمانی)", textPlaceholder: "نامه را اینجا بچسبانید یا تایپ کنید…", analyzeText: "تحلیل نامه", apiHeading: "کلید API", apiKeyLabel: "Anthropic API Key", apiHint: "کلید فقط در مرورگر شما استفاده می‌شود و ذخیره نمی‌شود.", resultsHeading: "نتیجه" },
+        "Bulgarisch": { uiLangLabel: "🌐 Изберете език на страницата:", targetLangLabel: "Целеви език за превод на документа:", modeFile: "Снимка или PDF", modeText: "Въведете текст", uploadLabel: "Качете документ", dropTitle: "Пуснете файла тук", dropHint: "или натиснете и изберете изображение или PDF", takePhoto: "Направи снимка", uploadHint: "Макс. около 32 MB. Защитени PDF не се поддържат.", textInputLabel: "Официално писмо (немски)", textPlaceholder: "Поставете или въведете писмото тук…", analyzeText: "Анализирай писмото", apiHeading: "API ключ", apiKeyLabel: "Anthropic API Key", apiHint: "Ключът се използва само в браузъра и не се съхранява.", resultsHeading: "Резултат" },
+        "Georgisch": { uiLangLabel: "🌐 აირჩიეთ გვერდის ენა:", targetLangLabel: "დოკუმენტის თარგმნის სამიზნე ენა:", modeFile: "ფოტო ან PDF", modeText: "ტექსტის შეყვანა", uploadLabel: "დოკუმენტის ატვირთვა", dropTitle: "ჩააგდეთ ფაილი აქ", dropHint: "ან დააჭირეთ და აირჩიეთ სურათი ან PDF", takePhoto: "ფოტოს გადაღება", uploadHint: "მაქს. დაახლოებით 32 მბ. პაროლით დაცული PDF არ არის მხარდაჭერილი.", textInputLabel: "ოფიციალური წერილი (გერმანული)", textPlaceholder: "ჩასვით ან აკრიფეთ წერილი აქ…", analyzeText: "წერილის ანალიზი", apiHeading: "API გასაღები", apiKeyLabel: "Anthropic API Key", apiHint: "გასაღები გამოიყენება მხოლოდ ბრაუზერში და არ ინახება.", resultsHeading: "შედეგი" },
+        "Spanisch": { uiLangLabel: "🌐 Elige el idioma de la página:", targetLangLabel: "Idioma objetivo para traducir el documento:", modeFile: "Foto o PDF", modeText: "Introducir texto", uploadLabel: "Subir documento", dropTitle: "Arrastra el archivo aquí", dropHint: "o haz clic y elige imagen o PDF", takePhoto: "Tomar foto", uploadHint: "Máx. aprox. 32 MB. No se admiten PDF protegidos.", textInputLabel: "Carta oficial (alemán)", textPlaceholder: "Pega o escribe la carta aquí…", analyzeText: "Analizar carta", apiHeading: "Clave API", apiKeyLabel: "Anthropic API Key", apiHint: "La clave solo se usa en tu navegador y no se guarda.", resultsHeading: "Resultado" },
+        "Portugiesisch": { uiLangLabel: "🌐 Escolha o idioma da página:", targetLangLabel: "Idioma de destino para tradução do documento:", modeFile: "Foto ou PDF", modeText: "Inserir texto", uploadLabel: "Enviar documento", dropTitle: "Solte o arquivo aqui", dropHint: "ou clique e escolha imagem ou PDF", takePhoto: "Tirar foto", uploadHint: "Máx. aprox. 32 MB. PDFs protegidos não são suportados.", textInputLabel: "Carta oficial (alemão)", textPlaceholder: "Cole ou digite a carta aqui…", analyzeText: "Analisar carta", apiHeading: "Chave API", apiKeyLabel: "Anthropic API Key", apiHint: "A chave é usada apenas no navegador e não é salva.", resultsHeading: "Resultado" },
+        "Französisch": { uiLangLabel: "🌐 Choisissez la langue de la page :", targetLangLabel: "Langue cible pour la traduction du document :", modeFile: "Photo ou PDF", modeText: "Saisir du texte", uploadLabel: "Téléverser un document", dropTitle: "Déposez le fichier ici", dropHint: "ou cliquez et choisissez une image ou un PDF", takePhoto: "Prendre une photo", uploadHint: "Max. env. 32 Mo. Les PDF protégés ne sont pas pris en charge.", textInputLabel: "Lettre officielle (allemand)", textPlaceholder: "Collez ou saisissez la lettre ici…", analyzeText: "Analyser la lettre", apiHeading: "Clé API", apiKeyLabel: "Anthropic API Key", apiHint: "La clé est utilisée uniquement dans votre navigateur et n'est pas enregistrée.", resultsHeading: "Résultat" },
+        "Italienisch": { uiLangLabel: "🌐 Scegli la lingua della pagina:", targetLangLabel: "Lingua di destinazione per la traduzione del documento:", modeFile: "Foto o PDF", modeText: "Inserisci testo", uploadLabel: "Carica documento", dropTitle: "Trascina qui il file", dropHint: "oppure clicca e scegli immagine o PDF", takePhoto: "Scatta foto", uploadHint: "Max circa 32 MB. I PDF protetti non sono supportati.", textInputLabel: "Lettera ufficiale (tedesco)", textPlaceholder: "Incolla o digita qui la lettera…", analyzeText: "Analizza lettera", apiHeading: "Chiave API", apiKeyLabel: "Anthropic API Key", apiHint: "La chiave è usata solo nel browser e non viene salvata.", resultsHeading: "Risultato" },
+        "Griechisch": { uiLangLabel: "🌐 Επιλέξτε γλώσσα σελίδας:", targetLangLabel: "Γλώσσα στόχος για μετάφραση εγγράφου:", modeFile: "Φωτογραφία ή PDF", modeText: "Εισαγωγή κειμένου", uploadLabel: "Μεταφόρτωση εγγράφου", dropTitle: "Σύρετε το αρχείο εδώ", dropHint: "ή πατήστε και επιλέξτε εικόνα ή PDF", takePhoto: "Λήψη φωτογραφίας", uploadHint: "Μέγ. περίπου 32 MB. Τα προστατευμένα PDF δεν υποστηρίζονται.", textInputLabel: "Επίσημη επιστολή (γερμανικά)", textPlaceholder: "Επικολλήστε ή πληκτρολογήστε την επιστολή εδώ…", analyzeText: "Ανάλυση επιστολής", apiHeading: "Κλειδί API", apiKeyLabel: "Anthropic API Key", apiHint: "Το κλειδί χρησιμοποιείται μόνο στον browser και δεν αποθηκεύεται.", resultsHeading: "Αποτέλεσμα" },
+        "Albanisch": { uiLangLabel: "🌐 Zgjidh gjuhën e faqes:", targetLangLabel: "Gjuha e synuar për përkthimin e dokumentit:", modeFile: "Foto ose PDF", modeText: "Shkruaj tekst", uploadLabel: "Ngarko dokument", dropTitle: "Lësho skedarin këtu", dropHint: "ose kliko dhe zgjidh imazh ose PDF", takePhoto: "Bëj foto", uploadHint: "Maks. rreth 32 MB. PDF-të e mbrojtura nuk mbështeten.", textInputLabel: "Letër zyrtare (gjermanisht)", textPlaceholder: "Ngjit ose shkruaj letrën këtu…", analyzeText: "Analizo letrën", apiHeading: "Çelës API", apiKeyLabel: "Anthropic API Key", apiHint: "Çelësi përdoret vetëm në shfletues dhe nuk ruhet.", resultsHeading: "Rezultati" },
+        "Bosnisch": { uiLangLabel: "🌐 Odaberite jezik stranice:", targetLangLabel: "Ciljni jezik za prijevod dokumenta:", modeFile: "Fotografija ili PDF", modeText: "Unesi tekst", uploadLabel: "Otpremi dokument", dropTitle: "Prevucite datoteku ovdje", dropHint: "ili kliknite i odaberite sliku ili PDF", takePhoto: "Snimi fotografiju", uploadHint: "Maks. oko 32 MB. Zaštićeni PDF nije podržan.", textInputLabel: "Službeno pismo (njemački)", textPlaceholder: "Zalijepite ili unesite pismo ovdje…", analyzeText: "Analiziraj pismo", apiHeading: "API ključ", apiKeyLabel: "Anthropic API Key", apiHint: "Ključ se koristi samo u pregledniku i ne pohranjuje se.", resultsHeading: "Rezultat" },
+        "Serbisch": { uiLangLabel: "🌐 Izaberite jezik stranice:", targetLangLabel: "Ciljni jezik za prevod dokumenta:", modeFile: "Fotografija ili PDF", modeText: "Unesite tekst", uploadLabel: "Otpremi dokument", dropTitle: "Prevucite fajl ovde", dropHint: "ili kliknite i izaberite sliku ili PDF", takePhoto: "Snimite fotografiju", uploadHint: "Maks. oko 32 MB. Zaštićeni PDF nije podržan.", textInputLabel: "Službeno pismo (nemački)", textPlaceholder: "Nalepite ili unesite pismo ovde…", analyzeText: "Analiziraj pismo", apiHeading: "API ključ", apiKeyLabel: "Anthropic API Key", apiHint: "Ključ se koristi samo u pregledaču i ne čuva se.", resultsHeading: "Rezultat" },
+        "Kroatisch": { uiLangLabel: "🌐 Odaberite jezik stranice:", targetLangLabel: "Ciljni jezik za prijevod dokumenta:", modeFile: "Fotografija ili PDF", modeText: "Unesi tekst", uploadLabel: "Prenesi dokument", dropTitle: "Povucite datoteku ovdje", dropHint: "ili kliknite i odaberite sliku ili PDF", takePhoto: "Snimi fotografiju", uploadHint: "Maks. oko 32 MB. Zaštićeni PDF nije podržan.", textInputLabel: "Službeno pismo (njemački)", textPlaceholder: "Zalijepite ili upišite pismo ovdje…", analyzeText: "Analiziraj pismo", apiHeading: "API ključ", apiKeyLabel: "Anthropic API Key", apiHint: "Ključ se koristi samo u pregledniku i ne sprema se.", resultsHeading: "Rezultat" },
+        "Chinesisch": { uiLangLabel: "🌐 选择页面语言：", targetLangLabel: "文档翻译目标语言：", modeFile: "照片或 PDF", modeText: "输入文本", uploadLabel: "上传文档", dropTitle: "将文件拖到这里", dropHint: "或点击选择图片或 PDF", takePhoto: "拍照", uploadHint: "最大约 32 MB。不支持加密 PDF。", textInputLabel: "官方来信（德语）", textPlaceholder: "请在此粘贴或输入来信…", analyzeText: "分析来信", apiHeading: "API 密钥", apiKeyLabel: "Anthropic API Key", apiHint: "密钥仅在浏览器中使用，不会保存。", resultsHeading: "结果" },
+        "Vietnamesisch": { uiLangLabel: "🌐 Chọn ngôn ngữ trang:", targetLangLabel: "Ngôn ngữ đích để dịch tài liệu:", modeFile: "Ảnh hoặc PDF", modeText: "Nhập văn bản", uploadLabel: "Tải tài liệu", dropTitle: "Thả tệp vào đây", dropHint: "hoặc bấm để chọn ảnh hoặc PDF", takePhoto: "Chụp ảnh", uploadHint: "Tối đa khoảng 32 MB. Không hỗ trợ PDF có mật khẩu.", textInputLabel: "Thư chính thức (tiếng Đức)", textPlaceholder: "Dán hoặc nhập thư tại đây…", analyzeText: "Phân tích thư", apiHeading: "Khóa API", apiKeyLabel: "Anthropic API Key", apiHint: "Khóa chỉ dùng trong trình duyệt và không được lưu.", resultsHeading: "Kết quả" },
+        "Persisch": { uiLangLabel: "🌐 زبان صفحه را انتخاب کنید:", targetLangLabel: "زبان هدف برای ترجمه سند:", modeFile: "عکس یا PDF", modeText: "ورود متن", uploadLabel: "بارگذاری سند", dropTitle: "فایل را اینجا رها کنید", dropHint: "یا کلیک کنید و تصویر یا PDF انتخاب کنید", takePhoto: "عکس بگیرید", uploadHint: "حداکثر حدود ۳۲ مگابایت. PDF رمزدار پشتیبانی نمی‌شود.", textInputLabel: "نامه رسمی (آلمانی)", textPlaceholder: "نامه را اینجا جای‌گذاری یا تایپ کنید…", analyzeText: "تحلیل نامه", apiHeading: "کلید API", apiKeyLabel: "Anthropic API Key", apiHint: "کلید فقط در مرورگر استفاده می‌شود و ذخیره نمی‌شود.", resultsHeading: "نتیجه" },
+        "Somali": { uiLangLabel: "🌐 Dooro luqadda bogga:", targetLangLabel: "Luqadda bartilmaameedka tarjumaadda dukumeentiga:", modeFile: "Sawir ama PDF", modeText: "Geli qoraal", uploadLabel: "Soo geli dukumeenti", dropTitle: "Faylka halkan ku rid", dropHint: "ama guji oo dooro sawir ama PDF", takePhoto: "Qaado sawir", uploadHint: "Ugu badnaan qiyaastii 32 MB. PDF-yada sirta leh lama taageero.", textInputLabel: "Warqad rasmi ah (Jarmal)", textPlaceholder: "Halkan ku dheji ama ku qor warqadda…", analyzeText: "Falanqee warqadda", apiHeading: "Fure API", apiKeyLabel: "Anthropic API Key", apiHint: "Furaha waxaa lagu isticmaalaa biraawsarkaaga oo kaliya, lama kaydiyo.", resultsHeading: "Natiijo" },
+        "Tigrinya": { uiLangLabel: "🌐 ቋንቋ ገጽ ምረጽ:", targetLangLabel: "ናይ ሰነድ ትርጉም ዕላማ ቋንቋ:", modeFile: "ስእሊ ወይ PDF", modeText: "ጽሑፍ ኣእቱ", uploadLabel: "ሰነድ ኣምጽእ", dropTitle: "ፋይል ኣብዚ ኣንብር", dropHint: "ወይ ጠውቕ እሞ ስእሊ ወይ PDF ምረጽ", takePhoto: "ስእሊ ኣንሳ", uploadHint: "ኣብ 32 MB ኣካባቢ። ብፓስዎርድ ዝተጠበቐ PDF ኣይደገፍን።", textInputLabel: "ወግዓዊ ደብዳቤ (ጀርመን)", textPlaceholder: "ደብዳበ ኣብዚ ለጥፍ ወይ ጻሕፍ…", analyzeText: "ደብዳበ ተንትን", apiHeading: "API መፍትሕ", apiKeyLabel: "Anthropic API Key", apiHint: "መፍትሑ ኣብ ብራውዘርካ ጥራይ ይጥቀም፣ ኣይተኸዝን።", resultsHeading: "ውጽኢት" },
+        "Litauisch": { uiLangLabel: "🌐 Pasirinkite puslapio kalbą:", targetLangLabel: "Dokumento vertimo tikslinė kalba:", modeFile: "Nuotrauka arba PDF", modeText: "Įvesti tekstą", uploadLabel: "Įkelti dokumentą", dropTitle: "Įmeskite failą čia", dropHint: "arba spustelėkite ir pasirinkite vaizdą arba PDF", takePhoto: "Nufotografuoti", uploadHint: "Maks. apie 32 MB. Slaptažodžiu apsaugoti PDF nepalaikomi.", textInputLabel: "Oficialus laiškas (vokiečių)", textPlaceholder: "Įklijuokite arba įveskite laišką čia…", analyzeText: "Analizuoti laišką", apiHeading: "API raktas", apiKeyLabel: "Anthropic API Key", apiHint: "Raktas naudojamas tik naršyklėje ir nėra saugomas.", resultsHeading: "Rezultatas" },
+        "Arabisch (Ägyptisch)": { uiLangLabel: "🌐 اختر لغة الصفحة:", targetLangLabel: "لغة ترجمة المستند:", modeFile: "صورة أو PDF", modeText: "اكتب النص", uploadLabel: "ارفع المستند", dropTitle: "اسحب الملف هنا", dropHint: "أو اضغط واختر صورة أو PDF", takePhoto: "التقاط صورة", uploadHint: "الحد الأقصى حوالي 32 ميجابايت. ملفات PDF المحمية غير مدعومة.", textInputLabel: "خطاب رسمي (ألماني)", textPlaceholder: "الصق الخطاب أو اكتبه هنا…", analyzeText: "حلّل الخطاب", apiHeading: "مفتاح API", apiKeyLabel: "Anthropic API Key", apiHint: "يُستخدم المفتاح داخل المتصفح فقط ولا يتم حفظه.", resultsHeading: "النتيجة", toggleShow: "إظهار", toggleHide: "إخفاء" }
+      };
+
+      const localizedLoadingSteps = {
+        "Deutsch": ["Dokument wird gelesen...", "Text wird erkannt...", "Wird übersetzt...", "Erklärung wird erstellt...", "Schritte werden zusammengestellt...", "Fast fertig..."],
+        "Englisch": ["Reading document...", "Recognizing text...", "Translating...", "Creating explanation...", "Preparing next steps...", "Almost done..."],
+        "Türkisch": ["Belge okunuyor...", "Metin algılanıyor...", "Çevriliyor...", "Açıklama hazırlanıyor...", "Adımlar hazırlanıyor...", "Neredeyse hazır..."],
+        "Arabisch": ["جاري قراءة المستند...", "جاري التعرف على النص...", "جاري الترجمة...", "جاري إنشاء الشرح...", "جاري تجهيز الخطوات...", "أوشكنا على الانتهاء..."],
+        "Russisch": ["Чтение документа...", "Распознавание текста...", "Перевод...", "Подготовка объяснения...", "Формирование шагов...", "Почти готово..."],
+        "Ukrainisch": ["Читаємо документ...", "Розпізнаємо текст...", "Перекладаємо...", "Готуємо пояснення...", "Формуємо кроки...", "Майже готово..."],
+        "Rumänisch": ["Se citește documentul...", "Se recunoaște textul...", "Se traduce...", "Se creează explicația...", "Se pregătesc pașii...", "Aproape gata..."],
+        "Polnisch": ["Czytanie dokumentu...", "Rozpoznawanie tekstu...", "Tłumaczenie...", "Tworzenie wyjaśnienia...", "Przygotowywanie kroków...", "Prawie gotowe..."],
+        "Dari": ["سند در حال خواندن است...", "متن شناسایی می‌شود...", "در حال ترجمه...", "توضیح ساخته می‌شود...", "گام‌ها آماده می‌شوند...", "تقریباً تمام شد..."],
+        "Bulgarisch": ["Документът се чете...", "Разпознаване на текста...", "Превеждане...", "Създаване на обяснение...", "Подготвяне на стъпките...", "Почти готово..."],
+        "Georgisch": ["დოკუმენტი იკითხება...", "ტექსტი ამოიცნობა...", "ითარგმნება...", "განმარტება მზადდება...", "ნაბიჯები იკრიბება...", "თითქმის მზადაა..."],
+        "Spanisch": ["Leyendo documento...", "Reconociendo texto...", "Traduciendo...", "Creando explicación...", "Preparando pasos...", "Casi listo..."],
+        "Portugiesisch": ["Lendo documento...", "Reconhecendo texto...", "Traduzindo...", "Criando explicação...", "Preparando passos...", "Quase pronto..."],
+        "Französisch": ["Lecture du document...", "Reconnaissance du texte...", "Traduction...", "Création de l'explication...", "Préparation des étapes...", "Presque terminé..."],
+        "Italienisch": ["Lettura del documento...", "Riconoscimento del testo...", "Traduzione...", "Creazione della spiegazione...", "Preparazione dei passaggi...", "Quasi fatto..."],
+        "Griechisch": ["Ανάγνωση εγγράφου...", "Αναγνώριση κειμένου...", "Μετάφραση...", "Δημιουργία εξήγησης...", "Συγκρότηση βημάτων...", "Σχεδόν έτοιμο..."],
+        "Albanisch": ["Dokumenti po lexohet...", "Teksti po njihet...", "Po përkthehet...", "Po krijohet shpjegimi...", "Po përgatiten hapat...", "Pothuajse gati..."],
+        "Bosnisch": ["Dokument se čita...", "Tekst se prepoznaje...", "Prevodi se...", "Objašnjenje se priprema...", "Koraci se sastavljaju...", "Skoro gotovo..."],
+        "Serbisch": ["Dokument se čita...", "Tekst se prepoznaje...", "Prevodi se...", "Objašnjenje se priprema...", "Koraci se sastavljaju...", "Skoro gotovo..."],
+        "Kroatisch": ["Dokument se čita...", "Tekst se prepoznaje...", "Prevodi se...", "Objašnjenje se priprema...", "Koraci se sastavljaju...", "Gotovo je..."],
+        "Chinesisch": ["正在读取文档...", "正在识别文本...", "正在翻译...", "正在生成解释...", "正在整理步骤...", "即将完成..."],
+        "Vietnamesisch": ["Đang đọc tài liệu...", "Đang nhận dạng văn bản...", "Đang dịch...", "Đang tạo phần giải thích...", "Đang tổng hợp các bước...", "Sắp xong..."],
+        "Persisch": ["در حال خواندن سند...", "در حال شناسایی متن...", "در حال ترجمه...", "در حال ایجاد توضیح...", "در حال آماده‌سازی مراحل...", "تقریباً تمام شد..."],
+        "Somali": ["Dukumeentiga waa la akhrinayaa...", "Qoraalka waa la aqoonsanayaa...", "Waa la turjumayaa...", "Sharaxaad ayaa la diyaarinayaa...", "Tallaabooyinka waa la diyaarinayaa...", "Wuu dhammaanayaa..."],
+        "Tigrinya": ["ሰነድ ይንበብ ኣሎ...", "ጽሑፍ ይፍለጥ ኣሎ...", "ይትርጎም ኣሎ...", "መብርሂ ይሰናዳ ኣሎ...", "ስጉምትታት ይእከቡ ኣለዉ...", "ቀሪቡ ተወዲኡ..."],
+        "Litauisch": ["Skaitomas dokumentas...", "Atpažįstamas tekstas...", "Verčiama...", "Rengiamas paaiškinimas...", "Ruošiami žingsniai...", "Beveik baigta..."],
+        "Arabisch (Ägyptisch)": ["جاري قراءة المستند...", "جاري التعرف على النص...", "جاري الترجمة...", "جاري إعداد الشرح...", "جاري تجميع الخطوات...", "فاضل قليل..."]
+      };
+
+      Object.keys(uiTranslations).forEach(function (langKey) {
+        uiTranslations[langKey].loadingSteps = localizedLoadingSteps[langKey] || localizedLoadingSteps["Deutsch"];
+      });
 
       function getTargetLang() {
-        var active = document.querySelector(".lang-btn.is-active");
+        var active = document.querySelector(".target-lang-btn.is-active");
         return active ? active.getAttribute("data-lang") : "Arabisch";
+      }
+
+      function getUiLang() {
+        var active = document.querySelector(".ui-lang-btn.is-active");
+        return active ? active.getAttribute("data-ui-lang") : "Deutsch";
+      }
+
+      function applyUiLanguage(lang) {
+        var t = uiTranslations[lang] || uiTranslations["Deutsch"];
+        uiLangLabel.textContent = t.uiLangLabel;
+        targetLangLabel.textContent = t.targetLangLabel;
+        modeFileLabel.textContent = t.modeFile;
+        modeTextLabel.textContent = t.modeText;
+        uploadLabel.textContent = t.uploadLabel;
+        dropTitle.textContent = t.dropTitle;
+        dropHint.textContent = t.dropHint;
+        takePhotoLabel.textContent = t.takePhoto;
+        uploadHint.textContent = t.uploadHint;
+        textInputLabel.textContent = t.textInputLabel;
+        letterText.placeholder = t.textPlaceholder;
+        analyzeText.textContent = t.analyzeText;
+        apiHeading.textContent = t.apiHeading;
+        apiKeyLabel.textContent = t.apiKeyLabel;
+        apiHint.textContent = t.apiHint;
+        resultsHeading.textContent = t.resultsHeading;
+        toggleKey.textContent = apiKeyInput.type === "password" ? (t.toggleShow || "Show") : (t.toggleHide || "Hide");
+        if (loadingScreen.classList.contains("visible")) {
+          var loadingSteps = t.loadingSteps || uiTranslations["Deutsch"].loadingSteps;
+          var idx = Math.min(loadingStepIndex, loadingSteps.length - 1);
+          loadingMessage.textContent = loadingSteps[idx];
+        }
       }
 
       function showError(msg) {
@@ -870,12 +1113,23 @@
         errorBox.classList.remove("visible");
       }
 
-      document.querySelectorAll(".lang-btn").forEach(function (btn) {
+      document.querySelectorAll(".target-lang-btn").forEach(function (btn) {
         btn.addEventListener("click", function () {
-          document.querySelectorAll(".lang-btn").forEach(function (b) {
+          document.querySelectorAll(".target-lang-btn").forEach(function (b) {
             b.classList.remove("is-active");
           });
           btn.classList.add("is-active");
+          clearError();
+        });
+      });
+
+      document.querySelectorAll(".ui-lang-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document.querySelectorAll(".ui-lang-btn").forEach(function (b) {
+            b.classList.remove("is-active");
+          });
+          btn.classList.add("is-active");
+          applyUiLanguage(btn.getAttribute("data-ui-lang"));
           clearError();
         });
       });
@@ -902,6 +1156,42 @@
       btnTakePhoto.addEventListener("click", function () {
         letterFile.click();
       });
+
+      btnBack.addEventListener("click", function () {
+        results.classList.remove("visible");
+        document.body.classList.remove("results-open");
+      });
+
+      function startLoadingScreen() {
+        var currentUiLang = getUiLang();
+        var loadingSteps = (uiTranslations[currentUiLang] && uiTranslations[currentUiLang].loadingSteps) || uiTranslations["Deutsch"].loadingSteps;
+        loadingStepIndex = 0;
+        loadingMessage.textContent = loadingSteps[loadingStepIndex];
+        loadingScreen.classList.add("visible");
+        loadingScreen.setAttribute("aria-hidden", "false");
+        if (loadingIntervalId) {
+          clearInterval(loadingIntervalId);
+        }
+        loadingIntervalId = setInterval(function () {
+          if (loadingStepIndex < loadingSteps.length - 1) {
+            loadingStepIndex += 1;
+            loadingMessage.textContent = loadingSteps[loadingStepIndex];
+            if (loadingStepIndex === loadingSteps.length - 1) {
+              clearInterval(loadingIntervalId);
+              loadingIntervalId = null;
+            }
+          }
+        }, 4000);
+      }
+
+      function stopLoadingScreen() {
+        if (loadingIntervalId) {
+          clearInterval(loadingIntervalId);
+          loadingIntervalId = null;
+        }
+        loadingScreen.classList.remove("visible");
+        loadingScreen.setAttribute("aria-hidden", "true");
+      }
 
       ["dragenter", "dragover", "dragleave", "drop"].forEach(function (ev) {
         dropZone.addEventListener(ev, function (e) {
@@ -1187,6 +1477,7 @@
       analyzeBtn.addEventListener("click", async function () {
         clearError();
         results.classList.remove("visible");
+        document.body.classList.remove("results-open");
 
         var key = apiKeyInput.value.trim();
         if (!key) {
@@ -1263,6 +1554,7 @@
 
         analyzeBtn.disabled = true;
         analyzeBtn.classList.add("loading");
+        startLoadingScreen();
 
         try {
           var res = await fetch(API_URL, {
@@ -1335,7 +1627,8 @@
             ? parsed.antwortvorlage
             : parsed.kein_briefkopf_text;
           results.classList.add("visible");
-          results.scrollIntoView({ behavior: "smooth", block: "start" });
+          document.body.classList.add("results-open");
+          results.scrollTop = 0;
         } catch (err) {
           var m =
             err && typeof err.message === "string"
@@ -1345,11 +1638,23 @@
                 : "Unbekannter Fehler.";
           showError(m);
         } finally {
+          stopLoadingScreen();
           analyzeBtn.disabled = false;
           analyzeBtn.classList.remove("loading");
         }
       });
+
+      applyUiLanguage(getUiLang());
     })();
+  </script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("service-worker.js").catch(function () {
+          // no-op
+        });
+      });
+    }
   </script>
 </body>
 </html>
