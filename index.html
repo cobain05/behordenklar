@@ -94,6 +94,7 @@
       min-width: min(100%, 240px);
       display: flex;
       flex-wrap: wrap;
+      flex-direction: row-reverse;
       align-items: flex-start;
       justify-content: space-between;
       gap: 1rem 1.5rem;
@@ -805,6 +806,13 @@
         padding: 1.5rem 0 2rem;
       }
 
+      .lang-btn {
+        font-size: 0.78rem;
+        padding: 0.45rem 0.6rem;
+      }
+    }
+
+    @media (max-width: 768px) {
       .hero-welcome {
         flex-direction: column;
         align-items: stretch;
@@ -815,13 +823,43 @@
         width: 100%;
       }
 
-      .lang-btn {
-        font-size: 0.78rem;
-        padding: 0.45rem 0.6rem;
+      .hero-card {
+        display: flex;
+        flex-direction: column;
       }
-    }
 
-    @media (max-width: 768px) {
+      .hero-card .lang-section-ui {
+        order: 1;
+        margin-top: 0;
+        padding-top: 0.35rem;
+        border-top: none;
+      }
+
+      .hero-card .mode-toggle {
+        order: 2;
+      }
+
+      .hero-card #panelFile.panel,
+      .hero-card #panelText.panel {
+        order: 2;
+      }
+
+      .hero-card #uiLangModal {
+        order: 50;
+      }
+
+      .hero-card .lang-section-target {
+        order: 3;
+      }
+
+      .hero-card #targetLangModal {
+        order: 51;
+      }
+
+      .hero-card .btn-analyze {
+        order: 4;
+      }
+
       #uiLangGrid {
         display: none;
       }
@@ -965,12 +1003,12 @@
           </svg>
         </a>
         <div class="hero-welcome">
+          <div class="hero-flags" aria-hidden="true">
+            <span class="hero-flag">🇸🇦</span><span class="hero-flag">🇹🇷</span><span class="hero-flag">🇷🇺</span><span class="hero-flag">🇺🇦</span><span class="hero-flag">🇷🇴</span><span class="hero-flag">🇵🇱</span><span class="hero-flag">🇦🇫</span><span class="hero-flag">🇧🇬</span><span class="hero-flag">🇬🇪</span><span class="hero-flag">🇩🇪</span><span class="hero-flag">🇬🇧</span><span class="hero-flag">🇪🇸</span><span class="hero-flag">🇵🇹</span><span class="hero-flag">🇪🇬</span><span class="hero-flag">🇱🇹</span><span class="hero-flag">🇦🇱</span><span class="hero-flag">🇧🇦</span><span class="hero-flag">🇷🇸</span><span class="hero-flag">🇭🇷</span><span class="hero-flag">🇨🇳</span><span class="hero-flag">🇻🇳</span><span class="hero-flag">🇮🇹</span><span class="hero-flag">🇬🇷</span><span class="hero-flag">🇮🇷</span><span class="hero-flag">🇸🇴</span><span class="hero-flag">🇪🇷</span>
+          </div>
           <div class="hero-text">
             <h1>Willkommen bei BehördenKlar</h1>
             <p>Fügen Sie Ihren Behördenbrief ein oder laden Sie ein Foto oder PDF hoch – wir helfen beim Verstehen, Übersetzen und den nächsten Schritten.</p>
-          </div>
-          <div class="hero-flags" aria-hidden="true">
-            <span class="hero-flag">🇸🇦</span><span class="hero-flag">🇹🇷</span><span class="hero-flag">🇷🇺</span><span class="hero-flag">🇺🇦</span><span class="hero-flag">🇷🇴</span><span class="hero-flag">🇵🇱</span><span class="hero-flag">🇦🇫</span><span class="hero-flag">🇧🇬</span><span class="hero-flag">🇬🇪</span><span class="hero-flag">🇩🇪</span><span class="hero-flag">🇬🇧</span><span class="hero-flag">🇪🇸</span><span class="hero-flag">🇵🇹</span><span class="hero-flag">🇪🇬</span><span class="hero-flag">🇱🇹</span><span class="hero-flag">🇦🇱</span><span class="hero-flag">🇧🇦</span><span class="hero-flag">🇷🇸</span><span class="hero-flag">🇭🇷</span><span class="hero-flag">🇨🇳</span><span class="hero-flag">🇻🇳</span><span class="hero-flag">🇮🇹</span><span class="hero-flag">🇬🇷</span><span class="hero-flag">🇮🇷</span><span class="hero-flag">🇸🇴</span><span class="hero-flag">🇪🇷</span>
           </div>
         </div>
       </div>
@@ -1012,7 +1050,7 @@
           <textarea id="letterText" class="textarea-hero" placeholder="Brief hier einfügen oder abtippen…"></textarea>
         </div>
 
-        <div class="lang-section">
+        <div class="lang-section lang-section-ui">
           <span class="field-label" id="uiLangLabel">🌐 Sprache der Seite wählen:</span>
           <button type="button" class="ui-lang-mobile-trigger" id="uiLangMobileTrigger" aria-haspopup="dialog" aria-controls="uiLangModal" aria-expanded="false">
             <span id="uiLangMobileTriggerText">🌐 Sprache wählen</span>
@@ -1086,7 +1124,7 @@
           </div>
         </div>
 
-        <div class="lang-section">
+        <div class="lang-section lang-section-target">
           <span class="field-label" id="targetLangLabel">Zielsprache für die Übersetzung des Dokuments:</span>
           <button type="button" class="target-lang-mobile-trigger" id="targetLangMobileTrigger" aria-haspopup="dialog" aria-controls="targetLangModal" aria-expanded="false">
             <span id="targetLangMobileTriggerText">🌐 🇸🇦 Arabisch ▼</span>
