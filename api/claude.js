@@ -17,7 +17,7 @@ function headerValue(req, name) {
 
 function setCors(res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-api-key, anthropic-version");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, anthropic-version");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
 }
 
@@ -40,9 +40,13 @@ module.exports = async function handler(req, res) {
     return sendJsonError(res, 405, "Method not allowed");
   }
 
-  var apiKey = headerValue(req, "x-api-key").trim();
+  var apiKey = (process.env.ANTHROPIC_API_KEY || "").trim();
   if (!apiKey) {
-    return sendJsonError(res, 400, "Header x-api-key fehlt.");
+    return sendJsonError(
+      res,
+      503,
+      "Server-Konfiguration: Umgebungsvariable ANTHROPIC_API_KEY ist nicht gesetzt."
+    );
   }
 
   var anthropicVersion = headerValue(req, "anthropic-version").trim() || "2023-06-01";

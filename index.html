@@ -1310,18 +1310,6 @@
     <div class="container">
       <div id="errorBox" class="error" role="alert"></div>
 
-      <section class="card-api" aria-labelledby="api-heading">
-        <h2 id="api-heading">API-Schlüssel</h2>
-        <div class="key-row">
-          <div class="field">
-            <label for="apiKey" id="apiKeyLabel">Anthropic API Key</label>
-            <input type="password" id="apiKey" autocomplete="off" placeholder="sk-ant-api03-…" />
-          </div>
-          <button type="button" class="toggle-key" id="toggleKey">Anzeigen</button>
-        </div>
-        <p class="hint" id="apiHint">Der Schlüssel wird nur in Ihrem Browser verwendet und nicht gespeichert.</p>
-      </section>
-
       <section id="results" aria-live="polite">
         <div class="results-view">
           <button type="button" class="btn-back" id="btnBack">← Zurück</button>
@@ -1403,8 +1391,6 @@
 
       const $ = (id) => document.getElementById(id);
 
-      const apiKeyInput = $("apiKey");
-      const toggleKey = $("toggleKey");
       const analyzeBtn = $("analyzeBtn");
       const errorBox = $("errorBox");
       const results = $("results");
@@ -1445,9 +1431,6 @@
       const uploadHint = $("uploadHint");
       const textInputLabel = $("textInputLabel");
       const analyzeText = $("analyzeText");
-      const apiHeading = $("api-heading");
-      const apiKeyLabel = $("apiKeyLabel");
-      const apiHint = $("apiHint");
       const resultsHeading = $("resultsHeading");
       const welcomeTitle = $("welcomeTitle");
       const welcomeText = $("welcomeText");
@@ -1580,11 +1563,7 @@
         textInputLabel.textContent = t.textInputLabel;
         letterText.placeholder = t.textPlaceholder;
         analyzeText.textContent = t.analyzeText;
-        apiHeading.textContent = t.apiHeading;
-        apiKeyLabel.textContent = t.apiKeyLabel;
-        apiHint.textContent = t.apiHint;
         resultsHeading.textContent = t.resultsHeading;
-        toggleKey.textContent = apiKeyInput.type === "password" ? (t.toggleShow || "Show") : (t.toggleHide || "Hide");
         if (loadingScreen.classList.contains("visible")) {
           var loadingSteps = t.loadingSteps || uiTranslations["Deutsch"].loadingSteps;
           var idx = Math.min(loadingStepIndex, loadingSteps.length - 1);
@@ -2065,16 +2044,6 @@
         if (uiLangModal.classList.contains("visible")) {
           closeUiLangModal();
           e.preventDefault();
-        }
-      });
-
-      toggleKey.addEventListener("click", function () {
-        if (apiKeyInput.type === "password") {
-          apiKeyInput.type = "text";
-          toggleKey.textContent = "Verbergen";
-        } else {
-          apiKeyInput.type = "password";
-          toggleKey.textContent = "Anzeigen";
         }
       });
 
@@ -2617,12 +2586,6 @@
         results.classList.remove("visible");
         document.body.classList.remove("results-open");
 
-        var key = apiKeyInput.value.trim();
-        if (!key) {
-          showError("Bitte geben Sie Ihren Anthropic API Key ein.");
-          return;
-        }
-
         var mode = document.querySelector('input[name="inputMode"]:checked').value;
         var content = [];
         var instruction = buildInstructionPrompt(getTargetLang());
@@ -2713,7 +2676,6 @@
             method: "POST",
             headers: {
               "content-type": "application/json",
-              "x-api-key": key,
               "anthropic-version": ANTHROPIC_VERSION,
             },
             body: JSON.stringify({

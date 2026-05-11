@@ -2,9 +2,11 @@
 """Statische Dateien aus diesem Ordner + POST /api/claude -> Proxy zu Anthropic.
 
 Das Modell wird im JSON-Body vom Client gesetzt (index.html: z. B. claude-sonnet-4-5).
+Der Anthropic-API-Key kommt aus der Umgebungsvariable ANTHROPIC_API_KEY (wie auf Vercel).
 """
 
 import json
+import os
 import urllib.error
 import urllib.request
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -31,7 +33,7 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header(
             "Access-Control-Allow-Headers",
-            "Content-Type, x-api-key, anthropic-version",
+            "Content-Type, anthropic-version",
         )
         self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
 
@@ -80,9 +82,12 @@ class Handler(SimpleHTTPRequestHandler):
             self._json_proxy_error(400, "Body konnte nicht vollständig gelesen werden.")
             return
 
-        api_key = (self.headers.get("x-api-key") or "").strip()
+        api_key = (os.environ.get("ANTHROPIC_API_KEY") or "").strip()
         if not api_key:
-            self._json_proxy_error(400, "Header x-api-key fehlt.")
+            self._json_proxy_error(
+                503,
+                "Umgebungsvariable ANTHROPIC_API_KEY ist nicht gesetzt (lokal: export ANTHROPIC_API_KEY=…).",
+            )
             return
 
         anthropic_version = self.headers.get("anthropic-version") or "2023-06-01"
