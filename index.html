@@ -1960,6 +1960,17 @@
         });
       }
 
+      (function applyStoredUiLanguageOnLoad() {
+        try {
+          var stored = localStorage.getItem("behordenklar-ui-lang");
+          if (stored && uiTranslations[stored]) {
+            applyUiLanguage(stored);
+            return;
+          }
+        } catch (e) {}
+        applyUiLanguage(getUiLang());
+      })();
+
       function openUiLangModal() {
         uiLangModal.classList.add("visible");
         uiLangModal.setAttribute("aria-hidden", "false");
@@ -2799,8 +2810,6 @@
           analyzeBtn.classList.remove("loading");
         }
       });
-
-      applyUiLanguage(getUiLang());
 
       window.addEventListener("resize", function () {
         updateDropZoneTextsForViewport(getUiLang());
