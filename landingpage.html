@@ -304,6 +304,71 @@
       margin-bottom: 0.35rem;
     }
 
+    /* —— Kontakt —— */
+    .lp-contact {
+      padding: 2.5rem 0 3.25rem;
+    }
+
+    .lp-contact-card {
+      max-width: 36rem;
+      margin: 0 auto;
+      padding: 2.25rem 2rem 2.5rem;
+      text-align: center;
+      background: #1a73e8;
+      color: #fff;
+      border-radius: 20px;
+      box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.08),
+        0 14px 36px -6px rgba(26, 115, 232, 0.45),
+        0 24px 48px -12px rgba(26, 29, 33, 0.12);
+    }
+
+    .lp-contact-card h2 {
+      margin: 0 0 0.85rem;
+      font-size: clamp(1.25rem, 3.5vw, 1.55rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      color: #fff;
+    }
+
+    .lp-contact-card p {
+      margin: 0 0 1.5rem;
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .lp-contact-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.85rem 1.5rem;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1a73e8;
+      background: #fff;
+      border: none;
+      border-radius: 14px;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .lp-contact-btn:hover {
+      background: #f8fbff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 12px 28px rgba(0, 0, 0, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .lp-contact-btn:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 3px;
+    }
+
     /* —— Footer —— */
     .site-footer {
       margin-top: auto;
@@ -499,6 +564,16 @@
             <h3>Briefkopf-Vorlage</h3>
             <p>Wenn eine Antwort nötig ist: strukturierter Entwurf mit Platzhaltern für deine Daten und das Aktenzeichen.</p>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="lp-contact" aria-labelledby="contact-heading">
+      <div class="container">
+        <div class="lp-contact-card">
+          <h2 id="contact-heading">Hast du Fragen oder brauchst du Hilfe?</h2>
+          <p>Wir sind für dich da – schreib uns einfach eine E-Mail.</p>
+          <a class="lp-contact-btn" href="mailto:info@behördenklar.de">✉️ Kontakt aufnehmen</a>
         </div>
       </div>
     </section>
