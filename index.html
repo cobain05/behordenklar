@@ -65,7 +65,23 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 1.25rem 2rem;
+      justify-content: space-between;
+      gap: 0.75rem 1rem;
+      width: 100%;
+    }
+
+    .hero-top .brand {
+      flex-shrink: 0;
+    }
+
+    .hero-nav-lang-trigger {
+      width: auto;
+      max-width: min(100%, 20rem);
+      margin-left: auto;
+      flex-shrink: 1;
+      min-width: 0;
+      display: inline-flex;
+      white-space: nowrap;
     }
 
     .brand {
@@ -90,57 +106,38 @@
     }
 
     .hero-welcome {
-      flex: 1;
-      min-width: min(100%, 240px);
-      display: flex;
-      flex-wrap: wrap;
-      flex-direction: row-reverse;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 1rem 1.5rem;
-    }
-
-    .hero-text {
-      flex: 1;
-      min-width: min(100%, 200px);
-      max-width: 40rem;
-    }
-
-    .hero-flags {
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      gap: 0.45rem;
-      max-width: 100%;
-      padding: 0.45rem 0.65rem;
-      background: rgba(255, 255, 255, 0.75);
-      border: 1px solid rgba(26, 115, 232, 0.14);
-      border-radius: 14px;
-      box-shadow: 0 2px 14px rgba(26, 115, 232, 0.1);
+      gap: 0;
     }
 
-    .hero-flags-emojis {
+    .hero-text {
+      width: 100%;
+      max-width: 40rem;
+    }
+
+    .hero-welcome-flags {
+      margin-top: 0.85rem;
+      padding-top: 0.7rem;
+      border-top: 1px solid rgba(26, 115, 232, 0.14);
+    }
+
+    .hero-welcome-flags .hero-flags-emojis {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: flex-end;
-      gap: 0.28rem;
-      font-size: clamp(1.05rem, 2.4vw, 1.42rem);
+      justify-content: flex-start;
+      gap: 0.2rem 0.28rem;
+      font-size: clamp(0.92rem, 2.1vw, 1.12rem);
       line-height: 1;
       user-select: none;
     }
 
-    .hero-flags .hero-flag {
+    .hero-welcome-flags .hero-flag {
       display: inline-block;
       line-height: 1;
-    }
-
-    .hero-flags .ui-lang-mobile-trigger {
-      display: none;
-      flex-shrink: 0;
-      font-size: 0.88rem;
-      padding: 0.55rem 0.65rem;
-      background: rgba(255, 255, 255, 0.95);
     }
 
     .hero-text h1 {
@@ -504,6 +501,11 @@
       display: none;
     }
 
+    .hero-top .ui-lang-mobile-trigger.hero-nav-lang-trigger {
+      width: auto;
+      display: inline-flex;
+    }
+
     .ui-lang-mobile-trigger:focus-visible,
     .target-lang-mobile-trigger:focus-visible {
       outline: 2px solid var(--primary);
@@ -835,21 +837,25 @@
     }
 
     @media (max-width: 768px) {
-      .hero-welcome {
-        flex-direction: column;
-        align-items: stretch;
+      .hero-top {
+        gap: 0.5rem 0.75rem;
       }
 
-      .hero-flags {
-        width: 100%;
+      .hero-nav-lang-trigger {
+        max-width: min(100%, 11.5rem);
+        padding: 0.5rem 0.55rem;
+        font-size: 0.78rem;
+        gap: 0.28rem;
+        border-radius: 10px;
       }
 
-      .hero-flags-emojis {
+      .hero-nav-lang-trigger span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .hero-welcome-flags .hero-flags-emojis {
         justify-content: center;
-      }
-
-      .hero-flags .ui-lang-mobile-trigger {
-        display: inline-flex;
       }
 
       .lang-section-ui {
@@ -1096,18 +1102,16 @@
             <text x="58" y="54" class="logo-word-klar">Klar</text>
           </svg>
         </a>
-        <div class="hero-welcome">
-          <div class="hero-flags">
-            <div class="hero-flags-emojis" aria-hidden="true">
-              <span class="hero-flag">🇩🇪</span><span class="hero-flag">🇬🇧</span><span class="hero-flag">🇹🇷</span><span class="hero-flag">🇸🇦</span><span class="hero-flag">🇷🇺</span><span class="hero-flag">🇺🇦</span><span class="hero-flag">🇷🇴</span><span class="hero-flag">🇵🇱</span><span class="hero-flag">🇦🇫</span><span class="hero-flag">🇧🇬</span><span class="hero-flag">🇬🇪</span><span class="hero-flag">🇪🇸</span><span class="hero-flag">🇵🇹</span><span class="hero-flag">🇫🇷</span><span class="hero-flag">🇮🇹</span><span class="hero-flag">🇬🇷</span><span class="hero-flag">🇦🇱</span><span class="hero-flag">🇧🇦</span><span class="hero-flag">🇷🇸</span><span class="hero-flag">🇭🇷</span><span class="hero-flag">🇨🇳</span><span class="hero-flag">🇻🇳</span><span class="hero-flag">🇮🇷</span><span class="hero-flag">🇸🇴</span><span class="hero-flag">🇪🇷</span><span class="hero-flag">🇱🇹</span><span class="hero-flag">🇪🇬</span>
-            </div>
-            <button type="button" class="ui-lang-mobile-trigger" id="uiLangMobileTrigger" aria-haspopup="dialog" aria-controls="uiLangModal" aria-expanded="false">
-              <span id="uiLangMobileTriggerText">🌐 Sprache wählen</span>
-            </button>
-          </div>
-          <div class="hero-text">
-            <h1 id="welcomeTitle">Willkommen bei BehördenKlar</h1>
-            <p id="welcomeText">Fügen Sie Ihren Behördenbrief ein oder laden Sie ein Foto oder PDF hoch – wir helfen beim Verstehen, Übersetzen und den nächsten Schritten.</p>
+        <button type="button" class="ui-lang-mobile-trigger hero-nav-lang-trigger" id="uiLangMobileTrigger" aria-haspopup="dialog" aria-controls="uiLangModal" aria-expanded="false">
+          <span id="uiLangMobileTriggerText">🌐 Sprache wählen</span>
+        </button>
+      </div>
+      <div class="hero-welcome">
+        <div class="hero-text">
+          <h1 id="welcomeTitle">Willkommen bei BehördenKlar</h1>
+          <p id="welcomeText">Fügen Sie Ihren Behördenbrief ein oder laden Sie ein Foto oder PDF hoch – wir helfen beim Verstehen, Übersetzen und den nächsten Schritten.</p>
+          <div class="hero-welcome-flags">
+            <div class="hero-flags-emojis" aria-hidden="true"></div>
           </div>
         </div>
       </div>
