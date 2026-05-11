@@ -361,10 +361,6 @@
       display: none !important;
     }
 
-    .btn-take-another-photo {
-      margin-top: 0.75rem;
-    }
-
     .preview-strip {
       display: flex;
       flex-direction: row;
@@ -1073,7 +1069,6 @@
           <p class="hint" id="uploadHint">Bis zu 5 Dateien gleichzeitig. Max. ca. 32&nbsp;MB pro Datei. Passwortgeschützte PDFs werden nicht unterstützt.</p>
           <div class="preview-strip-wrap" id="previewStripWrap" hidden>
             <div class="preview-strip" id="previewStrip" role="list" aria-label="Ausgewählte Dateien"></div>
-            <button type="button" class="btn-take-photo btn-take-another-photo" id="btnTakeAnotherPhoto" hidden aria-hidden="true">📷 Weiteres Foto aufnehmen</button>
           </div>
         </div>
 
@@ -1341,7 +1336,6 @@
       const btnTakePhoto = $("btnTakePhoto");
       const previewStripWrap = $("previewStripWrap");
       const previewStrip = $("previewStrip");
-      const btnTakeAnotherPhoto = $("btnTakeAnotherPhoto");
       const dropZone = $("dropZone");
       const dropFileName = $("dropFileName");
       const btnBack = $("btnBack");
@@ -1378,11 +1372,10 @@
 
       const MAX_LETTER_FILES = 5;
       var stagedLetterFiles = [];
-      var everAddedViaCamera = false;
 
       const uiTranslations = {
-        "Deutsch": { uiLangLabel: "🌐 Sprache der Seite wählen:", targetLangLabel: "Zielsprache für die Übersetzung des Dokuments:", modeFile: "Foto oder PDF", modeText: "Text eingeben", uploadLabel: "Datei hochladen", dropTitle: "Datei hierher ziehen", dropHint: "oder klicken und eine oder mehrere JPG-, PNG- oder PDF-Dateien wählen (max. 5)", dropTitleMobile: "Foto oder PDF auswählen", dropHintMobile: "Kamera oder Galerie öffnen", takePhoto: "📷 Kamera öffnen", takeAnotherPhoto: "📷 Weiteres Foto aufnehmen", uploadHint: "Bis zu 5 Dateien gleichzeitig, je max. ca. 32 MB. Passwortgeschützte PDFs werden nicht unterstützt.", textInputLabel: "Behördenbrief (Deutsch)", textPlaceholder: "Brief hier einfügen oder abtippen…", analyzeText: "Brief analysieren", apiHeading: "API-Schlüssel", apiKeyLabel: "Anthropic API Key", apiHint: "Der Schlüssel wird nur in Ihrem Browser verwendet und nicht gespeichert.", resultsHeading: "Ergebnis", toggleShow: "Anzeigen", toggleHide: "Verbergen", removeFile: "Datei entfernen", filesSelectedMany: "{n} Dateien ausgewählt" },
-        "Englisch": { uiLangLabel: "🌐 Choose page language:", targetLangLabel: "Target language for document translation:", modeFile: "Photo or PDF", modeText: "Enter text", uploadLabel: "Upload document", dropTitle: "Drop file here", dropHint: "or click and choose one or more JPG, PNG or PDF files (max. 5)", dropTitleMobile: "Select photo or PDF", dropHintMobile: "Open camera or gallery", takePhoto: "📷 Open camera", takeAnotherPhoto: "📷 Take another photo", uploadHint: "Up to 5 files at once, max. about 32 MB each. Password-protected PDFs are not supported.", textInputLabel: "Official letter (German)", textPlaceholder: "Paste or type the letter here…", analyzeText: "Analyze letter", apiHeading: "API key", apiKeyLabel: "Anthropic API Key", apiHint: "The key is only used in your browser and is not stored.", resultsHeading: "Result", toggleShow: "Show", toggleHide: "Hide", removeFile: "Remove file", filesSelectedMany: "{n} files selected" },
+        "Deutsch": { uiLangLabel: "🌐 Sprache der Seite wählen:", targetLangLabel: "Zielsprache für die Übersetzung des Dokuments:", modeFile: "Foto oder PDF", modeText: "Text eingeben", uploadLabel: "Datei hochladen", dropTitle: "Datei hierher ziehen", dropHint: "oder klicken und eine oder mehrere JPG-, PNG- oder PDF-Dateien wählen (max. 5)", dropTitleMobile: "Foto oder PDF auswählen", dropHintMobile: "Kamera oder Galerie öffnen", takePhoto: "📷 Kamera öffnen", uploadHint: "Bis zu 5 Dateien gleichzeitig, je max. ca. 32 MB. Passwortgeschützte PDFs werden nicht unterstützt.", textInputLabel: "Behördenbrief (Deutsch)", textPlaceholder: "Brief hier einfügen oder abtippen…", analyzeText: "Brief analysieren", apiHeading: "API-Schlüssel", apiKeyLabel: "Anthropic API Key", apiHint: "Der Schlüssel wird nur in Ihrem Browser verwendet und nicht gespeichert.", resultsHeading: "Ergebnis", toggleShow: "Anzeigen", toggleHide: "Verbergen", removeFile: "Datei entfernen", filesSelectedMany: "{n} Dateien ausgewählt" },
+        "Englisch": { uiLangLabel: "🌐 Choose page language:", targetLangLabel: "Target language for document translation:", modeFile: "Photo or PDF", modeText: "Enter text", uploadLabel: "Upload document", dropTitle: "Drop file here", dropHint: "or click and choose one or more JPG, PNG or PDF files (max. 5)", dropTitleMobile: "Select photo or PDF", dropHintMobile: "Open camera or gallery", takePhoto: "📷 Open camera", uploadHint: "Up to 5 files at once, max. about 32 MB each. Password-protected PDFs are not supported.", textInputLabel: "Official letter (German)", textPlaceholder: "Paste or type the letter here…", analyzeText: "Analyze letter", apiHeading: "API key", apiKeyLabel: "Anthropic API Key", apiHint: "The key is only used in your browser and is not stored.", resultsHeading: "Result", toggleShow: "Show", toggleHide: "Hide", removeFile: "Remove file", filesSelectedMany: "{n} files selected" },
         "Türkisch": { uiLangLabel: "🌐 Sayfa dilini seçin:", targetLangLabel: "Belge çevirisi için hedef dil:", modeFile: "Fotoğraf veya PDF", modeText: "Metin girin", uploadLabel: "Belge yükle", dropTitle: "Dosyayı buraya bırakın", dropHint: "veya tıklayıp görsel ya da PDF seçin", takePhoto: "Fotoğraf çek", uploadHint: "Maks. yaklaşık 32 MB. Şifreli PDF desteklenmez.", textInputLabel: "Resmi mektup (Almanca)", textPlaceholder: "Mektubu buraya yapıştırın veya yazın…", analyzeText: "Mektubu analiz et", apiHeading: "API anahtarı", apiKeyLabel: "Anthropic API Key", apiHint: "Anahtar yalnızca tarayıcınızda kullanılır ve kaydedilmez.", resultsHeading: "Sonuç" },
         "Arabisch": { uiLangLabel: "🌐 اختر لغة الصفحة:", targetLangLabel: "لغة ترجمة المستند:", modeFile: "صورة أو PDF", modeText: "إدخال نص", uploadLabel: "رفع المستند", dropTitle: "اسحب الملف هنا", dropHint: "أو انقر واختر صورة أو PDF", takePhoto: "التقاط صورة", uploadHint: "الحد الأقصى حوالي 32 ميغابايت. ملفات PDF المحمية غير مدعومة.", textInputLabel: "الخطاب الرسمي (بالألمانية)", textPlaceholder: "ألصق الرسالة أو اكتبها هنا…", analyzeText: "تحليل الخطاب", apiHeading: "مفتاح API", apiKeyLabel: "Anthropic API Key", apiHint: "يُستخدم المفتاح في متصفحك فقط ولا يتم حفظه.", resultsHeading: "النتيجة" },
         "Russisch": { uiLangLabel: "🌐 Выберите язык страницы:", targetLangLabel: "Язык перевода документа:", modeFile: "Фото или PDF", modeText: "Ввести текст", uploadLabel: "Загрузить документ", dropTitle: "Перетащите файл сюда", dropHint: "или нажмите и выберите изображение или PDF", takePhoto: "Сделать фото", uploadHint: "Макс. около 32 МБ. Защищенные PDF не поддерживаются.", textInputLabel: "Официальное письмо (нем.)", textPlaceholder: "Вставьте или введите письмо здесь…", analyzeText: "Анализировать письмо", apiHeading: "API-ключ", apiKeyLabel: "Anthropic API Key", apiHint: "Ключ используется только в браузере и не сохраняется.", resultsHeading: "Результат" },
@@ -1499,7 +1492,6 @@
         syncActiveUiLangButtons(lang);
         refreshLanguageGridsAfterUiLangChange(lang);
         updateTargetLangTrigger();
-        updateTakeAnotherPhotoButton();
         if (stagedLetterFiles.length) {
           renderLetterFilePreviews();
           updateDropFileNameSummary();
@@ -1996,10 +1988,6 @@
         letterCamera.click();
       });
 
-      btnTakeAnotherPhoto.addEventListener("click", function () {
-        letterCamera.click();
-      });
-
       btnBack.addEventListener("click", function () {
         results.classList.remove("visible");
         document.body.classList.remove("results-open");
@@ -2194,29 +2182,11 @@
         dropFileName.textContent = tpl.replace("{n}", String(stagedLetterFiles.length));
       }
 
-      function updateTakeAnotherPhotoButton() {
-        if (!btnTakeAnotherPhoto) {
-          return;
-        }
-        var n = stagedLetterFiles.length;
-        var show = everAddedViaCamera && n >= 1 && n < MAX_LETTER_FILES;
-        btnTakeAnotherPhoto.hidden = !show;
-        btnTakeAnotherPhoto.setAttribute("aria-hidden", show ? "false" : "true");
-        if (show) {
-          var t = uiTranslations[getUiLang()] || uiTranslations["Deutsch"];
-          var label = t.takeAnotherPhoto || "📷 Weiteres Foto aufnehmen";
-          btnTakeAnotherPhoto.textContent = label;
-          btnTakeAnotherPhoto.setAttribute("aria-label", label);
-        }
-      }
-
       function renderLetterFilePreviews() {
         previewStrip.innerHTML = "";
         if (!stagedLetterFiles.length) {
-          everAddedViaCamera = false;
           previewStripWrap.hidden = true;
           updateDropFileNameSummary();
-          updateTakeAnotherPhotoButton();
           return;
         }
         previewStripWrap.hidden = false;
@@ -2265,7 +2235,6 @@
           thumb.appendChild(removeBtn);
           previewStrip.appendChild(thumb);
         });
-        updateTakeAnotherPhotoButton();
       }
 
       function mergeLetterFilesIntoStaged(incoming) {
@@ -2303,17 +2272,11 @@
 
       function handleLetterFileInputChange(inputEl) {
         var incoming = Array.from(inputEl.files || []);
-        var before = stagedLetterFiles.length;
         inputEl.value = "";
         if (!incoming.length) {
           return;
         }
         mergeLetterFilesIntoStaged(incoming);
-        if (!stagedLetterFiles.length) {
-          everAddedViaCamera = false;
-        } else if (inputEl === letterCamera && stagedLetterFiles.length > before) {
-          everAddedViaCamera = true;
-        }
         syncLetterInputFromStaged();
         renderLetterFilePreviews();
         updateDropFileNameSummary();
