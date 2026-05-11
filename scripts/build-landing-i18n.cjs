@@ -388,7 +388,9 @@ const bootSnippet = `
   function sortLangButtonContainer(containerEl, childSelector, uiLangKey) {
     if (!containerEl) return;
     var locale = LOCALE_FOR_UI_LANG[uiLangKey] || "de";
-    var buttons = Array.prototype.slice.call(containerEl.querySelectorAll(":scope > " + childSelector));
+    var buttons = Array.prototype.slice.call(
+      containerEl.querySelectorAll(childSelector || "button.ui-modal-lang-btn")
+    );
     if (!buttons.length) return;
     buttons.sort(function (a, b) {
       var ka = langButtonSortKey(a);
@@ -500,6 +502,9 @@ const bootSnippet = `
   }
 
   function applyLandingLanguage(lang) {
+    try {
+      console.log("[BehördenKlar LP] applyLandingLanguage", lang);
+    } catch (e) {}
     var t = uiTranslations[lang] || uiTranslations["Deutsch"];
     var iso = LOCALE_FOR_UI_LANG[lang] || "de";
     document.documentElement.setAttribute("lang", iso.split("-")[0]);
@@ -510,7 +515,6 @@ const bootSnippet = `
     }
     updateUiLangTrigger(lang);
     syncActiveUiLangButtons(lang);
-    refreshLanguageGridsAfterUiLangChange(lang);
 
     var brand = $("lpBrandLink") || document.querySelector(".brand");
     if (brand) {
@@ -559,6 +563,10 @@ const bootSnippet = `
     tx("lpFooterOwnerLabel", t.lpFooterOwnerLabel);
 
     try {
+      refreshLanguageGridsAfterUiLangChange(lang);
+    } catch (e) {}
+
+    try {
       localStorage.setItem("behordenklar-ui-lang", lang);
     } catch (e) {}
   }
@@ -584,12 +592,17 @@ const bootSnippet = `
     } catch (e) {}
     applyLegalShell(savedLegal && uiTranslations[savedLegal] ? savedLegal : "Deutsch");
   } else if (uiLangModal && uiLangMobileTrigger && uiLangModalClose) {
-    document.querySelectorAll(".ui-modal-lang-btn").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        applyLandingLanguage(btn.getAttribute("data-ui-lang"));
+    var uiLangModalGrid = $("uiLangModalGrid");
+    if (uiLangModalGrid) {
+      uiLangModalGrid.addEventListener("click", function (e) {
+        var tg = e.target && e.target.closest && e.target.closest("button.ui-modal-lang-btn");
+        if (!tg || !uiLangModalGrid.contains(tg)) return;
+        var picked = tg.getAttribute("data-ui-lang");
+        if (!picked) return;
+        applyLandingLanguage(picked);
         closeUiLangModal();
       });
-    });
+    }
 
     uiLangMobileTrigger.addEventListener("click", function () {
       openUiLangModal();
