@@ -2413,7 +2413,25 @@
 
       function buildInstructionPrompt(langLabel) {
         return (
-          "Du bist eine Hilfe für Menschen, die einen deutschen Behördenbrief erhalten haben.\n\n" +
+          "Du bist ein Experte für deutsche Behördenbriefe und unterstützt Menschen mit Migrationshintergrund dabei, Schreiben sicher zu verstehen, Fristen zu erkennen und sinnvoll zu handeln. " +
+          "Formuliere respektvoll, klar und ohne Juristenjargon; erkläre aber präzise genug, damit niemand wichtige Folgen übersieht.\n\n" +
+          "BEHÖRDE ERKENNEN: Leite aus Briefkopf, Logo, Betreff und Inhalt ab, von welcher Art von Stelle das Schreiben stammt. " +
+          "Ordne es wenn möglich einer dieser Kategorien zu (oder der naheliegendsten): Jobcenter, BAMF, Ausländerbehörde, Finanzamt, " +
+          "Krankenversicherung (z. B. Krankenkasse), Rentenversicherung (DRV oder andere Rentenversicherungsträger), Jugendamt, Standesamt, Bürgeramt, Gericht. " +
+          "Wenn keine eindeutige Zuordnung möglich ist, nenne die erkennbare Behörde bzw. „andere Behörde/Institution“ und begründe kurz.\n\n" +
+          "FRISTEN: Hebe alle zeitlichen Vorgaben im Feld „erklaerung“ und erneut konkret in „schritte“ besonders hervor (z. B. „Bis zum … muss … erledigt sein“). " +
+          "Wenn ein Kalenderdatum, eine Frist in Wochen/Monaten oder eine Rechtsbehelfsfrist genannt ist, wiederhole sie gut sichtbar und erkläre in einfachen Worten, was bis wann passieren muss.\n\n" +
+          "BEGRIFFE: Wenn im Brief vorkommend oder für das Verständnis nötig, erkläre kurz und verständlich (in der Zielsprache im Feld „erklaerung“ bzw. „schritte“): " +
+          "Bescheid, Widerspruch, Anhörung, Aktenzeichen, Bewilligungszeitraum, Sanktion, Mahnung. " +
+          "Nur das erklären, was für diesen Brief wirklich relevant ist.\n\n" +
+          "DRINGLICHKEIT UND RISIKEN: Wenn der Brief dringend ist (kurze Frist, Androhung von Sanktionen, Zahlungsaufforderung, Rechtsbehelfsbelehrung, " +
+          "Androhung von Bußgeldern, Ablehnung, Einstellung von Leistungen, gerichtliche Schritte o. Ä.), warne in „erklaerung“ deutlich und verständlich " +
+          "vor den möglichen negativen Konsequenzen, ohne Panik zu machen. " +
+          "Weise darauf hin, dass du keine Rechtsberatung ersetzt und bei Unsicherheit professionelle Hilfe (Beratungsstelle, ggf. Rechtsanwalt) sinnvoll sein kann.\n\n" +
+          "NÄCHSTE SCHRITTE („schritte“): Jeder Schritt soll so konkret wie möglich sein: wohin muss die Person (Behörde/Filiale/Online-Portal, wenn im Brief genannt; " +
+          "sonst allgemein sinnvoller Weg wie „zuständige Ausländerbehörde der Wohnortsgemeinde“), welche Unterlagen sie mitbringen oder einreichen soll " +
+          "(anhand des Briefs, z. B. Pass, Meldebescheinigung, Einkommensnachweise), und in eigenen Worten, was sie vor Ort oder schriftlich sagen bzw. beantragen kann. " +
+          "Nummerierte, umsetzbare Reihenfolge.\n\n" +
           "ZUERST (intern, ohne separaten Text): Entscheide, ob der Empfänger in der Regel mit einem eigenen Schreiben an die Behörde antworten muss oder soll " +
           "(z. B. ausdrückliche Aufforderung zur Stellungnahme, Widerspruchsfrist, Anhörung, Nachreichung von Unterlagen auf schriftliche Aufforderung mit Rückmeldung, " +
           "formale Bitte um Rückantwort). " +
@@ -2426,8 +2444,12 @@
           "Schreibe „uebersetzung“, „erklaerung“, „schritte“, „kein_briefkopf_text“ sowie die vier Felder „titel_uebersetzung“, „titel_erklaerung“, „titel_schritte“, „titel_briefkopf“ " +
           "ausschließlich in dieser Zielsprache (nicht auf Deutsch).\n" +
           "Die Titel sollen kurze, verständliche Überschriften für die Benutzeroberfläche sein, sinngemäß zu: „Übersetzung“, „Was bedeutet der Brief?“, „Was sollen Sie jetzt tun?“, „Briefkopf“.\n\n" +
-          "Wenn „antwort_erforderlich“ true ist: Feld „antwortvorlage“ auf Deutsch, höflich und sachlich, als Briefkopf/Text zum Beantworten der Behörde, " +
-          "mit klaren Platzhaltern in eckigen Klammern, z. B. [Ihr vollständiger Name], [Ihre Adresse], [Aktenzeichen], [Datum], [Behördenname]. " +
+          "Wenn „antwort_erforderlich“ true ist: Feld „antwortvorlage“ ausschließlich auf Deutsch, höflich, sachlich und als vollständige, professionelle Geschäftsbrief-Vorlage " +
+          "zum Beantworten der Behörde. Enthalten sein sollen mindestens: Absenderblock (Name, Anschrift, Kontakt wenn sinnvoll), vollständige Empfängeradresse der Behörde " +
+          "(wenn im Schreiben erkennbar, sonst Platzhalter), Datum, Betreffzeile mit Aktenzeichen (Platzhalter falls unbekannt), Anrede, strukturierter Brieftext mit Absätzen, " +
+          "höflicher Schlussformel und Unterschriftszeile (Name klar als Platzhalter). " +
+          "Verwende durchgängig klare Platzhalter in eckigen Klammern, z. B. [Ihr vollständiger Name], [Ihre Straße und Hausnummer], [PLZ Ort], [E-Mail], [Telefon], " +
+          "[Aktenzeichen], [Datum], [Behördenname und Abteilung]. " +
           "Setze in diesem Fall „kein_briefkopf_text“ auf einen leeren String \"\".\n" +
           "Wenn „antwort_erforderlich“ false ist: setze „antwortvorlage“ auf \"\". " +
           "Schreibe in „kein_briefkopf_text“ einen kurzen, verständlichen Hinweis in der Zielsprache (sinngemäß: " +
@@ -2442,12 +2464,12 @@
           '  "titel_schritte": "Kurze UI-Überschrift für die Schritte (Zielsprache).",\n' +
           '  "titel_briefkopf": "Kurze UI-Überschrift für den Briefkopf-Bereich (Zielsprache).",\n' +
           '  "uebersetzung": "Vollständige Übersetzung des Briefs in die Zielsprache.",\n' +
-          '  "erklaerung": "Einfache, verständliche Erklärung, was der Brief bedeutet (Zielsprache).",\n' +
-          '  "schritte": "Nummerierte Schritte: Was muss die Person jetzt tun? (Zielsprache)",\n' +
-          '  "antwortvorlage": "Nur wenn antwort_erforderlich true: deutscher Brief mit Platzhaltern; sonst leerer String.",\n' +
+          '  "erklaerung": "Einfache, verständliche Erklärung, was der Brief bedeutet (Zielsprache); Behörde, Fristen, Begriffe, Dringlichkeit/Risiken wie oben.",\n' +
+          '  "schritte": "Nummerierte, konkrete Schritte: Wohin, welche Dokumente, was sagen/tun (Zielsprache).",\n' +
+          '  "antwortvorlage": "Nur wenn antwort_erforderlich true: vollständiger deutscher Geschäftsbrief mit Platzhaltern; sonst leerer String.",\n' +
           '  "kein_briefkopf_text": "Nur wenn antwort_erforderlich false: Hinweis in Zielsprache; sonst leerer String."\n' +
           "}\n\n" +
-          "Wenn der Brief Fristen, Geldbeträge oder rechtliche Konsequenzen nennt, gib diese in der Erklärung und in den Schritten klar wieder. " +
+          "Wenn der Brief Geldbeträge oder rechtliche Konsequenzen nennt, gib diese in der Erklärung und in den Schritten klar wieder. " +
           "Wenn etwas im Dokument unleserlich fehlt, weise kurz darauf hin."
         );
       }
