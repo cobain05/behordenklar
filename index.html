@@ -1090,6 +1090,54 @@
       line-height: 1.45;
       font-weight: 600;
     }
+
+    .template-download-block {
+      margin-top: 1rem;
+    }
+
+    .template-download-disclaimer {
+      background: #fff8e1;
+      border: 1px solid #ffc107;
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.45;
+      margin: 0 0 1rem;
+    }
+
+    .template-download-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: stretch;
+    }
+
+    .btn-template-download {
+      appearance: none;
+      flex: 1 1 200px;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      text-align: center;
+    }
+
+    .btn-template-download:hover {
+      border-color: rgba(26, 115, 232, 0.45);
+      background: #fafbfd;
+    }
+
+    .btn-template-download:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
   </style>
 </head>
 <body>
@@ -1237,6 +1285,13 @@
           <article class="result-section">
             <h3 id="h3TitleBriefkopf">Briefkopf</h3>
             <div class="result-body" id="outTemplate"></div>
+            <div id="templateDownloadBlock" class="template-download-block" hidden>
+              <p id="templateDownloadDisclaimer" class="template-download-disclaimer" role="note"></p>
+              <div class="template-download-buttons">
+                <button type="button" class="btn-template-download" id="btnDownloadTemplatePdf"></button>
+                <button type="button" class="btn-template-download" id="btnDownloadTemplateDocx"></button>
+              </div>
+            </div>
           </article>
         </div>
       </section>
@@ -1358,6 +1413,7 @@
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
     try {
       var _initLang = localStorage.getItem("behordenklar-ui-lang");
@@ -1395,6 +1451,9 @@
       const dropZone = $("dropZone");
       const dropFileName = $("dropFileName");
       const btnBack = $("btnBack");
+      const templateDownloadBlock = $("templateDownloadBlock");
+      const btnDownloadTemplatePdf = $("btnDownloadTemplatePdf");
+      const btnDownloadTemplateDocx = $("btnDownloadTemplateDocx");
       const uiLangModal = $("uiLangModal");
       const uiLangModalClose = $("uiLangModalClose");
       const uiLangMobileTrigger = $("uiLangMobileTrigger");
@@ -1428,6 +1487,7 @@
 
       const MAX_LETTER_FILES = 5;
       var stagedLetterFiles = [];
+      var lastAntwortvorlageForDownload = "";
 
       const uiTranslations = {
         "Deutsch": { uiLangLabel: "🌐 Sprache der Seite wählen:", targetLangLabel: "Zielsprache für die Übersetzung des Dokuments:", modeFile: "Foto oder PDF", modeText: "Text eingeben", uploadLabel: "Datei hochladen", dropTitle: "Datei hierher ziehen", dropHint: "oder klicken und eine oder mehrere JPG-, PNG- oder PDF-Dateien wählen (max. 5)", dropTitleMobile: "Foto oder PDF auswählen", dropHintMobile: "Kamera oder Galerie öffnen", takePhoto: "📷 Kamera öffnen", pickFilesMobile: "🖼️ Foto oder PDF auswählen", uploadHint: "Bis zu 5 Dateien gleichzeitig, je max. ca. 32 MB. Passwortgeschützte PDFs werden nicht unterstützt.", textInputLabel: "Behördenbrief (Deutsch)", textPlaceholder: "Brief hier einfügen oder abtippen…", analyzeText: "Brief analysieren", apiHeading: "API-Schlüssel", apiKeyLabel: "Anthropic API Key", apiHint: "Der Schlüssel wird nur in Ihrem Browser verwendet und nicht gespeichert.", resultsHeading: "Ergebnis", toggleShow: "Anzeigen", toggleHide: "Verbergen", removeFile: "Datei entfernen", filesSelectedMany: "{n} Dateien ausgewählt", welcomeTitle: "Willkommen bei BehördenKlar", welcomeText: "Fügen Sie Ihren Behördenbrief ein oder laden Sie ein Foto oder PDF hoch – wir helfen beim Verstehen, Übersetzen und den nächsten Schritten.", footerTagline: "<span>BehördenKlar</span> – Dokumente verstehen, einfach gemacht", footerDisclaimer: "Keine Rechtsberatung. Bei Fristen und rechtlichen Folgen prüfen Sie die Angaben oder wenden Sie sich an eine Beratungsstelle oder an eine Rechtsanwältin bzw. einen Rechtsanwalt.", maxUploadsReached: "✋ Maximum erreicht – 5 Fotos hochgeladen" },
@@ -1457,6 +1517,173 @@
         "Tigrinya": { uiLangLabel: "🌐 ቋንቋ ገጽ ምረጽ:", targetLangLabel: "ናይ ሰነድ ትርጉም ዕላማ ቋንቋ:", modeFile: "ስእሊ ወይ PDF", modeText: "ጽሑፍ ኣእቱ", uploadLabel: "ሰነድ ኣምጽእ", dropTitle: "ፋይል ኣብዚ ኣንብር", dropHint: "ወይ ጠውቕ እሞ ስእሊ ወይ PDF ምረጽ", takePhoto: "ስእሊ ኣንሳ", uploadHint: "ኣብ 32 MB ኣካባቢ። ብፓስዎርድ ዝተጠበቐ PDF ኣይደገፍን።", textInputLabel: "ወግዓዊ ደብዳቤ (ጀርመን)", textPlaceholder: "ደብዳበ ኣብዚ ለጥፍ ወይ ጻሕፍ…", analyzeText: "ደብዳበ ተንትን", apiHeading: "API መፍትሕ", apiKeyLabel: "Anthropic API Key", apiHint: "መፍትሑ ኣብ ብራውዘርካ ጥራይ ይጥቀም፣ ኣይተኸዝን።", resultsHeading: "ውጽኢት", welcomeTitle: "ናብ BehördenKlar እንኳን ደህና መጹ", welcomeText: "ወግዓዊ ደብዳበ ኣብዚ ለጥፍ ወይ ስእሊ ወይ PDF ኣምጽእ – ኣብ ምርዳእ፣ ትርጉምን ዝቕጽሉ ስጉምትታትን ንሕግዝ።", footerTagline: "<span>BehördenKlar</span> – ሰነዳት ምርዳእ፣ ብቐሊል መንገዲ", footerDisclaimer: "ናይ ሕጊ ምኽርቲ ኣይኮነን። ንናይ ግዜ ገደባትን ናይ ሕጊ መዘኻኸርታትን፣ ሓበሬታ ኣረጋግጹ ወይ ናይ ምኽርቲ ቦታ ወይ ናይ ሕጊ ጸሓፍቲ ርከቡ።", maxUploadsReached: "✋ ናይ ልዕሊ ደረጃ ተሰሊጡ – 5 ፋይላት ተሓቒኦም" },
         "Litauisch": { uiLangLabel: "🌐 Pasirinkite puslapio kalbą:", targetLangLabel: "Dokumento vertimo tikslinė kalba:", modeFile: "Nuotrauka arba PDF", modeText: "Įvesti tekstą", uploadLabel: "Įkelti dokumentą", dropTitle: "Įmeskite failą čia", dropHint: "arba spustelėkite ir pasirinkite vaizdą arba PDF", takePhoto: "Nufotografuoti", uploadHint: "Maks. apie 32 MB. Slaptažodžiu apsaugoti PDF nepalaikomi.", textInputLabel: "Oficialus laiškas (vokiečių)", textPlaceholder: "Įklijuokite arba įveskite laišką čia…", analyzeText: "Analizuoti laišką", apiHeading: "API raktas", apiKeyLabel: "Anthropic API Key", apiHint: "Raktas naudojamas tik naršyklėje ir nėra saugomas.", resultsHeading: "Rezultatas", welcomeTitle: "Sveiki atvykę į BehördenKlar", welcomeText: "Įklijuokite oficialų laišką arba įkelkite nuotrauką arba PDF – padedame suprasti, išversti ir dėl tolesnių žingsnių.", footerTagline: "<span>BehördenKlar</span> – Suprasti dokumentus paprasčiau", footerDisclaimer: "Tai ne teisinė konsultacija. Dėl terminų ir teisinių pasekmių patikrinkite informaciją arba kreipkitės į konsultacijos centrą ar advokatą.", maxUploadsReached: "✋ Pasiektas limitas – 5 failai įkelti" },
         "Arabisch (Ägyptisch)": { uiLangLabel: "🌐 اختر لغة الصفحة:", targetLangLabel: "لغة ترجمة المستند:", modeFile: "صورة أو PDF", modeText: "اكتب النص", uploadLabel: "ارفع المستند", dropTitle: "اسحب الملف هنا", dropHint: "أو اضغط واختر صورة أو PDF", takePhoto: "التقاط صورة", uploadHint: "الحد الأقصى حوالي 32 ميجابايت. ملفات PDF المحمية غير مدعومة.", textInputLabel: "خطاب رسمي (ألماني)", textPlaceholder: "الصق الخطاب أو اكتبه هنا…", analyzeText: "حلّل الخطاب", apiHeading: "مفتاح API", apiKeyLabel: "Anthropic API Key", apiHint: "يُستخدم المفتاح داخل المتصفح فقط ولا يتم حفظه.", resultsHeading: "النتيجة", toggleShow: "إظهار", toggleHide: "إخفاء", welcomeTitle: "أهلاً بكم في BehördenKlar", welcomeText: "الصق خطابك الرسمي أو ارفع صورة أو ملف PDF – نساعدك على الفهم والترجمة والخطوات التالية.", footerTagline: "<span>BehördenKlar</span> – فهم المستندات بسهولة", footerDisclaimer: "ليس استشارة قانونية. بشأن المواعيد والآثار القانونية، راجع المعلومات أو تواصل مع مركز استشارات أو محامٍ.", maxUploadsReached: "✋ تم بلوغ الحد الأقصى – تم رفع 5 ملفات" }
+      };
+
+      const templateDownloadUiByLang = {
+        "Deutsch": {
+          templateDownloadDisclaimer:
+            "⚠️ Diese Vorlage dient nur als Orientierung. Bitte prüfe den Brief sorgfältig vor dem Absenden und passe ihn an deine Situation an. BehördenKlar übernimmt keine Haftung für den Inhalt.",
+          downloadPdfLabel: "📄 Als PDF herunterladen",
+          downloadDocxLabel: "📝 Als Word herunterladen",
+          templateExportFailed: "Export fehlgeschlagen. Bitte Seite neu laden und erneut versuchen.",
+        },
+        "Englisch": {
+          templateDownloadDisclaimer:
+            "⚠️ This template is for guidance only. Please review the letter carefully before sending and adapt it to your situation. BehördenKlar accepts no liability for the content.",
+          downloadPdfLabel: "📄 Download as PDF",
+          downloadDocxLabel: "📝 Download as Word",
+          templateExportFailed: "Export failed. Please reload the page and try again.",
+        },
+        "Türkisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Bu şablon yalnızca yönlendirme amaçlıdır. Göndermeden önce mektubu dikkatle kontrol edin ve durumunuza göre uyarlayın. BehördenKlar içerik için sorumluluk kabul etmez.",
+          downloadPdfLabel: "📄 PDF olarak indir",
+          downloadDocxLabel: "📝 Word olarak indir",
+        },
+        "Arabisch": {
+          templateDownloadDisclaimer:
+            "⚠️ هذا القالب للإرشاد فقط. يُرجى مراجعة الخطاب بعناية قبل الإرسال وتعديله وفقًا لحالتك. BehördenKlar لا تتحمل مسؤولية المحتوى.",
+          downloadPdfLabel: "📄 تنزيل PDF",
+          downloadDocxLabel: "📝 تنزيل Word",
+        },
+        "Russisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Этот шаблон только для ориентира. Внимательно проверьте письмо перед отправкой и адаптируйте его к своей ситуации. BehördenKlar не несёт ответственности за содержание.",
+          downloadPdfLabel: "📄 Скачать PDF",
+          downloadDocxLabel: "📝 Скачать Word",
+        },
+        "Ukrainisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Цей шаблон лише для орієнтиру. Уважно перевірте лист перед відправленням і підлаштуйте його під свою ситуацію. BehördenKlar не несе відповідальності за зміст.",
+          downloadPdfLabel: "📄 Завантажити PDF",
+          downloadDocxLabel: "📝 Завантажити Word",
+        },
+        "Rumänisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Acest șablon este doar orientativ. Verificați cu atenție scrisoarea înainte de trimitere și adaptați-o situației dvs. BehördenKlar nu își asumă răspunderea pentru conținut.",
+          downloadPdfLabel: "📄 Descarcă PDF",
+          downloadDocxLabel: "📝 Descarcă Word",
+        },
+        "Polnisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Ten szablon służy wyłącznie jako wskazówka. Przed wysłaniem dokładnie sprawdź pismo i dostosuj je do swojej sytuacji. BehördenKlar nie ponosi odpowiedzialności za treść.",
+          downloadPdfLabel: "📄 Pobierz PDF",
+          downloadDocxLabel: "📝 Pobierz Word",
+        },
+        "Dari": {
+          templateDownloadDisclaimer:
+            "⚠️ این قالب فقط برای راهنمایی است. لطفاً قبل از ارسال نامه را با دقت بررسی کرده و متناسب با وضعیت خود تنظیم کنید. BehördenKlar مسئولیتی در قبال محتوا ندارد.",
+          downloadPdfLabel: "📄 دانلود PDF",
+          downloadDocxLabel: "📝 دانلود Word",
+        },
+        "Bulgarisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Този шаблон е само за ориентир. Моля, внимателно проверете писмото преди изпращане и го адаптирайте към вашата ситуация. BehördenKlar не носи отговорност за съдържанието.",
+          downloadPdfLabel: "📄 Изтегли PDF",
+          downloadDocxLabel: "📝 Изтегли Word",
+        },
+        "Georgisch": {
+          templateDownloadDisclaimer:
+            "⚠️ ეს ნიმუში მხოლოდ ორიენტირებისთვისაა. გაგზავნამდე ყურადღებით შეამოწმეთ წერილი და მოარგეთ თქვენს სიტუაციას. BehördenKlar არ იღებს პასუხისმგებლობას შიგთავსზე.",
+          downloadPdfLabel: "📄 ჩამოტვირთვა PDF",
+          downloadDocxLabel: "📝 ჩამოტვირთვა Word",
+        },
+        "Spanisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Esta plantilla es solo orientativa. Revise la carta con cuidado antes de enviarla y adáptela a su situación. BehördenKlar no se hace responsable del contenido.",
+          downloadPdfLabel: "📄 Descargar PDF",
+          downloadDocxLabel: "📝 Descargar Word",
+        },
+        "Portugiesisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Este modelo é apenas orientativo. Verifique a carta com atenção antes de enviar e adapte-a à sua situação. BehördenKlar não se responsabiliza pelo conteúdo.",
+          downloadPdfLabel: "📄 Descarregar PDF",
+          downloadDocxLabel: "📝 Descarregar Word",
+        },
+        "Französisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Ce modèle ne sert que d’orientation. Vérifiez attentivement la lettre avant l’envoi et adaptez-la à votre situation. BehördenKlar décline toute responsabilité quant au contenu.",
+          downloadPdfLabel: "📄 Télécharger en PDF",
+          downloadDocxLabel: "📝 Télécharger en Word",
+        },
+        "Italienisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Questo modello serve solo come guida. Controlla attentamente la lettera prima dell’invio e adattala alla tua situazione. BehördenKlar non è responsabile del contenuto.",
+          downloadPdfLabel: "📄 Scarica PDF",
+          downloadDocxLabel: "📝 Scarica Word",
+        },
+        "Griechisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Αυτό το πρότυπο είναι μόνο για καθοδήγηση. Ελέγξτε προσεκτικά την επιστολή πριν την αποστολή και προσαρμόστε την στην κατάστασή σας. Η BehördenKlar δεν ευθύνεται για το περιεχόμενο.",
+          downloadPdfLabel: "📄 Λήψη PDF",
+          downloadDocxLabel: "📝 Λήψη Word",
+        },
+        "Albanisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Ky model është vetëm orientues. Kontrollo me kujdes letrën para dërgimit dhe përshtateje situatës tënde. BehördenKlar nuk merr përgjegjësi për përmbajtjen.",
+          downloadPdfLabel: "📄 Shkarko PDF",
+          downloadDocxLabel: "📝 Shkarko Word",
+        },
+        "Bosnisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Ovaj predložak je samo za orijentaciju. Pažljivo provjerite pismo prije slanja i prilagodite ga svojoj situaciji. BehördenKlar ne snosi odgovornost za sadržaj.",
+          downloadPdfLabel: "📄 Preuzmi PDF",
+          downloadDocxLabel: "📝 Preuzmi Word",
+        },
+        "Serbisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Ovaj šablon je samo za orijentaciju. Pažljivo proverite pismo pre slanja i prilagodite ga svojoj situaciji. BehördenKlar ne snosi odgovornost za sadržaj.",
+          downloadPdfLabel: "📄 Preuzmi PDF",
+          downloadDocxLabel: "📝 Preuzmi Word",
+        },
+        "Kroatisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Ovaj predložak služi samo kao smjernica. Pažljivo provjerite pismo prije slanja i prilagodite ga svojoj situaciji. BehördenKlar ne snosi odgovornost za sadržaj.",
+          downloadPdfLabel: "📄 Preuzmi PDF",
+          downloadDocxLabel: "📝 Preuzmi Word",
+        },
+        "Chinesisch": {
+          templateDownloadDisclaimer:
+            "⚠️ 本模板仅供参考。发送前请仔细核对信件内容，并根据您的实际情况修改。BehördenKlar 对内容不承担任何责任。",
+          downloadPdfLabel: "📄 下载 PDF",
+          downloadDocxLabel: "📝 下载 Word",
+        },
+        "Vietnamesisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Mẫu này chỉ mang tính tham khảo. Vui lòng kiểm tra kỹ thư trước khi gửi và chỉnh sửa cho phù hợp với tình huống của bạn. BehördenKlar không chịu trách nhiệm về nội dung.",
+          downloadPdfLabel: "📄 Tải PDF",
+          downloadDocxLabel: "📝 Tải Word",
+        },
+        "Persisch": {
+          templateDownloadDisclaimer:
+            "⚠️ این الگو فقط برای راهنمایی است. لطفاً قبل از ارسال نامه را با دقت بررسی و متناسب با وضعیت خود تنظیم کنید. BehördenKlar مسئولیتی در قبال محتوا ندارد.",
+          downloadPdfLabel: "📄 دانلود PDF",
+          downloadDocxLabel: "📝 دانلود Word",
+        },
+        "Somali": {
+          templateDownloadDisclaimer:
+            "⚠️ Qaabkani wuxuu u yahay tilmaan oo keliya. Fadlan si taxadar leh u hubi warqadda ka hor intaadan dirin oo u habee xaaladdaada. BehördenKlar mas'uul kama aha waxa ku jira.",
+          downloadPdfLabel: "📄 Soo deji PDF",
+          downloadDocxLabel: "📝 Soo deji Word",
+        },
+        "Tigrinya": {
+          templateDownloadDisclaimer:
+            "⚠️ እዚ ሞደል መምርሒ ጥራይ እዩ። ቅድሚ ምስዳድ ደብዳበኩም ብጥንቃቐ ምርግጋጽን ናብ ኩነታትኩም ምሕዳስን ግበሩ። BehördenKlar ንሓበሬታ ኣይተሓባበርን እዩ።",
+          downloadPdfLabel: "📄 PDF ኣውርድ",
+          downloadDocxLabel: "📝 Word ኣውርድ",
+        },
+        "Litauisch": {
+          templateDownloadDisclaimer:
+            "⚠️ Šis šablonas skirtas tik orientacijai. Prieš siųsdami atidžiai patikrinkite laišką ir pritaikykite jį savo situacijai. BehördenKlar neatsako už turinį.",
+          downloadPdfLabel: "📄 Atsisiųsti PDF",
+          downloadDocxLabel: "📝 Atsisiųsti Word",
+        },
+        "Arabisch (Ägyptisch)": {
+          templateDownloadDisclaimer:
+            "⚠️ هذا القالب للإرشاد فقط. يُرجى مراجعة الخطاب بعناية قبل الإرسال وتعديله وفقًا لحالتك. BehördenKlar لا تتحمل مسؤولية المحتوى.",
+          downloadPdfLabel: "📄 تنزيل PDF",
+          downloadDocxLabel: "📝 تنزيل Word",
+        },
       };
 
       const localizedLoadingSteps = {
@@ -1491,6 +1718,13 @@
 
       Object.keys(uiTranslations).forEach(function (langKey) {
         uiTranslations[langKey].loadingSteps = localizedLoadingSteps[langKey] || localizedLoadingSteps["Deutsch"];
+        var td = templateDownloadUiByLang[langKey] || templateDownloadUiByLang["Deutsch"];
+        uiTranslations[langKey].templateDownloadDisclaimer = td.templateDownloadDisclaimer;
+        uiTranslations[langKey].downloadPdfLabel = td.downloadPdfLabel;
+        uiTranslations[langKey].downloadDocxLabel = td.downloadDocxLabel;
+        uiTranslations[langKey].templateExportFailed =
+          (templateDownloadUiByLang[langKey] && templateDownloadUiByLang[langKey].templateExportFailed) ||
+          templateDownloadUiByLang["Englisch"].templateExportFailed;
       });
 
       (function syncUiLangFromStorage() {
@@ -1636,6 +1870,7 @@
           renderLetterFilePreviews();
           updateDropFileNameSummary();
         }
+        updateTemplateDownloadUi(lang);
         try {
           localStorage.setItem("behordenklar-ui-lang", lang);
         } catch (e) {}
@@ -2030,6 +2265,113 @@
         errorBox.classList.remove("visible");
       }
 
+      function updateTemplateDownloadUi(lang) {
+        var t = uiTranslations[lang] || uiTranslations["Deutsch"];
+        var disc = $("templateDownloadDisclaimer");
+        if (disc) {
+          disc.textContent = t.templateDownloadDisclaimer || "";
+        }
+        if (btnDownloadTemplatePdf) {
+          btnDownloadTemplatePdf.textContent = t.downloadPdfLabel || "";
+          btnDownloadTemplatePdf.setAttribute("aria-label", t.downloadPdfLabel || "");
+        }
+        if (btnDownloadTemplateDocx) {
+          btnDownloadTemplateDocx.textContent = t.downloadDocxLabel || "";
+          btnDownloadTemplateDocx.setAttribute("aria-label", t.downloadDocxLabel || "");
+        }
+      }
+
+      function setTemplateDownloadSectionVisible(visible, antwortText) {
+        if (!templateDownloadBlock) {
+          return;
+        }
+        if (visible && antwortText && String(antwortText).trim()) {
+          lastAntwortvorlageForDownload = String(antwortText);
+          templateDownloadBlock.hidden = false;
+          updateTemplateDownloadUi(getUiLang());
+        } else {
+          lastAntwortvorlageForDownload = "";
+          templateDownloadBlock.hidden = true;
+        }
+      }
+
+      function downloadAntwortvorlagePdf() {
+        var text = lastAntwortvorlageForDownload;
+        if (!text || !String(text).trim()) {
+          return;
+        }
+        var tErr = (uiTranslations[getUiLang()] || uiTranslations["Deutsch"]).templateExportFailed;
+        try {
+          var g = window.jspdf;
+          if (!g || !g.jsPDF) {
+            showError(tErr);
+            return;
+          }
+          var doc = new g.jsPDF({ unit: "mm", format: "a4" });
+          var margin = 20;
+          var pageW = doc.internal.pageSize.getWidth();
+          var pageH = doc.internal.pageSize.getHeight();
+          var maxW = pageW - margin * 2;
+          var lineH = 6;
+          var y = margin;
+          var lines = doc.splitTextToSize(text.replace(/\r\n/g, "\n"), maxW);
+          var i;
+          for (i = 0; i < lines.length; i++) {
+            if (y + lineH > pageH - margin) {
+              doc.addPage();
+              y = margin;
+            }
+            doc.text(lines[i], margin, y);
+            y += lineH;
+          }
+          doc.save("BehördenKlar-Antwortbrief.pdf");
+        } catch (e) {
+          showError(tErr);
+        }
+      }
+
+      async function downloadAntwortvorlageDocx() {
+        var text = lastAntwortvorlageForDownload;
+        if (!text || !String(text).trim()) {
+          return;
+        }
+        var tErr = (uiTranslations[getUiLang()] || uiTranslations["Deutsch"]).templateExportFailed;
+        try {
+          var docxMod = await import("https://esm.sh/docx@8.5.0");
+          var Document = docxMod.Document;
+          var Packer = docxMod.Packer;
+          var Paragraph = docxMod.Paragraph;
+          var TextRun = docxMod.TextRun;
+          var raw = text.replace(/\r\n/g, "\n");
+          var parts = raw.split("\n");
+          var children = parts.map(function (line) {
+            return new Paragraph({
+              children: [new TextRun({ text: line.length ? line : " " })],
+            });
+          });
+          var d = new Document({
+            sections: [
+              {
+                properties: {},
+                children: children,
+              },
+            ],
+          });
+          var blob = await Packer.toBlob(d);
+          var a = document.createElement("a");
+          var url = URL.createObjectURL(blob);
+          a.href = url;
+          a.download = "BehördenKlar-Antwortbrief.docx";
+          a.rel = "noopener";
+          document.body.appendChild(a);
+          a.click();
+          URL.revokeObjectURL(url);
+          a.remove();
+        } catch (e) {
+          showError(tErr);
+        }
+      }
+
       document.querySelectorAll(".target-lang-btn").forEach(function (btn) {
         btn.addEventListener("click", function () {
           setTargetLang(btn.getAttribute("data-lang"));
@@ -2118,7 +2460,19 @@
       btnBack.addEventListener("click", function () {
         results.classList.remove("visible");
         document.body.classList.remove("results-open");
+        setTemplateDownloadSectionVisible(false, "");
       });
+
+      if (btnDownloadTemplatePdf) {
+        btnDownloadTemplatePdf.addEventListener("click", function () {
+          downloadAntwortvorlagePdf();
+        });
+      }
+      if (btnDownloadTemplateDocx) {
+        btnDownloadTemplateDocx.addEventListener("click", function () {
+          downloadAntwortvorlageDocx();
+        });
+      }
 
       function startLoadingScreen() {
         var currentUiLang = getUiLang();
@@ -2658,6 +3012,7 @@
         clearError();
         results.classList.remove("visible");
         document.body.classList.remove("results-open");
+        setTemplateDownloadSectionVisible(false, "");
 
         var mode = document.querySelector('input[name="inputMode"]:checked').value;
         var content = [];
@@ -2835,6 +3190,10 @@
           $("outTemplate").textContent = parsed.antwort_erforderlich
             ? parsed.antwortvorlage
             : parsed.kein_briefkopf_text;
+          setTemplateDownloadSectionVisible(
+            parsed.antwort_erforderlich === true,
+            parsed.antwort_erforderlich ? parsed.antwortvorlage : ""
+          );
           results.classList.add("visible");
           document.body.classList.add("results-open");
           results.scrollTop = 0;
