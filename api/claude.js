@@ -2,8 +2,10 @@
  * Vercel Serverless Function: POST /api/claude
  * Proxies JSON requests to https://api.anthropic.com/v1/messages
  * (same role as server.py for local development).
+ * Default model if the client omits `model`: claude-haiku-4-5-20251001 (matches index.html).
  */
 
+const DEFAULT_ANTHROPIC_MODEL = "claude-haiku-4-5-20251001";
 const ANTHROPIC_MESSAGES_URL = "https://api.anthropic.com/v1/messages";
 const MAX_BODY_BYTES = 40 * 1024 * 1024;
 
@@ -67,6 +69,10 @@ module.exports = async function handler(req, res) {
     }
   } catch (e) {
     return sendJsonError(res, 400, "Ungültiges JSON im Request-Body.");
+  }
+
+  if (!bodyObj.model || String(bodyObj.model).trim() === "") {
+    bodyObj.model = DEFAULT_ANTHROPIC_MODEL;
   }
 
   var payloadOut = JSON.stringify(bodyObj);
