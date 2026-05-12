@@ -1413,7 +1413,6 @@
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
     try {
       var _initLang = localStorage.getItem("behordenklar-ui-lang");
@@ -1526,6 +1525,9 @@
           downloadPdfLabel: "📄 Als PDF herunterladen",
           downloadDocxLabel: "📝 Als Word herunterladen",
           templateExportFailed: "Export fehlgeschlagen. Bitte Seite neu laden und erneut versuchen.",
+          printPdfHint:
+            "Im Druckdialog „Als PDF speichern“ bzw. „Als PDF“ / „PDF“ als Drucker oder Ziel wählen. Anschließend die Datei speichern (z. B. als BehördenKlar-Antwortbrief.pdf).",
+          pdfPrintPopupBlocked: "Bitte Pop-ups für diese Website erlauben, damit die Druckansicht geöffnet werden kann.",
         },
         "Englisch": {
           templateDownloadDisclaimer:
@@ -1533,6 +1535,9 @@
           downloadPdfLabel: "📄 Download as PDF",
           downloadDocxLabel: "📝 Download as Word",
           templateExportFailed: "Export failed. Please reload the page and try again.",
+          printPdfHint:
+            "In the print dialog, choose “Save as PDF” (or “Save to PDF” / “PDF”) as the printer or destination, then save the file (e.g. as BehördenKlar-Antwortbrief.pdf).",
+          pdfPrintPopupBlocked: "Please allow pop-ups for this site so the print view can open.",
         },
         "Türkisch": {
           templateDownloadDisclaimer:
@@ -1725,6 +1730,12 @@
         uiTranslations[langKey].templateExportFailed =
           (templateDownloadUiByLang[langKey] && templateDownloadUiByLang[langKey].templateExportFailed) ||
           templateDownloadUiByLang["Englisch"].templateExportFailed;
+        uiTranslations[langKey].printPdfHint =
+          (templateDownloadUiByLang[langKey] && templateDownloadUiByLang[langKey].printPdfHint) ||
+          templateDownloadUiByLang["Englisch"].printPdfHint;
+        uiTranslations[langKey].pdfPrintPopupBlocked =
+          (templateDownloadUiByLang[langKey] && templateDownloadUiByLang[langKey].pdfPrintPopupBlocked) ||
+          templateDownloadUiByLang["Englisch"].pdfPrintPopupBlocked;
       });
 
       (function syncUiLangFromStorage() {
@@ -2295,38 +2306,64 @@
         }
       }
 
+      function escapeHtmlForPrint(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
       function downloadAntwortvorlagePdf() {
         var text = lastAntwortvorlageForDownload;
         if (!text || !String(text).trim()) {
           return;
         }
-        var tErr = (uiTranslations[getUiLang()] || uiTranslations["Deutsch"]).templateExportFailed;
+        var t = uiTranslations[getUiLang()] || uiTranslations["Deutsch"];
+        var hint = t.printPdfHint || "";
+        var popupMsg = t.pdfPrintPopupBlocked || "";
+        var win = window.open("", "_blank");
+        if (!win || !win.document) {
+          showError(popupMsg);
+          return;
+        }
         try {
-          var g = window.jspdf;
-          if (!g || !g.jsPDF) {
-            showError(tErr);
-            return;
-          }
-          var doc = new g.jsPDF({ unit: "mm", format: "a4" });
-          var margin = 20;
-          var pageW = doc.internal.pageSize.getWidth();
-          var pageH = doc.internal.pageSize.getHeight();
-          var maxW = pageW - margin * 2;
-          var lineH = 6;
-          var y = margin;
-          var lines = doc.splitTextToSize(text.replace(/\r\n/g, "\n"), maxW);
-          var i;
-          for (i = 0; i < lines.length; i++) {
-            if (y + lineH > pageH - margin) {
-              doc.addPage();
-              y = margin;
-            }
-            doc.text(lines[i], margin, y);
-            y += lineH;
-          }
-          doc.save("BehördenKlar-Antwortbrief.pdf");
+          var safeBody = escapeHtmlForPrint(text.replace(/\r\n/g, "\n"));
+          var safeHint = escapeHtmlForPrint(hint);
+          var d = win.document;
+          d.open();
+          d.write("<!DOCTYPE html><html><head><meta charset=\"UTF-8\">");
+          d.write("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+          d.write("<title>BehördenKlar-Antwortbrief</title>");
+          d.write("<style>");
+          d.write(
+            "*{box-sizing:border-box;}body{margin:0;padding:12mm;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:11pt;line-height:1.5;color:#111;}"
+          );
+          d.write(
+            ".print-hint{margin:0 0 14px;padding:10px 12px;background:#fff8e1;border:1px solid #ffc107;border-radius:8px;font-size:10pt;line-height:1.45;}"
+          );
+          d.write(".letter{white-space:pre-wrap;word-wrap:break-word;}");
+          d.write(
+            "@media print{.no-print{display:none!important;}body{padding:18mm;}.letter{font-size:11pt;}}"
+          );
+          d.write("</style></head><body>");
+          d.write('<p class="print-hint no-print" role="note">' + safeHint + "</p>");
+          d.write('<div class="letter">' + safeBody + "</div>");
+          d.write("<script>");
+          d.write("(function(){");
+          d.write("function run(){try{window.focus();window.print();}catch(e){}}");
+          d.write("function closeWin(){try{window.close();}catch(e){}}");
+          d.write('window.addEventListener("afterprint",closeWin);');
+          d.write("if(document.readyState===\"complete\"){setTimeout(run,200);}");
+          d.write('else{window.addEventListener("load",function(){setTimeout(run,200);});}');
+          d.write("})();");
+          d.write("<\/script></body></html>");
+          d.close();
         } catch (e) {
-          showError(tErr);
+          try {
+            win.close();
+          } catch (e2) {}
+          showError(t.templateExportFailed);
         }
       }
 
