@@ -118,13 +118,8 @@
       max-width: 40rem;
     }
 
-    .hero-welcome-flags {
-      margin-top: 0.85rem;
-      padding-top: 0.7rem;
-      border-top: 1px solid rgba(26, 115, 232, 0.14);
-    }
-
-    .hero-welcome-flags .hero-flags-emojis {
+    .hero-text .hero-flags-emojis {
+      margin-top: 0.55rem;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -135,7 +130,7 @@
       user-select: none;
     }
 
-    .hero-welcome-flags .hero-flag {
+    .hero-text .hero-flag {
       display: inline-block;
       line-height: 1;
     }
@@ -516,7 +511,6 @@
       position: fixed;
       inset: 0;
       z-index: 1300;
-      display: none;
       align-items: center;
       justify-content: center;
       background: rgba(17, 24, 39, 0.45);
@@ -524,8 +518,12 @@
       padding: 1rem;
     }
 
+    .ui-lang-modal:not(.visible) {
+      display: none !important;
+    }
+
     .ui-lang-modal.visible {
-      display: flex;
+      display: flex !important;
     }
 
     .ui-lang-modal-card {
@@ -836,6 +834,13 @@
       }
     }
 
+    @media (min-width: 769px) {
+      #btnPickFilesMobile,
+      #btnTakePhoto {
+        display: none !important;
+      }
+    }
+
     @media (max-width: 768px) {
       .hero-top {
         gap: 0.5rem 0.75rem;
@@ -854,7 +859,7 @@
         text-overflow: ellipsis;
       }
 
-      .hero-welcome-flags .hero-flags-emojis {
+      .hero-text .hero-flags-emojis {
         justify-content: center;
       }
 
@@ -872,16 +877,8 @@
         order: 1;
       }
 
-      .hero-card #uiLangModal {
-        order: 50;
-      }
-
       .hero-card .lang-section-target {
         order: 2;
-      }
-
-      .hero-card #targetLangModal {
-        order: 51;
       }
 
       .hero-card .btn-analyze {
@@ -1098,9 +1095,7 @@
         <div class="hero-text">
           <h1 id="welcomeTitle">Willkommen bei BehördenKlar</h1>
           <p id="welcomeText">Fügen Sie Ihren Behördenbrief ein oder laden Sie ein Foto oder PDF hoch – wir helfen beim Verstehen, Übersetzen und den nächsten Schritten.</p>
-          <div class="hero-welcome-flags">
-            <div class="hero-flags-emojis" aria-hidden="true"></div>
-          </div>
+          <div class="hero-flags-emojis" aria-hidden="true"></div>
         </div>
       </div>
 
@@ -1145,44 +1140,6 @@
           <textarea id="letterText" class="textarea-hero" placeholder="Brief hier einfügen oder abtippen…"></textarea>
         </div>
 
-        <div class="ui-lang-modal" id="uiLangModal" aria-hidden="true">
-          <div class="ui-lang-modal-card" role="dialog" aria-modal="true" aria-labelledby="uiLangModalTitle">
-            <div class="ui-lang-modal-head">
-              <h3 class="ui-lang-modal-title" id="uiLangModalTitle">🌐 Sprache wählen</h3>
-              <button type="button" class="ui-lang-modal-close" id="uiLangModalClose" aria-label="Schließen">×</button>
-            </div>
-            <div class="ui-lang-modal-grid" id="uiLangModalGrid">
-              <button type="button" class="lang-btn ui-modal-lang-btn is-active" data-ui-lang="Deutsch"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Englisch"><span aria-hidden="true">🇬🇧</span> Englisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Türkisch"><span aria-hidden="true">🇹🇷</span> Türkisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Arabisch"><span aria-hidden="true">🇸🇦</span> Arabisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Russisch"><span aria-hidden="true">🇷🇺</span> Russisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Ukrainisch"><span aria-hidden="true">🇺🇦</span> Ukrainisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Rumänisch"><span aria-hidden="true">🇷🇴</span> Rumänisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Polnisch"><span aria-hidden="true">🇵🇱</span> Polnisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Dari"><span aria-hidden="true">🇦🇫</span> Dari</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Bulgarisch"><span aria-hidden="true">🇧🇬</span> Bulgarisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Georgisch"><span aria-hidden="true">🇬🇪</span> Georgisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Spanisch"><span aria-hidden="true">🇪🇸</span> Spanisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Portugiesisch"><span aria-hidden="true">🇵🇹</span> Portugiesisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Französisch"><span aria-hidden="true">🇫🇷</span> Französisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Italienisch"><span aria-hidden="true">🇮🇹</span> Italienisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Griechisch"><span aria-hidden="true">🇬🇷</span> Griechisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Albanisch"><span aria-hidden="true">🇦🇱</span> Albanisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Bosnisch"><span aria-hidden="true">🇧🇦</span> Bosnisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Serbisch"><span aria-hidden="true">🇷🇸</span> Serbisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Kroatisch"><span aria-hidden="true">🇭🇷</span> Kroatisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Chinesisch"><span aria-hidden="true">🇨🇳</span> Chinesisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Vietnamesisch"><span aria-hidden="true">🇻🇳</span> Vietnamesisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Persisch"><span aria-hidden="true">🇮🇷</span> Persisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Somali"><span aria-hidden="true">🇸🇴</span> Somali</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Tigrinya"><span aria-hidden="true">🇪🇷</span> Tigrinya</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Litauisch"><span aria-hidden="true">🇱🇹</span> Litauisch</button>
-              <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Arabisch (Ägyptisch)"><span aria-hidden="true">🇪🇬</span> Arabisch (Ägyptisch)</button>
-            </div>
-          </div>
-        </div>
-
         <div class="lang-section lang-section-target">
           <span class="field-label" id="targetLangLabel">Zielsprache für die Übersetzung des Dokuments:</span>
           <button type="button" class="target-lang-mobile-trigger" id="targetLangMobileTrigger" aria-haspopup="dialog" aria-controls="targetLangModal" aria-expanded="false">
@@ -1216,44 +1173,6 @@
             <button type="button" class="lang-btn target-lang-btn" data-lang="Persisch"><span aria-hidden="true">🇮🇷</span> Persisch</button>
             <button type="button" class="lang-btn target-lang-btn" data-lang="Somali"><span aria-hidden="true">🇸🇴</span> Somali</button>
             <button type="button" class="lang-btn target-lang-btn" data-lang="Tigrinya"><span aria-hidden="true">🇪🇷</span> Tigrinya</button>
-          </div>
-        </div>
-
-        <div class="ui-lang-modal" id="targetLangModal" aria-hidden="true">
-          <div class="ui-lang-modal-card" role="dialog" aria-modal="true" aria-labelledby="targetLangModalTitle">
-            <div class="ui-lang-modal-head">
-              <h3 class="ui-lang-modal-title" id="targetLangModalTitle">Zielsprache für die Übersetzung des Dokuments</h3>
-              <button type="button" class="ui-lang-modal-close" id="targetLangModalClose" aria-label="Schließen">×</button>
-            </div>
-            <div class="ui-lang-modal-grid" id="targetLangModalGrid">
-              <button type="button" class="lang-btn target-modal-lang-btn is-active" data-lang="Arabisch"><span aria-hidden="true">🇸🇦</span> Arabisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Türkisch"><span aria-hidden="true">🇹🇷</span> Türkisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Russisch"><span aria-hidden="true">🇷🇺</span> Russisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Ukrainisch"><span aria-hidden="true">🇺🇦</span> Ukrainisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Rumänisch"><span aria-hidden="true">🇷🇴</span> Rumänisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Polnisch"><span aria-hidden="true">🇵🇱</span> Polnisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Dari/Farsi (Afghanisch)"><span aria-hidden="true">🇦🇫</span> Dari/Farsi</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Bulgarisch"><span aria-hidden="true">🇧🇬</span> Bulgarisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Georgisch"><span aria-hidden="true">🇬🇪</span> Georgisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Deutsch"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Englisch"><span aria-hidden="true">🇬🇧</span> Englisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Französisch"><span aria-hidden="true">🇫🇷</span> Französisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Spanisch"><span aria-hidden="true">🇪🇸</span> Spanisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Portugiesisch"><span aria-hidden="true">🇵🇹</span> Portugiesisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Arabisch (Ägyptisch)"><span aria-hidden="true">🇪🇬</span> Arabisch (Ägyptisch)</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Litauisch"><span aria-hidden="true">🇱🇹</span> Litauisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Albanisch"><span aria-hidden="true">🇦🇱</span> Albanisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Bosnisch"><span aria-hidden="true">🇧🇦</span> Bosnisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Serbisch"><span aria-hidden="true">🇷🇸</span> Serbisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Kroatisch"><span aria-hidden="true">🇭🇷</span> Kroatisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Chinesisch"><span aria-hidden="true">🇨🇳</span> Chinesisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Vietnamesisch"><span aria-hidden="true">🇻🇳</span> Vietnamesisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Italienisch"><span aria-hidden="true">🇮🇹</span> Italienisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Griechisch"><span aria-hidden="true">🇬🇷</span> Griechisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Persisch"><span aria-hidden="true">🇮🇷</span> Persisch</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Somali"><span aria-hidden="true">🇸🇴</span> Somali</button>
-              <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Tigrinya"><span aria-hidden="true">🇪🇷</span> Tigrinya</button>
-            </div>
           </div>
         </div>
 
@@ -1303,6 +1222,82 @@
       Die App über den lokalen Server öffnen (siehe <code>server.py</code>), damit Anfragen ohne CORS-Probleme funktionieren.
     </p>
   </footer>
+
+  <div class="ui-lang-modal" id="uiLangModal" aria-hidden="true">
+    <div class="ui-lang-modal-card" role="dialog" aria-modal="true" aria-labelledby="uiLangModalTitle">
+      <div class="ui-lang-modal-head">
+        <h3 class="ui-lang-modal-title" id="uiLangModalTitle">🌐 Sprache wählen</h3>
+        <button type="button" class="ui-lang-modal-close" id="uiLangModalClose" aria-label="Schließen">×</button>
+      </div>
+      <div class="ui-lang-modal-grid" id="uiLangModalGrid">
+        <button type="button" class="lang-btn ui-modal-lang-btn is-active" data-ui-lang="Deutsch"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Englisch"><span aria-hidden="true">🇬🇧</span> Englisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Türkisch"><span aria-hidden="true">🇹🇷</span> Türkisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Arabisch"><span aria-hidden="true">🇸🇦</span> Arabisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Russisch"><span aria-hidden="true">🇷🇺</span> Russisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Ukrainisch"><span aria-hidden="true">🇺🇦</span> Ukrainisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Rumänisch"><span aria-hidden="true">🇷🇴</span> Rumänisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Polnisch"><span aria-hidden="true">🇵🇱</span> Polnisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Dari"><span aria-hidden="true">🇦🇫</span> Dari</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Bulgarisch"><span aria-hidden="true">🇧🇬</span> Bulgarisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Georgisch"><span aria-hidden="true">🇬🇪</span> Georgisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Spanisch"><span aria-hidden="true">🇪🇸</span> Spanisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Portugiesisch"><span aria-hidden="true">🇵🇹</span> Portugiesisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Französisch"><span aria-hidden="true">🇫🇷</span> Französisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Italienisch"><span aria-hidden="true">🇮🇹</span> Italienisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Griechisch"><span aria-hidden="true">🇬🇷</span> Griechisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Albanisch"><span aria-hidden="true">🇦🇱</span> Albanisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Bosnisch"><span aria-hidden="true">🇧🇦</span> Bosnisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Serbisch"><span aria-hidden="true">🇷🇸</span> Serbisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Kroatisch"><span aria-hidden="true">🇭🇷</span> Kroatisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Chinesisch"><span aria-hidden="true">🇨🇳</span> Chinesisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Vietnamesisch"><span aria-hidden="true">🇻🇳</span> Vietnamesisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Persisch"><span aria-hidden="true">🇮🇷</span> Persisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Somali"><span aria-hidden="true">🇸🇴</span> Somali</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Tigrinya"><span aria-hidden="true">🇪🇷</span> Tigrinya</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Litauisch"><span aria-hidden="true">🇱🇹</span> Litauisch</button>
+        <button type="button" class="lang-btn ui-modal-lang-btn" data-ui-lang="Arabisch (Ägyptisch)"><span aria-hidden="true">🇪🇬</span> Arabisch (Ägyptisch)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui-lang-modal" id="targetLangModal" aria-hidden="true">
+    <div class="ui-lang-modal-card" role="dialog" aria-modal="true" aria-labelledby="targetLangModalTitle">
+      <div class="ui-lang-modal-head">
+        <h3 class="ui-lang-modal-title" id="targetLangModalTitle">Zielsprache für die Übersetzung des Dokuments</h3>
+        <button type="button" class="ui-lang-modal-close" id="targetLangModalClose" aria-label="Schließen">×</button>
+      </div>
+      <div class="ui-lang-modal-grid" id="targetLangModalGrid">
+        <button type="button" class="lang-btn target-modal-lang-btn is-active" data-lang="Arabisch"><span aria-hidden="true">🇸🇦</span> Arabisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Türkisch"><span aria-hidden="true">🇹🇷</span> Türkisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Russisch"><span aria-hidden="true">🇷🇺</span> Russisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Ukrainisch"><span aria-hidden="true">🇺🇦</span> Ukrainisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Rumänisch"><span aria-hidden="true">🇷🇴</span> Rumänisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Polnisch"><span aria-hidden="true">🇵🇱</span> Polnisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Dari/Farsi (Afghanisch)"><span aria-hidden="true">🇦🇫</span> Dari/Farsi</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Bulgarisch"><span aria-hidden="true">🇧🇬</span> Bulgarisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Georgisch"><span aria-hidden="true">🇬🇪</span> Georgisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Deutsch"><span aria-hidden="true">🇩🇪</span> Deutsch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Englisch"><span aria-hidden="true">🇬🇧</span> Englisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Französisch"><span aria-hidden="true">🇫🇷</span> Französisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Spanisch"><span aria-hidden="true">🇪🇸</span> Spanisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Portugiesisch"><span aria-hidden="true">🇵🇹</span> Portugiesisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Arabisch (Ägyptisch)"><span aria-hidden="true">🇪🇬</span> Arabisch (Ägyptisch)</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Litauisch"><span aria-hidden="true">🇱🇹</span> Litauisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Albanisch"><span aria-hidden="true">🇦🇱</span> Albanisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Bosnisch"><span aria-hidden="true">🇧🇦</span> Bosnisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Serbisch"><span aria-hidden="true">🇷🇸</span> Serbisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Kroatisch"><span aria-hidden="true">🇭🇷</span> Kroatisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Chinesisch"><span aria-hidden="true">🇨🇳</span> Chinesisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Vietnamesisch"><span aria-hidden="true">🇻🇳</span> Vietnamesisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Italienisch"><span aria-hidden="true">🇮🇹</span> Italienisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Griechisch"><span aria-hidden="true">🇬🇷</span> Griechisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Persisch"><span aria-hidden="true">🇮🇷</span> Persisch</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Somali"><span aria-hidden="true">🇸🇴</span> Somali</button>
+        <button type="button" class="lang-btn target-modal-lang-btn" data-lang="Tigrinya"><span aria-hidden="true">🇪🇷</span> Tigrinya</button>
+      </div>
+    </div>
+  </div>
 
   <div class="loading-screen" id="loadingScreen" aria-live="polite" aria-hidden="true">
     <div class="loading-brand" aria-hidden="true">
