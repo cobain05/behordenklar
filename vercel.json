@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/landingpage.html",
+      "permanent": false
+    }
+  ],
   "functions": {
     "api/claude.js": {
       "maxDuration": 300
