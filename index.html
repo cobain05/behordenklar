@@ -2059,8 +2059,73 @@
         "Arabisch (Ägyptisch)": ["جاري قراءة المستند...", "جاري التعرف على النص...", "جاري الترجمة...", "جاري إعداد الشرح...", "جاري تجميع الخطوات...", "فاضل قليل..."]
       };
 
+      const resultTabLabelsByUiLang = {
+        Deutsch: { resultTabTranslation: "Übersetzung", resultTabSimpleExplanation: "Einfache Erklärung" },
+        Englisch: { resultTabTranslation: "Translation", resultTabSimpleExplanation: "Simple explanation" },
+        Türkisch: { resultTabTranslation: "Çeviri", resultTabSimpleExplanation: "Basit açıklama" },
+        Arabisch: { resultTabTranslation: "الترجمة", resultTabSimpleExplanation: "شرح بسيط" },
+        Russisch: { resultTabTranslation: "Перевод", resultTabSimpleExplanation: "Простое объяснение" },
+        Ukrainisch: { resultTabTranslation: "Переклад", resultTabSimpleExplanation: "Просте пояснення" },
+        Rumänisch: { resultTabTranslation: "Traducere", resultTabSimpleExplanation: "Explicație simplă" },
+        Polnisch: { resultTabTranslation: "Tłumaczenie", resultTabSimpleExplanation: "Proste wyjaśnienie" },
+        Dari: { resultTabTranslation: "ترجمه", resultTabSimpleExplanation: "توضیح ساده" },
+        Bulgarisch: { resultTabTranslation: "Превод", resultTabSimpleExplanation: "Опростено обяснение" },
+        Georgisch: { resultTabTranslation: "თარგმანი", resultTabSimpleExplanation: "მარტივი ახსნა" },
+        Spanisch: { resultTabTranslation: "Traducción", resultTabSimpleExplanation: "Explicación sencilla" },
+        Portugiesisch: { resultTabTranslation: "Tradução", resultTabSimpleExplanation: "Explicação simples" },
+        Französisch: { resultTabTranslation: "Traduction", resultTabSimpleExplanation: "Explication simple" },
+        Italienisch: { resultTabTranslation: "Traduzione", resultTabSimpleExplanation: "Spiegazione semplice" },
+        Griechisch: { resultTabTranslation: "Μετάφραση", resultTabSimpleExplanation: "Απλή εξήγηση" },
+        Albanisch: { resultTabTranslation: "Përkthim", resultTabSimpleExplanation: "Shpjegim i thjeshtë" },
+        Bosnisch: { resultTabTranslation: "Prijevod", resultTabSimpleExplanation: "Jednostavno objašnjenje" },
+        Serbisch: { resultTabTranslation: "Prevod", resultTabSimpleExplanation: "Jednostavno objašnjenje" },
+        Kroatisch: { resultTabTranslation: "Prijevod", resultTabSimpleExplanation: "Jednostavno objašnjenje" },
+        Chinesisch: { resultTabTranslation: "翻译", resultTabSimpleExplanation: "简要说明" },
+        Vietnamesisch: { resultTabTranslation: "Bản dịch", resultTabSimpleExplanation: "Giải thích đơn giản" },
+        Persisch: { resultTabTranslation: "ترجمه", resultTabSimpleExplanation: "توضیح ساده" },
+        Somali: { resultTabTranslation: "Tarjumaad", resultTabSimpleExplanation: "Sharaxaad fudud" },
+        Tigrinya: { resultTabTranslation: "ትርጉም", resultTabSimpleExplanation: "ቀሊል መብርሂ" },
+        Litauisch: { resultTabTranslation: "Vertimas", resultTabSimpleExplanation: "Paprastas paaiškinimas" },
+        "Arabisch (Ägyptisch)": { resultTabTranslation: "الترجمة", resultTabSimpleExplanation: "شرح بسيط" },
+      };
+
+      const loadingStepPlainExplainByUiLang = {
+        Deutsch: "Einfache Erklärung wird erstellt...",
+        Englisch: "Creating a simple explanation...",
+        Türkisch: "Basit açıklama hazırlanıyor...",
+        Arabisch: "جاري إعداد شرح بسيط...",
+        Russisch: "Готовится простое объяснение...",
+        Ukrainisch: "Готується просте пояснення...",
+        Rumänisch: "Se creează o explicație simplă...",
+        Polnisch: "Tworzenie prostego wyjaśnienia...",
+        Dari: "توضیح ساده آماده می‌شود...",
+        Bulgarisch: "Създава се опростено обяснение...",
+        Georgisch: "მარტივი ახსნა მზადდება...",
+        Spanisch: "Creando una explicación sencilla...",
+        Portugiesisch: "Criando uma explicação simples...",
+        Französisch: "Création d'une explication simple...",
+        Italienisch: "Creazione di una spiegazione semplice...",
+        Griechisch: "Δημιουργία απλής εξήγησης...",
+        Albanisch: "Po krijohet një shpjegim i thjeshtë...",
+        Bosnisch: "Priprema jednostavnog objašnjenja...",
+        Serbisch: "Priprema jednostavnog objašnjenja...",
+        Kroatisch: "Priprema jednostavnog objašnjenja...",
+        Chinesisch: "正在生成简要说明...",
+        Vietnamesisch: "Đang tạo phần giải thích đơn giản...",
+        Persisch: "در حال ایجاد توضیح ساده...",
+        Somali: "Sharaxaad fudud ayaa la diyaarinayaa...",
+        Tigrinya: "ቀሊል መብርሂ ይሰናዳ ኣሎ...",
+        Litauisch: "Kuriamas paprastas paaiškinimas...",
+        "Arabisch (Ägyptisch)": "جاري إعداد شرح بسيط...",
+      };
+
       Object.keys(uiTranslations).forEach(function (langKey) {
         uiTranslations[langKey].loadingSteps = localizedLoadingSteps[langKey] || localizedLoadingSteps["Deutsch"];
+        var rtl = resultTabLabelsByUiLang[langKey] || resultTabLabelsByUiLang["Deutsch"];
+        uiTranslations[langKey].resultTabTranslation = rtl.resultTabTranslation;
+        uiTranslations[langKey].resultTabSimpleExplanation = rtl.resultTabSimpleExplanation;
+        uiTranslations[langKey].loadingStepPlainExplain =
+          loadingStepPlainExplainByUiLang[langKey] || loadingStepPlainExplainByUiLang["Deutsch"];
         var td = templateDownloadUiByLang[langKey] || templateDownloadUiByLang["Deutsch"];
         uiTranslations[langKey].templateDownloadDisclaimer = td.templateDownloadDisclaimer;
         uiTranslations[langKey].downloadPdfLabel = td.downloadPdfLabel;
@@ -2110,6 +2175,31 @@
         } catch (e) {}
         var active = document.querySelector(".ui-modal-lang-btn.is-active");
         return active ? active.getAttribute("data-ui-lang") : "Deutsch";
+      }
+
+      function uiLangKeyFromTargetDataLang(dataLang) {
+        if (dataLang === "Dari/Farsi (Afghanisch)") {
+          return "Dari";
+        }
+        return dataLang;
+      }
+
+      function isTargetLangSameAsUiLang() {
+        return uiLangKeyFromTargetDataLang(getTargetLang()) === getUiLang();
+      }
+
+      function updateTranslationResultTabHeading() {
+        var el = $("h3TitleTranslation");
+        if (!el) {
+          return;
+        }
+        var ui = getUiLang();
+        var t = uiTranslations[ui] || uiTranslations["Deutsch"];
+        if (isTargetLangSameAsUiLang()) {
+          el.textContent = t.resultTabSimpleExplanation || t.resultTabTranslation || "";
+        } else {
+          el.textContent = t.resultTabTranslation || "";
+        }
       }
 
       var BK_GA_MEASUREMENT_ID = "G-ZT7YWN69P5";
@@ -2455,6 +2545,7 @@
         syncActiveUiLangButtons(lang);
         refreshLanguageGridsAfterUiLangChange(lang);
         updateTargetLangTrigger();
+        updateTranslationResultTabHeading();
         if (stagedLetterFiles.length) {
           renderLetterFilePreviews();
           updateDropFileNameSummary();
@@ -2814,6 +2905,7 @@
           b.classList.toggle("is-active", b.getAttribute("data-lang") === dataLang);
         });
         updateTargetLangTrigger();
+        updateTranslationResultTabHeading();
       }
 
       function syncActiveUiLangButtons(lang) {
@@ -3078,6 +3170,7 @@
         results.classList.remove("visible");
         document.body.classList.remove("results-open");
         setTemplateDownloadSectionVisible(false, "");
+        updateTranslationResultTabHeading();
       });
 
       if (btnDownloadTemplatePdf) {
@@ -3094,6 +3187,13 @@
       function startLoadingScreen() {
         var currentUiLang = getUiLang();
         var loadingSteps = (uiTranslations[currentUiLang] && uiTranslations[currentUiLang].loadingSteps) || uiTranslations["Deutsch"].loadingSteps;
+        loadingSteps = loadingSteps.slice();
+        if (isTargetLangSameAsUiLang() && loadingSteps.length > 2) {
+          var plain =
+            (uiTranslations[currentUiLang] && uiTranslations[currentUiLang].loadingStepPlainExplain) ||
+            uiTranslations["Deutsch"].loadingStepPlainExplain;
+          loadingSteps[2] = plain;
+        }
         loadingStepIndex = 0;
         loadingMessage.textContent = loadingSteps[loadingStepIndex];
         loadingScreen.classList.add("visible");
@@ -3390,8 +3490,10 @@
         handleLetterFileInputChange(letterCamera);
       });
 
-      function buildInstructionPrompt(langLabel) {
-        return (
+      function buildInstructionPrompt() {
+        var langLabel = getTargetLang();
+        var sameUi = isTargetLangSameAsUiLang();
+        var common =
           "Du bist ein Experte für deutsche Behördenbriefe und unterstützt Menschen mit Migrationshintergrund dabei, Schreiben sicher zu verstehen, Fristen zu erkennen und sinnvoll zu handeln. " +
           "Formuliere respektvoll, klar und ohne Juristenjargon; erkläre aber präzise genug, damit niemand wichtige Folgen übersieht.\n\n" +
           "BEHÖRDE ERKENNEN: Leite aus Briefkopf, Logo, Betreff und Inhalt ab, von welcher Art von Stelle das Schreiben stammt. " +
@@ -3416,41 +3518,94 @@
           "formale Bitte um Rückantwort). " +
           "Setze das JSON-Feld „antwort_erforderlich“ auf true nur in diesen Fällen.\n\n" +
           "Setze „antwort_erforderlich“ auf false bei reinen Informationsschreiben, reinen Bescheiden ohne Erwartung einer Antwort, " +
-          "Mitteilungen ohne Handlungsauftrag zum Zurückschreiben, reinen Zahlungsbestätigungen o. Ä., sofern keine ausdrückliche schriftliche Rückmeldung verlangt wird.\n\n" +
-          "Die gewählte Zielsprache ist: " +
-          langLabel +
-          ".\n" +
-          "Schreibe „uebersetzung“, „erklaerung“, „schritte“, „kein_briefkopf_text“ sowie die vier Felder „titel_uebersetzung“, „titel_erklaerung“, „titel_schritte“, „titel_briefkopf“ " +
-          "ausschließlich in dieser Zielsprache (nicht auf Deutsch).\n" +
-          "Die Titel sollen kurze, verständliche Überschriften für die Benutzeroberfläche sein, sinngemäß zu: „Übersetzung“, „Was bedeutet der Brief?“, „Was sollen Sie jetzt tun?“, „Briefkopf“.\n\n" +
-          "Wenn „antwort_erforderlich“ true ist: Feld „antwortvorlage“ ausschließlich auf Deutsch, höflich, sachlich und als vollständige, professionelle Geschäftsbrief-Vorlage " +
-          "zum Beantworten der Behörde. Enthalten sein sollen mindestens: Absenderblock (Name, Anschrift, Kontakt wenn sinnvoll), vollständige Empfängeradresse der Behörde " +
-          "(wenn im Schreiben erkennbar, sonst Platzhalter), Datum, Betreffzeile mit Aktenzeichen (Platzhalter falls unbekannt), Anrede, strukturierter Brieftext mit Absätzen, " +
-          "höflicher Schlussformel und Unterschriftszeile (Name klar als Platzhalter). " +
-          "Verwende durchgängig klare Platzhalter in eckigen Klammern, z. B. [Ihr vollständiger Name], [Ihre Straße und Hausnummer], [PLZ Ort], [E-Mail], [Telefon], " +
-          "[Aktenzeichen], [Datum], [Behördenname und Abteilung]. " +
-          "Setze in diesem Fall „kein_briefkopf_text“ auf einen leeren String \"\".\n" +
-          "Wenn „antwort_erforderlich“ false ist: setze „antwortvorlage“ auf \"\". " +
-          "Schreibe in „kein_briefkopf_text“ einen kurzen, verständlichen Hinweis in der Zielsprache (sinngemäß: " +
-          "Für dieses Schreiben ist keine Antwort an die Behörde nötig; die Person soll die Schritte oben befolgen).\n\n" +
-          "Antworte ausschließlich mit einem gültigen JSON-Objekt (kein Markdown, kein Code-Fence, keine Erklärung davor oder danach). " +
-          "„antwort_erforderlich“ muss ein JSON-Boolean sein (true oder false), kein String.\n" +
-          "Verwende exakt diese Schlüssel:\n" +
-          "{\n" +
-          '  "antwort_erforderlich": true,\n' +
-          '  "titel_uebersetzung": "Kurze UI-Überschrift für den Übersetzungsblock (Zielsprache).",\n' +
-          '  "titel_erklaerung": "Kurze UI-Überschrift für die Erklärung (Zielsprache).",\n' +
-          '  "titel_schritte": "Kurze UI-Überschrift für die Schritte (Zielsprache).",\n' +
-          '  "titel_briefkopf": "Kurze UI-Überschrift für den Briefkopf-Bereich (Zielsprache).",\n' +
-          '  "uebersetzung": "Vollständige Übersetzung des Briefs in die Zielsprache.",\n' +
-          '  "erklaerung": "Einfache, verständliche Erklärung, was der Brief bedeutet (Zielsprache); Behörde, Fristen, Begriffe, Dringlichkeit/Risiken wie oben.",\n' +
-          '  "schritte": "Nummerierte, konkrete Schritte: Wohin, welche Dokumente, was sagen/tun (Zielsprache).",\n' +
-          '  "antwortvorlage": "Nur wenn antwort_erforderlich true: vollständiger deutscher Geschäftsbrief mit Platzhaltern; sonst leerer String.",\n' +
-          '  "kein_briefkopf_text": "Nur wenn antwort_erforderlich false: Hinweis in Zielsprache; sonst leerer String."\n' +
-          "}\n\n" +
+          "Mitteilungen ohne Handlungsauftrag zum Zurückschreiben, reinen Zahlungsbestätigungen o. Ä., sofern keine ausdrückliche schriftliche Rückmeldung verlangt wird.\n\n";
+
+        var langBlock;
+        var jsonBlock;
+        if (sameUi) {
+          langBlock =
+            "WICHTIG: Die Benutzeroberfläche ist bereits in derselben Sprache wie die gewählte Zielsprache (" +
+            langLabel +
+            "). " +
+            "Erstelle daher KEINE Übersetzung des Briefs in dieses Feld.\n\n" +
+            "Stattdessen: Im JSON-Feld „uebersetzung“ schreibe eine „Einfache Erklärung“ des Briefs: Wiedergabe des Inhalts in sehr einfachen, alltäglichen Worten in dieser Sprache, " +
+            "so dass auch Menschen ohne Behörden- oder Juristendeutsch alles Wesentliche verstehen. Vermeide komplizierte Fachbegriffe; wenn ein Begriff nötig ist, erkläre ihn kurz in einfachen Worten. " +
+            "Keine wörtliche Behördenformulierung nachahmen – Ziel ist reine Verständlichkeit.\n\n" +
+            "Das Feld „erklaerung“ bleibt die etwas ausführlichere Sinnbeschreibung inkl. Behörde, Fristen, Begriffe, Dringlichkeit/Risiken (wie oben); „uebersetzung“ und „erklaerung“ sollen sich sinnvoll ergänzen, nicht wortgleich doppeln.\n\n" +
+            "Die gewählte Zielsprache (für alle nutzersichtbaren Texte außer der deutschen Antwortvorlage) ist: " +
+            langLabel +
+            ".\n" +
+            "Schreibe „uebersetzung“, „erklaerung“, „schritte“, „kein_briefkopf_text“ sowie die vier Felder „titel_uebersetzung“, „titel_erklaerung“, „titel_schritte“, „titel_briefkopf“ " +
+            "ausschließlich in dieser Sprache (nicht auf Deutsch).\n" +
+            "Die Titel sollen kurze, verständliche Überschriften für die Benutzeroberfläche sein, sinngemäß zu: „Einfache Erklärung“ (für den Block im Feld „uebersetzung“), „Was bedeutet der Brief?“, „Was sollen Sie jetzt tun?“, „Briefkopf“.\n\n";
+
+          jsonBlock =
+            "Wenn „antwort_erforderlich“ true ist: Feld „antwortvorlage“ ausschließlich auf Deutsch, höflich, sachlich und als vollständige, professionelle Geschäftsbrief-Vorlage " +
+            "zum Beantworten der Behörde. Enthalten sein sollen mindestens: Absenderblock (Name, Anschrift, Kontakt wenn sinnvoll), vollständige Empfängeradresse der Behörde " +
+            "(wenn im Schreiben erkennbar, sonst Platzhalter), Datum, Betreffzeile mit Aktenzeichen (Platzhalter falls unbekannt), Anrede, strukturierter Brieftext mit Absätzen, " +
+            "höflicher Schlussformel und Unterschriftszeile (Name klar als Platzhalter). " +
+            "Verwende durchgängig klare Platzhalter in eckigen Klammern, z. B. [Ihr vollständiger Name], [Ihre Straße und Hausnummer], [PLZ Ort], [E-Mail], [Telefon], " +
+            "[Aktenzeichen], [Datum], [Behördenname und Abteilung]. " +
+            "Setze in diesem Fall „kein_briefkopf_text“ auf einen leeren String \"\".\n" +
+            "Wenn „antwort_erforderlich“ false ist: setze „antwortvorlage“ auf \"\". " +
+            "Schreibe in „kein_briefkopf_text“ einen kurzen, verständlichen Hinweis in der Zielsprache (sinngemäß: " +
+            "Für dieses Schreiben ist keine Antwort an die Behörde nötig; die Person soll die Schritte oben befolgen).\n\n" +
+            "Antworte ausschließlich mit einem gültigen JSON-Objekt (kein Markdown, kein Code-Fence, keine Erklärung davor oder danach). " +
+            "„antwort_erforderlich“ muss ein JSON-Boolean sein (true oder false), kein String.\n" +
+            "Verwende exakt diese Schlüssel:\n" +
+            "{\n" +
+            '  "antwort_erforderlich": true,\n' +
+            '  "titel_uebersetzung": "Kurze UI-Überschrift für den Block „Einfache Erklärung“ (Zielsprache).",\n' +
+            '  "titel_erklaerung": "Kurze UI-Überschrift für die Erklärung (Zielsprache).",\n' +
+            '  "titel_schritte": "Kurze UI-Überschrift für die Schritte (Zielsprache).",\n' +
+            '  "titel_briefkopf": "Kurze UI-Überschrift für den Briefkopf-Bereich (Zielsprache).",\n' +
+            '  "uebersetzung": "Einfache, verständliche Erklärung des Briefinhalts in einfachen Worten (keine Übersetzung; Zielsprache).",\n' +
+            '  "erklaerung": "Einfache, verständliche Erklärung, was der Brief bedeutet (Zielsprache); Behörde, Fristen, Begriffe, Dringlichkeit/Risiken wie oben.",\n' +
+            '  "schritte": "Nummerierte, konkrete Schritte: Wohin, welche Dokumente, was sagen/tun (Zielsprache).",\n' +
+            '  "antwortvorlage": "Nur wenn antwort_erforderlich true: vollständiger deutscher Geschäftsbrief mit Platzhaltern; sonst leerer String.",\n' +
+            '  "kein_briefkopf_text": "Nur wenn antwort_erforderlich false: Hinweis in Zielsprache; sonst leerer String."\n' +
+            "}\n\n";
+        } else {
+          langBlock =
+            "Die gewählte Zielsprache ist: " +
+            langLabel +
+            ".\n" +
+            "Schreibe „uebersetzung“, „erklaerung“, „schritte“, „kein_briefkopf_text“ sowie die vier Felder „titel_uebersetzung“, „titel_erklaerung“, „titel_schritte“, „titel_briefkopf“ " +
+            "ausschließlich in dieser Zielsprache (nicht auf Deutsch).\n" +
+            "Die Titel sollen kurze, verständliche Überschriften für die Benutzeroberfläche sein, sinngemäß zu: „Übersetzung“, „Was bedeutet der Brief?“, „Was sollen Sie jetzt tun?“, „Briefkopf“.\n\n";
+
+          jsonBlock =
+            "Wenn „antwort_erforderlich“ true ist: Feld „antwortvorlage“ ausschließlich auf Deutsch, höflich, sachlich und als vollständige, professionelle Geschäftsbrief-Vorlage " +
+            "zum Beantworten der Behörde. Enthalten sein sollen mindestens: Absenderblock (Name, Anschrift, Kontakt wenn sinnvoll), vollständige Empfängeradresse der Behörde " +
+            "(wenn im Schreiben erkennbar, sonst Platzhalter), Datum, Betreffzeile mit Aktenzeichen (Platzhalter falls unbekannt), Anrede, strukturierter Brieftext mit Absätzen, " +
+            "höflicher Schlussformel und Unterschriftszeile (Name klar als Platzhalter). " +
+            "Verwende durchgängig klare Platzhalter in eckigen Klammern, z. B. [Ihr vollständiger Name], [Ihre Straße und Hausnummer], [PLZ Ort], [E-Mail], [Telefon], " +
+            "[Aktenzeichen], [Datum], [Behördenname und Abteilung]. " +
+            "Setze in diesem Fall „kein_briefkopf_text“ auf einen leeren String \"\".\n" +
+            "Wenn „antwort_erforderlich“ false ist: setze „antwortvorlage“ auf \"\". " +
+            "Schreibe in „kein_briefkopf_text“ einen kurzen, verständlichen Hinweis in der Zielsprache (sinngemäß: " +
+            "Für dieses Schreiben ist keine Antwort an die Behörde nötig; die Person soll die Schritte oben befolgen).\n\n" +
+            "Antworte ausschließlich mit einem gültigen JSON-Objekt (kein Markdown, kein Code-Fence, keine Erklärung davor oder danach). " +
+            "„antwort_erforderlich“ muss ein JSON-Boolean sein (true oder false), kein String.\n" +
+            "Verwende exakt diese Schlüssel:\n" +
+            "{\n" +
+            '  "antwort_erforderlich": true,\n' +
+            '  "titel_uebersetzung": "Kurze UI-Überschrift für den Übersetzungsblock (Zielsprache).",\n' +
+            '  "titel_erklaerung": "Kurze UI-Überschrift für die Erklärung (Zielsprache).",\n' +
+            '  "titel_schritte": "Kurze UI-Überschrift für die Schritte (Zielsprache).",\n' +
+            '  "titel_briefkopf": "Kurze UI-Überschrift für den Briefkopf-Bereich (Zielsprache).",\n' +
+            '  "uebersetzung": "Vollständige Übersetzung des Briefs in die Zielsprache.",\n' +
+            '  "erklaerung": "Einfache, verständliche Erklärung, was der Brief bedeutet (Zielsprache); Behörde, Fristen, Begriffe, Dringlichkeit/Risiken wie oben.",\n' +
+            '  "schritte": "Nummerierte, konkrete Schritte: Wohin, welche Dokumente, was sagen/tun (Zielsprache).",\n' +
+            '  "antwortvorlage": "Nur wenn antwort_erforderlich true: vollständiger deutscher Geschäftsbrief mit Platzhaltern; sonst leerer String.",\n' +
+            '  "kein_briefkopf_text": "Nur wenn antwort_erforderlich false: Hinweis in Zielsprache; sonst leerer String."\n' +
+            "}\n\n";
+        }
+
+        var tail =
           "Wenn der Brief Geldbeträge oder rechtliche Konsequenzen nennt, gib diese in der Erklärung und in den Schritten klar wieder. " +
-          "Wenn etwas im Dokument unleserlich fehlt, weise kurz darauf hin."
-        );
+          "Wenn etwas im Dokument unleserlich fehlt, weise kurz darauf hin.";
+        return common + langBlock + jsonBlock + tail;
       }
 
       function extractJsonObject(s) {
@@ -3630,10 +3785,11 @@
         results.classList.remove("visible");
         document.body.classList.remove("results-open");
         setTemplateDownloadSectionVisible(false, "");
+        updateTranslationResultTabHeading();
 
         var mode = document.querySelector('input[name="inputMode"]:checked').value;
         var content = [];
-        var instruction = buildInstructionPrompt(getTargetLang());
+        var instruction = buildInstructionPrompt();
 
         if (mode === "text") {
           var text = letterText.value.trim();
