@@ -1,0 +1,66 @@
+  <div
+    id="cookieConsentBar"
+    class="cookie-consent-bar"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cookieConsentText"
+    aria-hidden="true"
+    hidden
+  >
+    <div class="cookie-consent-inner">
+      <p id="cookieConsentText" class="cookie-consent-msg"></p>
+      <div class="cookie-consent-actions">
+        <button type="button" id="cookieConsentAcceptAll" class="btn-cookie-accept"></button>
+        <button type="button" id="cookieConsentNecessary" class="btn-cookie-reject"></button>
+        <button type="button" id="cookieConsentSettings" class="btn-cookie-settings"></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cookieSettingsModal" class="cookie-settings-modal" hidden aria-hidden="true">
+    <div class="cookie-settings-backdrop" id="cookieSettingsBackdrop" tabindex="-1"></div>
+    <div
+      class="cookie-settings-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cookieSettingsModalTitle"
+    >
+      <button type="button" class="cookie-settings-close" id="cookieSettingsClose" aria-label="">
+        <span aria-hidden="true">×</span>
+      </button>
+      <h2 id="cookieSettingsModalTitle" class="cookie-settings-dialog-title"></h2>
+      <p id="cookieSettingsIntro" class="cookie-settings-intro"></p>
+
+      <div class="cookie-settings-section">
+        <div class="cookie-settings-row">
+          <div class="cookie-settings-row-text">
+            <strong id="cookieNecessaryTitle" class="cookie-settings-cat"></strong>
+            <p id="cookieNecessaryDesc" class="cookie-settings-desc"></p>
+          </div>
+          <span class="cookie-settings-badge" id="cookieNecessaryBadge"></span>
+        </div>
+      </div>
+
+      <div class="cookie-settings-section">
+        <div class="cookie-settings-row">
+          <div class="cookie-settings-row-text">
+            <strong id="cookieAnalyticsTitle" class="cookie-settings-cat"></strong>
+            <p id="cookieAnalyticsDesc" class="cookie-settings-desc"></p>
+          </div>
+          <button
+            type="button"
+            id="cookieAnalyticsToggle"
+            class="cookie-settings-toggle"
+            role="switch"
+            aria-checked="false"
+            aria-labelledby="cookieAnalyticsTitle"
+          ></button>
+        </div>
+      </div>
+
+      <div class="cookie-settings-footer">
+        <button type="button" id="cookieSettingsSave" class="btn-cookie-save"></button>
+      </div>
+    </div>
+  </div>
+
