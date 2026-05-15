@@ -2,6 +2,18 @@
   "redirects": [
     {
       "source": "/",
+      "destination": "/index.html",
+      "permanent": false,
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(Mobile|Android|iPhone).*"
+        }
+      ]
+    },
+    {
+      "source": "/",
       "destination": "/landingpage.html",
       "permanent": false
     }
