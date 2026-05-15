@@ -59,7 +59,19 @@ tpl = tpl.replace(
     1,
 )
 
-# Language trigger
+# Nav + footer Produkt: remove separate "Sprachen" links (section #sprachen may remain on page)
+tpl = tpl.replace(
+    '      <a href="#sprachen">Sprachen</a>\n',
+    '',
+    1,
+)
+tpl = tpl.replace(
+    '          <li><a href="#sprachen">Sprachen</a></li>\n',
+    '',
+    1,
+)
+
+# Language trigger — single globe via styled span (lpUiLangTrigger is "🌐 …"; no extra emoji span)
 tpl = tpl.replace(
     '<button class="lang-btn" type="button">\n'
     "        <span>🌐</span>\n"
@@ -67,8 +79,7 @@ tpl = tpl.replace(
     '        <svg viewBox="0 0 12 12"',
     '<button class="lang-btn" type="button" id="uiLangMobileTrigger" '
     'aria-haspopup="dialog" aria-controls="uiLangModal" aria-expanded="false">\n'
-    "        <span>🌐</span>\n"
-    '        <span id="uiLangMobileTriggerText">Sprache wählen</span>\n'
+    '        <span id="uiLangMobileTriggerText">🌐 Sprache wählen</span>\n'
     '        <svg viewBox="0 0 12 12"',
     1,
 )

@@ -312,7 +312,9 @@
     var wrap = $("lpFlagsWrap");
     var grid = $("uiLangModalGrid");
     if (!wrap || !grid) return;
-    wrap.replaceChildren();
+    while (wrap.firstChild) {
+      wrap.removeChild(wrap.firstChild);
+    }
     grid.querySelectorAll(".ui-modal-lang-btn").forEach(function (btn) {
       var langKey = btn.getAttribute("data-ui-lang");
       var span = document.createElement("span");
