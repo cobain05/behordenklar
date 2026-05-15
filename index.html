@@ -18,8 +18,6 @@
       --primary-muted: rgba(26, 115, 232, 0.06);
       --bg: #f8fafc;
       --surface: #ffffff;
-      --navy: #0a1628;
-      --navy-mid: #0f2142;
       --text: #0f172a;
       --muted: #64748b;
       --border: #e2e8f0;
@@ -100,12 +98,10 @@
       display: inline-flex;
       align-items: center;
       gap: 0.65rem;
-      padding: 0.38rem 0.85rem 0.38rem 0.42rem;
-      background: linear-gradient(165deg, var(--navy-mid) 0%, var(--navy) 100%);
-      border-radius: 14px;
-      box-shadow:
-        0 2px 6px rgba(10, 22, 40, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      padding: 0.25rem 0;
+      background: transparent;
+      border-radius: 0;
+      box-shadow: none;
     }
 
     .brand-icon-svg {
@@ -114,7 +110,7 @@
       height: 36px;
       flex-shrink: 0;
       border-radius: 10px;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+      filter: drop-shadow(0 2px 6px rgba(26, 115, 232, 0.22));
     }
 
     .brand-wordmark {
@@ -128,7 +124,7 @@
     }
 
     .brand-behorden {
-      color: #ffffff;
+      color: var(--text);
     }
 
     .brand-klar {
@@ -937,7 +933,7 @@
       }
 
       .brand-chip {
-        padding: 0.35rem 0.68rem 0.35rem 0.35rem;
+        padding: 0.2rem 0;
         gap: 0.45rem;
       }
 
@@ -1116,9 +1112,8 @@
     }
 
     .loading-brand .brand-chip {
-      padding: 0.28rem 0.62rem 0.28rem 0.32rem;
+      padding: 0.15rem 0;
       gap: 0.45rem;
-      border-radius: 11px;
     }
 
     .loading-brand .brand-icon-svg {
