@@ -4934,6 +4934,13 @@
           "Sinn und Bedeutung des Originals zu 100 % wahren (nichts verdrehen, nichts weglassen und nichts erfinden).\n" +
           "Zahlen, Daten, Beträge, Kennungen und Fristen immer exakt wie im Original (siehe „KRITISCH - ZAHLEN UND DATEN“).\n" +
           "Alle für den Adressaten wichtigen Informationen aus dem Brief müssen enthalten sein.\n\n" +
+          "BILDQUALITÄT - NUR BEI EXTREMEN FÄLLEN: Setze „bildqualitaet_unzureichend“ auf true NUR wenn MINDESTENS EINES dieser Probleme vorliegt:\n\n" +
+          "Der Text ist so unscharf, dass einzelne Wörter komplett unleserlich sind.\n" +
+          "Das Bild ist so dunkel, dass mehr als 50 % des Textes nicht erkennbar ist.\n" +
+          "Das Bild zeigt eindeutig NICHT den Brief, sondern etwas anderes.\n" +
+          "Der Brief ist so weit weg, dass der Text nicht entzifferbar ist.\n\n" +
+          "Bei leicht schrägen Fotos, kleinen Schatten, leichter Unschärfe oder teilweise abgeschnittenen Rändern soll die Analyse NORMAL weiterlaufen („bildqualitaet_unzureichend“: false). " +
+          "Im Zweifel immer analysieren und am Ende von „kurz_erlaeuterung“ oder – falls dort zu kurz – als letzten Absatz von „zusatzinhalt“ eine kurze Notiz in der ZIELSPRACHE hinzufügen, sinngemäß wie: „⚠️ Einige Stellen waren schwer lesbar – bitte überprüfe wichtige Zahlen.“\n\n" +
           "BEHÖRDE ERKENNEN: Leite aus Briefkopf, Logo, Betreff und Inhalt ab, von welcher Art von Stelle das Schreiben stammt. " +
           "Ordne es wenn möglich einer dieser Kategorien zu (oder der naheliegendsten): Jobcenter, BAMF, Ausländerbehörde, Finanzamt, " +
           "Krankenversicherung (z. B. Krankenkasse), Rentenversicherung (DRV oder andere Rentenversicherungsträger), Jugendamt, Standesamt, Bürgeramt, Gericht. " +
@@ -4975,12 +4982,13 @@
         }
 
         var jsonBlock =
-          "„antwort_erforderlich“, „einspruch_moeglich“, „frist_warnung_aktiv“ als JSON-Boolean (true/false), keine Strings.\n" +
+          "„antwort_erforderlich“, „einspruch_moeglich“, „frist_warnung_aktiv“, „bildqualitaet_unzureichend“ als JSON-Boolean (true/false), keine Strings.\n" +
           "Verwende exakt diese Schlüssel:\n" +
           "{\n" +
           '  "schema_version": 2,\n' +
           '  "antwort_erforderlich": true,\n' +
           '  "einspruch_moeglich": true,\n' +
+          '  "bildqualitaet_unzureichend": false,\n' +
           '  "brief_typ": "Kurzer verständlicher Schreibtyp (Zielsprache), z. B. Verwarnungsschreiben.",\n' +
           '  "absender_zeile": "Kurze eine Zeile: wer schreibt (Behörde/Einrichtung), ohne Zwischenüberschrift.",\n' +
           '  "kurz_erlaeuterung": "Kurz was passiert ist, natürlich formuliert (Zielsprache).",\n' +
@@ -5129,6 +5137,11 @@
         var ar = coerceBool(obj.antwort_erforderlich, "antwort_erforderlich");
         var em = coerceBool(obj.einspruch_moeglich, "einspruch_moeglich");
         var fw = coerceBool(obj.frist_warnung_aktiv, "frist_warnung_aktiv");
+        var bqRaw = obj.bildqualitaet_unzureichend;
+        var bqu = false;
+        if (bqRaw !== undefined && bqRaw !== null && bqRaw !== "") {
+          bqu = coerceBool(bqRaw, "bildqualitaet_unzureichend");
+        }
         var briefTyp = coerceStr(obj.brief_typ).trim() || "Behördenbrief";
         var abs = coerceStr(obj.absender_zeile).trim();
         var kurz = coerceStr(obj.kurz_erlaeuterung).trim();
@@ -5175,6 +5188,7 @@
           schema_version: 2,
           antwort_erforderlich: ar,
           einspruch_moeglich: em,
+          bildqualitaet_unzureichend: bqu,
           brief_typ: briefTyp,
           absender_zeile: abs,
           kurz_erlaeuterung: kurz,
@@ -5260,6 +5274,7 @@
           schema_version: 2,
           antwort_erforderlich: ar,
           einspruch_moeglich: ar,
+          bildqualitaet_unzureichend: false,
           brief_typ: legacy.titel_erklaerung,
           absender_zeile: "",
           kurz_erlaeuterung: legacy.erklaerung.trim(),
