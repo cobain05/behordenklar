@@ -2102,7 +2102,7 @@
     </div>
     <div class="loading-card" role="status">
       <div class="loading-spinner" aria-hidden="true"></div>
-      <p class="loading-title">BehördenKlar analysiert</p>
+      <p class="loading-title" id="loadingTitle">BehördenKlar analysiert</p>
       <p class="loading-message" id="loadingMessage">Dokument wird gelesen...</p>
     </div>
   </div>
@@ -2226,6 +2226,7 @@
       const targetLangModalClose = $("targetLangModalClose");
       const targetLangModalTitle = $("targetLangModalTitle");
       const loadingScreen = $("loadingScreen");
+      const loadingTitle = $("loadingTitle");
       const loadingMessage = $("loadingMessage");
 
       let loadingIntervalId = null;
@@ -2452,36 +2453,6 @@
           downloadPdfLabel: "📄 تنزيل PDF",
           downloadDocxLabel: "📝 تنزيل Word",
         },
-      };
-
-      const localizedLoadingSteps = {
-        "Deutsch": ["Dokument wird gelesen...", "Text wird erkannt...", "Wird übersetzt...", "Erklärung wird erstellt...", "Schritte werden zusammengestellt...", "Fast fertig..."],
-        "Englisch": ["Reading document...", "Recognizing text...", "Translating...", "Creating explanation...", "Preparing next steps...", "Almost done..."],
-        "Türkisch": ["Belge okunuyor...", "Metin algılanıyor...", "Çevriliyor...", "Açıklama hazırlanıyor...", "Adımlar hazırlanıyor...", "Neredeyse hazır..."],
-        "Arabisch": ["جاري قراءة المستند...", "جاري التعرف على النص...", "جاري الترجمة...", "جاري إنشاء الشرح...", "جاري تجهيز الخطوات...", "أوشكنا على الانتهاء..."],
-        "Russisch": ["Чтение документа...", "Распознавание текста...", "Перевод...", "Подготовка объяснения...", "Формирование шагов...", "Почти готово..."],
-        "Ukrainisch": ["Читаємо документ...", "Розпізнаємо текст...", "Перекладаємо...", "Готуємо пояснення...", "Формуємо кроки...", "Майже готово..."],
-        "Rumänisch": ["Se citește documentul...", "Se recunoaște textul...", "Se traduce...", "Se creează explicația...", "Se pregătesc pașii...", "Aproape gata..."],
-        "Polnisch": ["Czytanie dokumentu...", "Rozpoznawanie tekstu...", "Tłumaczenie...", "Tworzenie wyjaśnienia...", "Przygotowywanie kroków...", "Prawie gotowe..."],
-        "Dari": ["سند در حال خواندن است...", "متن شناسایی می‌شود...", "در حال ترجمه...", "توضیح ساخته می‌شود...", "گام‌ها آماده می‌شوند...", "تقریباً تمام شد..."],
-        "Bulgarisch": ["Документът се чете...", "Разпознаване на текста...", "Превеждане...", "Създаване на обяснение...", "Подготвяне на стъпките...", "Почти готово..."],
-        "Georgisch": ["დოკუმენტი იკითხება...", "ტექსტი ამოიცნობა...", "ითარგმნება...", "განმარტება მზადდება...", "ნაბიჯები იკრიბება...", "თითქმის მზადაა..."],
-        "Spanisch": ["Leyendo documento...", "Reconociendo texto...", "Traduciendo...", "Creando explicación...", "Preparando pasos...", "Casi listo..."],
-        "Portugiesisch": ["Lendo documento...", "Reconhecendo texto...", "Traduzindo...", "Criando explicação...", "Preparando passos...", "Quase pronto..."],
-        "Französisch": ["Lecture du document...", "Reconnaissance du texte...", "Traduction...", "Création de l'explication...", "Préparation des étapes...", "Presque terminé..."],
-        "Italienisch": ["Lettura del documento...", "Riconoscimento del testo...", "Traduzione...", "Creazione della spiegazione...", "Preparazione dei passaggi...", "Quasi fatto..."],
-        "Griechisch": ["Ανάγνωση εγγράφου...", "Αναγνώριση κειμένου...", "Μετάφραση...", "Δημιουργία εξήγησης...", "Συγκρότηση βημάτων...", "Σχεδόν έτοιμο..."],
-        "Albanisch": ["Dokumenti po lexohet...", "Teksti po njihet...", "Po përkthehet...", "Po krijohet shpjegimi...", "Po përgatiten hapat...", "Pothuajse gati..."],
-        "Bosnisch": ["Dokument se čita...", "Tekst se prepoznaje...", "Prevodi se...", "Objašnjenje se priprema...", "Koraci se sastavljaju...", "Skoro gotovo..."],
-        "Serbisch": ["Dokument se čita...", "Tekst se prepoznaje...", "Prevodi se...", "Objašnjenje se priprema...", "Koraci se sastavljaju...", "Skoro gotovo..."],
-        "Kroatisch": ["Dokument se čita...", "Tekst se prepoznaje...", "Prevodi se...", "Objašnjenje se priprema...", "Koraci se sastavljaju...", "Gotovo je..."],
-        "Chinesisch": ["正在读取文档...", "正在识别文本...", "正在翻译...", "正在生成解释...", "正在整理步骤...", "即将完成..."],
-        "Vietnamesisch": ["Đang đọc tài liệu...", "Đang nhận dạng văn bản...", "Đang dịch...", "Đang tạo phần giải thích...", "Đang tổng hợp các bước...", "Sắp xong..."],
-        "Persisch": ["در حال خواندن سند...", "در حال شناسایی متن...", "در حال ترجمه...", "در حال ایجاد توضیح...", "در حال آماده‌سازی مراحل...", "تقریباً تمام شد..."],
-        "Somali": ["Dukumeentiga waa la akhrinayaa...", "Qoraalka waa la aqoonsanayaa...", "Waa la turjumayaa...", "Sharaxaad ayaa la diyaarinayaa...", "Tallaabooyinka waa la diyaarinayaa...", "Wuu dhammaanayaa..."],
-        "Tigrinya": ["ሰነድ ይንበብ ኣሎ...", "ጽሑፍ ይፍለጥ ኣሎ...", "ይትርጎም ኣሎ...", "መብርሂ ይሰናዳ ኣሎ...", "ስጉምትታት ይእከቡ ኣለዉ...", "ቀሪቡ ተወዲኡ..."],
-        "Litauisch": ["Skaitomas dokumentas...", "Atpažįstamas tekstas...", "Verčiama...", "Rengiamas paaiškinimas...", "Ruošiami žingsniai...", "Beveik baigta..."],
-        "Arabisch (Ägyptisch)": ["جاري قراءة المستند...", "جاري التعرف على النص...", "جاري الترجمة...", "جاري إعداد الشرح...", "جاري تجميع الخطوات...", "فاضل قليل..."]
       };
 
       const resultTabLabelsByUiLang = {
@@ -3165,6 +3136,314 @@
         },
       };
 
+      (function attachTargetLangLoadingUiToResultLayout() {
+        var L = {
+          Deutsch: {
+            rsLoadingTitle: "BehördenKlar analysiert",
+            rsLoadingSteps: [
+              "Dokument wird analysiert...",
+              "Text wird erkannt...",
+              "Übersetzung wird erstellt...",
+              "Erklärung wird generiert...",
+              "Nächste Schritte werden ermittelt...",
+              "Fast fertig...",
+            ],
+          },
+          Englisch: {
+            rsLoadingTitle: "BehördenKlar is analyzing",
+            rsLoadingSteps: [
+              "Analyzing document...",
+              "Recognizing text...",
+              "Creating translation...",
+              "Generating explanation...",
+              "Determining next steps...",
+              "Almost done...",
+            ],
+          },
+          Türkisch: {
+            rsLoadingTitle: "BehördenKlar analiz ediyor",
+            rsLoadingSteps: [
+              "Belge analiz ediliyor...",
+              "Metin algılanıyor...",
+              "Çeviri oluşturuluyor...",
+              "Açıklama oluşturuluyor...",
+              "Sonraki adımlar belirleniyor...",
+              "Neredeyse hazır...",
+            ],
+          },
+          Arabisch: {
+            rsLoadingTitle: "BehördenKlar يُجري التحليل",
+            rsLoadingSteps: [
+              "جاري تحليل المستند...",
+              "جاري التعرف على النص...",
+              "جاري إنشاء الترجمة...",
+              "جاري إنشاء الشرح...",
+              "جاري تحديد الخطوات التالية...",
+              "أوشكنا على الانتهاء...",
+            ],
+          },
+          Russisch: {
+            rsLoadingTitle: "BehördenKlar выполняет анализ",
+            rsLoadingSteps: [
+              "Анализ документа...",
+              "Распознавание текста...",
+              "Создание перевода...",
+              "Формирование объяснения...",
+              "Определение следующих шагов...",
+              "Почти готово...",
+            ],
+          },
+          Ukrainisch: {
+            rsLoadingTitle: "BehördenKlar виконує аналіз",
+            rsLoadingSteps: [
+              "Аналіз документа...",
+              "Розпізнавання тексту...",
+              "Створення перекладу...",
+              "Формування пояснення...",
+              "Визначення наступних кроків...",
+              "Майже готово...",
+            ],
+          },
+          Rumänisch: {
+            rsLoadingTitle: "BehördenKlar analizează",
+            rsLoadingSteps: [
+              "Se analizează documentul...",
+              "Se recunoaște textul...",
+              "Se creează traducerea...",
+              "Se generează explicația...",
+              "Se stabilesc pașii următori...",
+              "Aproape gata...",
+            ],
+          },
+          Polnisch: {
+            rsLoadingTitle: "BehördenKlar analizuje",
+            rsLoadingSteps: [
+              "Analizowanie dokumentu...",
+              "Rozpoznawanie tekstu...",
+              "Tworzenie tłumaczenia...",
+              "Generowanie wyjaśnienia...",
+              "Ustalanie kolejnych kroków...",
+              "Prawie gotowe...",
+            ],
+          },
+          Dari: {
+            rsLoadingTitle: "BehördenKlar در حال تحلیل است",
+            rsLoadingSteps: [
+              "سند در حال تحلیل است...",
+              "متن شناسایی می‌شود...",
+              "ترجمه تهیه می‌شود...",
+              "توضیح ساخته می‌شود...",
+              "گام‌های بعدی تعیین می‌شوند...",
+              "تقریباً تمام شد...",
+            ],
+          },
+          Bulgarisch: {
+            rsLoadingTitle: "BehördenKlar анализира",
+            rsLoadingSteps: [
+              "Анализиране на документа...",
+              "Разпознаване на текста...",
+              "Създаване на превод...",
+              "Генериране на обяснение...",
+              "Определяне на следващите стъпки...",
+              "Почти готово...",
+            ],
+          },
+          Georgisch: {
+            rsLoadingTitle: "BehördenKlar აკეთებს ანალიზს",
+            rsLoadingSteps: [
+              "დოკუმენტის ანალიზი...",
+              "ტექსტის ამოცნობა...",
+              "თარგმანის შექმნა...",
+              "ახსნის გენერირება...",
+              "შემდეგი ნაბიჯების განსაზღვრა...",
+              "თითქმის მზადაა...",
+            ],
+          },
+          Spanisch: {
+            rsLoadingTitle: "BehördenKlar está analizando",
+            rsLoadingSteps: [
+              "Analizando el documento...",
+              "Reconociendo texto...",
+              "Creando la traducción...",
+              "Generando la explicación...",
+              "Determinando los próximos pasos...",
+              "Casi listo...",
+            ],
+          },
+          Portugiesisch: {
+            rsLoadingTitle: "BehördenKlar está a analisar",
+            rsLoadingSteps: [
+              "A analisar o documento...",
+              "A reconhecer o texto...",
+              "A criar a tradução...",
+              "A gerar a explicação...",
+              "A determinar os próximos passos...",
+              "Quase pronto...",
+            ],
+          },
+          Französisch: {
+            rsLoadingTitle: "BehördenKlar analyse",
+            rsLoadingSteps: [
+              "Analyse du document...",
+              "Reconnaissance du texte...",
+              "Création de la traduction...",
+              "Génération de l'explication...",
+              "Détermination des prochaines étapes...",
+              "Presque terminé...",
+            ],
+          },
+          Italienisch: {
+            rsLoadingTitle: "BehördenKlar sta analizzando",
+            rsLoadingSteps: [
+              "Analisi del documento...",
+              "Riconoscimento del testo...",
+              "Creazione della traduzione...",
+              "Generazione della spiegazione...",
+              "Individuazione dei prossimi passi...",
+              "Quasi fatto...",
+            ],
+          },
+          Griechisch: {
+            rsLoadingTitle: "Το BehördenKlar αναλύει",
+            rsLoadingSteps: [
+              "Ανάλυση εγγράφου...",
+              "Αναγνώριση κειμένου...",
+              "Δημιουργία μετάφρασης...",
+              "Δημιουργία εξήγησης...",
+              "Προσδιορισμός των επόμενων βημάτων...",
+              "Σχεδόν έτοιμο...",
+            ],
+          },
+          Albanisch: {
+            rsLoadingTitle: "BehördenKlar po analizon",
+            rsLoadingSteps: [
+              "Dokumenti po analizohet...",
+              "Teksti po njihet...",
+              "Po krijohet përkthimi...",
+              "Po gjenerohet shpjegimi...",
+              "Po përcaktohen hapat e ardhshëm...",
+              "Pothuajse gati...",
+            ],
+          },
+          Bosnisch: {
+            rsLoadingTitle: "BehördenKlar analizira",
+            rsLoadingSteps: [
+              "Analiza dokumenta...",
+              "Prepoznavanje teksta...",
+              "Stvaranje prijevoda...",
+              "Generisanje objašnjenja...",
+              "Određivanje sljedećih koraka...",
+              "Skoro gotovo...",
+            ],
+          },
+          Serbisch: {
+            rsLoadingTitle: "BehördenKlar analizira",
+            rsLoadingSteps: [
+              "Analiza dokumenta...",
+              "Prepoznavanje teksta...",
+              "Kreiranje prevoda...",
+              "Generisanje objašnjenja...",
+              "Određivanje sledećih koraka...",
+              "Skoro gotovo...",
+            ],
+          },
+          Kroatisch: {
+            rsLoadingTitle: "BehördenKlar analizira",
+            rsLoadingSteps: [
+              "Analiza dokumenta...",
+              "Prepoznavanje teksta...",
+              "Stvaranje prijevoda...",
+              "Generiranje objašnjenja...",
+              "Određivanje sljedećih koraka...",
+              "Skoro gotovo...",
+            ],
+          },
+          Chinesisch: {
+            rsLoadingTitle: "BehördenKlar 正在分析",
+            rsLoadingSteps: [
+              "正在分析文档...",
+              "正在识别文本...",
+              "正在生成翻译...",
+              "正在生成说明...",
+              "正在确定后续步骤...",
+              "即将完成...",
+            ],
+          },
+          Vietnamesisch: {
+            rsLoadingTitle: "BehördenKlar đang phân tích",
+            rsLoadingSteps: [
+              "Đang phân tích tài liệu...",
+              "Đang nhận dạng văn bản...",
+              "Đang tạo bản dịch...",
+              "Đang tạo phần giải thích...",
+              "Đang xác định các bước tiếp theo...",
+              "Sắp xong...",
+            ],
+          },
+          Persisch: {
+            rsLoadingTitle: "BehördenKlar در حال تحلیل است",
+            rsLoadingSteps: [
+              "در حال تحلیل سند...",
+              "در حال شناسایی متن...",
+              "در حال ایجاد ترجمه...",
+              "در حال ایجاد توضیح...",
+              "در حال تعیین گام‌های بعدی...",
+              "تقریباً تمام شد...",
+            ],
+          },
+          Somali: {
+            rsLoadingTitle: "BehördenKlar wuxuu falanqeeyaa",
+            rsLoadingSteps: [
+              "Dukumeentiga waa la falanqeeyaa...",
+              "Qoraalka waa la aqoonsanayaa...",
+              "Turjumaad ayaa la abuurayaa...",
+              "Sharaxaad ayaa la abuurayaa...",
+              "Tallaabooyinka xiga ayaa la go’aaminayaa...",
+              "Wuu dhawaanayaa...",
+            ],
+          },
+          Tigrinya: {
+            rsLoadingTitle: "BehördenKlar ይተንተን ኣሎ",
+            rsLoadingSteps: [
+              "ሰነድ ይተንተን ኣሎ...",
+              "ጽሑፍ ይፍለጥ ኣሎ...",
+              "ትርጉም ይፍጠር ኣሎ...",
+              "መብርሂ ይፍጠር ኣሎ...",
+              "ዝቕጽሉ ስጉምትታት ይነጽጽ ኣሎ...",
+              "ቀሪቡ ተወዲኡ...",
+            ],
+          },
+          Litauisch: {
+            rsLoadingTitle: "BehördenKlar analizuoja",
+            rsLoadingSteps: [
+              "Analizuojamas dokumentas...",
+              "Atpažįstamas tekstas...",
+              "Kuriamas vertimas...",
+              "Generuojamas paaiškinimas...",
+              "Nustatomi kiti žingsniai...",
+              "Beveik baigta...",
+            ],
+          },
+          "Arabisch (Ägyptisch)": {
+            rsLoadingTitle: "BehördenKlar بيعمل تحليل",
+            rsLoadingSteps: [
+              "جاري تحليل المستند...",
+              "جاري التعرف على النص...",
+              "جاري إعداد الترجمة...",
+              "جاري إعداد الشرح...",
+              "جاري تحديد الخطوات الجاية...",
+              "خلّصنا تقريبًا...",
+            ],
+          },
+        };
+        Object.keys(L).forEach(function (k) {
+          if (resultLayoutUiByLang[k]) {
+            resultLayoutUiByLang[k].rsLoadingTitle = L[k].rsLoadingTitle;
+            resultLayoutUiByLang[k].rsLoadingSteps = L[k].rsLoadingSteps;
+          }
+        });
+      })();
+
       const loadingStepPlainExplainByUiLang = {
         Deutsch: "Einfache Erklärung wird erstellt...",
         Englisch: "Creating a simple explanation...",
@@ -3196,7 +3475,6 @@
       };
 
       Object.keys(uiTranslations).forEach(function (langKey) {
-        uiTranslations[langKey].loadingSteps = localizedLoadingSteps[langKey] || localizedLoadingSteps["Deutsch"];
         var rtl = resultTabLabelsByUiLang[langKey] || resultTabLabelsByUiLang["Deutsch"];
         uiTranslations[langKey].resultTabTranslation = rtl.resultTabTranslation;
         uiTranslations[langKey].resultTabSimpleExplanation = rtl.resultTabSimpleExplanation;
@@ -3281,9 +3559,16 @@
         var fallback = resultLayoutUiByLang["Englisch"];
         var out = {};
         Object.keys(fallback).forEach(function (k) {
+          if (k === "rsLoadingSteps") return;
           var pv = primary ? primary[k] : null;
-          out[k] = pv != null && String(pv).trim() !== "" ? pv : fallback[k];
+          var fb = fallback[k];
+          if (Array.isArray(fb)) return;
+          out[k] = pv != null && String(pv).trim() !== "" ? pv : fb;
         });
+        var fbSteps = fallback.rsLoadingSteps;
+        var prSteps = primary && primary.rsLoadingSteps;
+        out.rsLoadingSteps =
+          Array.isArray(prSteps) && Array.isArray(fbSteps) && prSteps.length === fbSteps.length ? prSteps.slice() : Array.isArray(fbSteps) ? fbSteps.slice() : [];
         var tdKey = templateDownloadKeyFromTarget();
         var td = templateDownloadUiByLang[tdKey] || templateDownloadUiByLang["Englisch"];
         var tdFb = templateDownloadUiByLang["Englisch"];
@@ -3294,6 +3579,20 @@
         out.rsPrintPdfHint = td.printPdfHint || tdFb.printPdfHint;
         out.rsPdfPrintPopupBlocked = td.pdfPrintPopupBlocked || tdFb.pdfPrintPopupBlocked;
         return out;
+      }
+
+      function resolveLoadingStepsForTarget() {
+        var rl = getResultLayoutStrings();
+        var loadingSteps = rl.rsLoadingSteps && rl.rsLoadingSteps.length ? rl.rsLoadingSteps.slice() : [];
+        if (!loadingSteps.length) {
+          loadingSteps = (resultLayoutUiByLang["Englisch"].rsLoadingSteps || []).slice();
+        }
+        if (isTargetLangSameAsUiLang() && loadingSteps.length > 2) {
+          var curUi = getUiLang();
+          var plain = loadingStepPlainExplainByUiLang[curUi] || loadingStepPlainExplainByUiLang["Deutsch"];
+          loadingSteps[2] = plain;
+        }
+        return loadingSteps;
       }
 
       function isTargetLangSameAsUiLang() {
@@ -3640,8 +3939,10 @@
         analyzeText.textContent = t.analyzeText;
         resultsHeading.textContent = t.resultsHeading;
         if (loadingScreen.classList.contains("visible")) {
-          var loadingSteps = t.loadingSteps || uiTranslations["Deutsch"].loadingSteps;
-          var idx = Math.min(loadingStepIndex, loadingSteps.length - 1);
+          var rlLoad = getResultLayoutStrings();
+          if (loadingTitle) loadingTitle.textContent = rlLoad.rsLoadingTitle || "";
+          var loadingSteps = resolveLoadingStepsForTarget();
+          var idx = Math.min(loadingStepIndex, Math.max(0, loadingSteps.length - 1));
           loadingMessage.textContent = loadingSteps[idx];
         }
         uiLangModalTitle.textContent = (t.uiLangLabel || "").replace(/^🌐\s*/, "").replace(/:\s*$/, "").trim() || "Sprache wählen";
@@ -4306,15 +4607,9 @@
       }
 
       function startLoadingScreen() {
-        var currentUiLang = getUiLang();
-        var loadingSteps = (uiTranslations[currentUiLang] && uiTranslations[currentUiLang].loadingSteps) || uiTranslations["Deutsch"].loadingSteps;
-        loadingSteps = loadingSteps.slice();
-        if (isTargetLangSameAsUiLang() && loadingSteps.length > 2) {
-          var plain =
-            (uiTranslations[currentUiLang] && uiTranslations[currentUiLang].loadingStepPlainExplain) ||
-            uiTranslations["Deutsch"].loadingStepPlainExplain;
-          loadingSteps[2] = plain;
-        }
+        var rl = getResultLayoutStrings();
+        if (loadingTitle) loadingTitle.textContent = rl.rsLoadingTitle || "";
+        var loadingSteps = resolveLoadingStepsForTarget();
         loadingStepIndex = 0;
         loadingMessage.textContent = loadingSteps[loadingStepIndex];
         loadingScreen.classList.add("visible");
