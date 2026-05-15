@@ -468,6 +468,25 @@
     }
   }
 
+  (function verifyLpEntrypoints() {
+    var map = {
+      syncLpFlagsFromModal: syncLpFlagsFromModal,
+      initCookieConsentUi: initCookieConsentUi,
+      applyLandingUiLanguage: applyLandingUiLanguage,
+      getUiLang: getUiLang,
+      wireCookieSettingsModalControls: wireCookieSettingsModalControls,
+      openCookieSettingsModal: openCookieSettingsModal,
+      updateCookieBannerUi: updateCookieBannerUi,
+      updateCookieSettingsModalUi: updateCookieSettingsModalUi,
+      loadGoogleAnalyticsIfConsented: loadGoogleAnalyticsIfConsented
+    };
+    Object.keys(map).forEach(function (k) {
+      if (typeof map[k] !== "function") {
+        console.error("[lp] expected function —", k, typeof map[k]);
+      }
+    });
+  })();
+
   initCookieConsentUi();
 })();
 
