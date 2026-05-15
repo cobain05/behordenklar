@@ -843,7 +843,7 @@
       z-index: 999;
       background: var(--bg);
       overflow-y: auto;
-      padding: 1.1rem;
+      padding: 16px;
     }
 
     #results.visible {
@@ -854,10 +854,12 @@
       overflow: hidden;
     }
 
-    .results-view {
-      width: min(100%, 1200px);
+    .results-view.results-shell {
+      width: 100%;
+      max-width: 680px;
       margin: 0 auto;
       padding-bottom: 2rem;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     .btn-back {
@@ -882,31 +884,305 @@
       letter-spacing: -0.035em;
     }
 
-    .result-section {
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
+    .rs-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 0.5px solid rgba(15, 23, 42, 0.18);
+      padding: 1rem 1.1rem;
+      margin-bottom: 1rem;
       box-shadow: var(--shadow);
-      padding: clamp(1.1rem, 2.8vw, 2rem);
+    }
+
+    .rs-label {
+      margin: 0 0 0.65rem;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #64748b;
+    }
+
+    .rs-label--inner {
+      margin-top: 0.85rem;
+    }
+
+    .rs-brief-type {
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.35rem, 4vw, 1.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+      line-height: 1.25;
+    }
+
+    .rs-sender {
+      margin: 0 0 1rem;
+      font-size: 1rem;
+      line-height: 1.55;
+      color: #0f172a;
+    }
+
+    .rs-body {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: #334155;
+      word-break: break-word;
+    }
+
+    .rs-body p {
+      margin: 0 0 0.65rem;
+    }
+
+    .rs-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .rs-subcard {
+      margin-top: 1rem;
+      padding-top: 0.85rem;
+      border-top: 0.5px solid rgba(15, 23, 42, 0.12);
+    }
+
+    .rs-warn-box {
+      background: #fef2f2;
+      border-color: #fecaca !important;
+    }
+
+    .rs-warn-title {
+      margin: 0 0 0.35rem;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #991b1b;
+    }
+
+    .rs-warn-highlight {
+      margin: 0 0 0.45rem;
+      font-size: clamp(1.35rem, 4vw, 1.65rem);
+      font-weight: 800;
+      color: #dc2626;
+      line-height: 1.2;
+    }
+
+    .rs-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 520px) {
+      .rs-info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .rs-info-cell {
+      background: #f8fafc;
+      border-radius: 10px;
+      border: 0.5px solid rgba(15, 23, 42, 0.12);
+      padding: 12px 12px;
+      min-height: 4.5rem;
+    }
+
+    .rs-info-key {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+
+    .rs-info-val {
+      font-size: 0.98rem;
+      line-height: 1.45;
+      color: #0f172a;
+      word-break: break-word;
+    }
+
+    .rs-red,
+    .rs-info-val--fine {
+      color: #dc2626;
+      font-weight: 700;
+    }
+
+    .rs-steps {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .rs-steps > li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
       margin-bottom: 1rem;
     }
 
-    .result-section h3 {
-      margin: 0 0 0.95rem;
-      font-size: clamp(1.05rem, 2.2vw, 1.35rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--primary);
-      padding-bottom: 0.7rem;
-      border-bottom: 2px solid var(--primary-soft);
+    .rs-steps > li:last-child {
+      margin-bottom: 0;
     }
 
-    .result-body {
+    .rs-step-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: #1a73e8;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.9rem;
+      line-height: 28px;
+      text-align: center;
+    }
+
+    .rs-step-body {
+      flex: 1;
+      min-width: 0;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #334155;
+    }
+
+    .rs-step2-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 520px) {
+      .rs-step2-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .rs-opt {
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 0.5px solid rgba(15, 23, 42, 0.18);
+      background: #fff;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #334155;
+    }
+
+    .rs-opt-b {
+      border: 1px solid #fecaca;
+      box-shadow: inset 0 0 0 1px rgba(252, 165, 165, 0.35);
+    }
+
+    .rs-tab-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .rs-tab {
+      flex: 1;
+      cursor: pointer;
+      border: 0.5px solid rgba(15, 23, 42, 0.18);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      font-weight: 700;
+      font-size: 0.88rem;
+      background: #e5e7eb;
+      color: #334155;
+    }
+
+    .rs-tab.is-active {
+      background: #334155;
+      color: #fff;
+      border-color: #334155;
+    }
+
+    .rs-tab-panel {
+      margin-bottom: 12px;
+    }
+
+    .rs-envelope {
+      position: relative;
+      border: 0.5px solid rgba(15, 23, 42, 0.22);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #fafafa 0%, #ffffff 40%);
+      min-height: 220px;
+      padding: 18px 18px 52px;
+    }
+
+    .rs-env-sender {
+      font-size: 0.92rem;
+      line-height: 1.45;
+      color: #334155;
+      max-width: 72%;
+    }
+
+    .rs-env-recipient {
+      margin-top: 36px;
+      margin-left: auto;
+      max-width: 62%;
+      text-align: left;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      color: #0f172a;
+    }
+
+    .rs-env-stamp {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 56px;
+      height: 72px;
+      border: 1px dashed rgba(100, 116, 139, 0.55);
+      border-radius: 6px;
+      background: rgba(248, 250, 252, 0.9);
+    }
+
+    .rs-env-stamp-note {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: #64748b;
+      line-height: 1.35;
+    }
+
+    .rs-letter-pre {
       white-space: pre-wrap;
       word-break: break-word;
-      font-size: clamp(1rem, 1.7vw, 1.18rem);
-      line-height: 1.75;
-      color: var(--text);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .rs-ph {
+      background: rgba(219, 234, 254, 0.85);
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .rs-yellow-box {
+      background: #fffbeb;
+      border: 0.5px solid #fde68a;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #78350f;
+    }
+
+    .rs-yellow-box p {
+      margin: 0;
+    }
+
+    .rs-muted {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 0.5px solid rgba(15, 23, 42, 0.12);
+      font-size: 0.95rem;
+      color: #475569;
+      line-height: 1.55;
     }
 
     @media (max-width: 600px) {
@@ -1615,24 +1891,90 @@
       <div id="errorBox" class="error" role="alert"></div>
 
       <section id="results" aria-live="polite">
-        <div class="results-view">
+        <div class="results-view results-shell">
           <button type="button" class="btn-back" id="btnBack">← Zurück</button>
           <h2 class="results-page-title" id="resultsHeading">Ergebnis</h2>
-          <article class="result-section">
-            <h3 id="h3TitleTranslation">Übersetzung</h3>
-            <div class="result-body" id="outTranslation"></div>
-          </article>
-          <article class="result-section">
-            <h3 id="h3TitleExplain">Erklärung</h3>
-            <div class="result-body" id="outExplain"></div>
-          </article>
-          <article class="result-section">
-            <h3 id="h3TitleSteps">Nächste Schritte</h3>
-            <div class="result-body" id="outSteps"></div>
-          </article>
-          <article class="result-section">
-            <h3 id="h3TitleBriefkopf">Briefkopf</h3>
-            <div class="result-body" id="outTemplate"></div>
+
+          <section class="rs-card" aria-labelledby="rsS1Label">
+            <p class="rs-label" id="rsS1Label"></p>
+            <h3 class="rs-brief-type" id="rsBriefTyp"></h3>
+            <p class="rs-sender" id="rsAbsender"></p>
+            <div class="rs-body" id="rsKurz"></div>
+            <div class="rs-subcard" id="rsZusatzWrap" hidden>
+              <p class="rs-label rs-label--inner" id="rsZusatzTitle"></p>
+              <div class="rs-body" id="rsZusatz"></div>
+            </div>
+          </section>
+
+          <section class="rs-card rs-warn-box" id="rsWarnSection" hidden>
+            <p class="rs-warn-title" id="rsWarnTitle"></p>
+            <p class="rs-warn-highlight" id="rsWarnHighlight"></p>
+            <div class="rs-body" id="rsWarnDetail"></div>
+          </section>
+
+          <section class="rs-card" aria-labelledby="rsS3Label">
+            <p class="rs-label" id="rsS3Label"></p>
+            <div class="rs-info-grid">
+              <div class="rs-info-cell">
+                <span class="rs-info-key" id="rsGkAz"></span>
+                <div class="rs-info-val" id="rsValAz"></div>
+              </div>
+              <div class="rs-info-cell">
+                <span class="rs-info-key" id="rsGkFine"></span>
+                <div class="rs-info-val rs-info-val--fine" id="rsValFine"></div>
+              </div>
+              <div class="rs-info-cell">
+                <span class="rs-info-key" id="rsGkDate"></span>
+                <div class="rs-info-val" id="rsValDate"></div>
+              </div>
+              <div class="rs-info-cell">
+                <span class="rs-info-key" id="rsGkLaw"></span>
+                <div class="rs-info-val" id="rsValLaw"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="rs-card" aria-labelledby="rsS4Label">
+            <p class="rs-label" id="rsS4Label"></p>
+            <ol class="rs-steps">
+              <li>
+                <span class="rs-step-num" aria-hidden="true">1</span>
+                <div class="rs-step-body" id="rsStep1"></div>
+              </li>
+              <li id="rsStep2Wrap">
+                <span class="rs-step-num" aria-hidden="true">2</span>
+                <div class="rs-step-body">
+                  <div class="rs-step2-row" id="rsStep2Row">
+                    <div class="rs-opt rs-opt-a" id="rsOptA"></div>
+                    <div class="rs-opt rs-opt-b" id="rsOptB"></div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="rs-step-num" aria-hidden="true">3</span>
+                <div class="rs-step-body" id="rsStep3"></div>
+              </li>
+            </ol>
+            <div id="rsKeinAntwort" class="rs-muted" hidden></div>
+          </section>
+
+          <section class="rs-card" id="rsTemplateSection" hidden>
+            <p class="rs-label" id="rsS5Label"></p>
+            <div class="rs-tab-bar" id="rsTabBar" role="tablist" aria-label="">
+              <button type="button" class="rs-tab is-active" role="tab" id="rsTabEnvelopeBtn" data-rs-tab="rsPanelEnvelope" aria-selected="true"></button>
+              <button type="button" class="rs-tab" role="tab" id="rsTabLetterBtn" data-rs-tab="rsPanelLetter" aria-selected="false"></button>
+            </div>
+            <div class="rs-tab-panel" id="rsPanelEnvelope" role="tabpanel" aria-labelledby="rsTabEnvelopeBtn">
+              <div class="rs-envelope">
+                <div class="rs-env-stamp" aria-hidden="true"></div>
+                <div class="rs-env-sender" id="rsEnvSender"></div>
+                <div class="rs-env-recipient" id="rsEnvRecipient"></div>
+                <p class="rs-env-stamp-note" id="rsStampHint"></p>
+              </div>
+            </div>
+            <div class="rs-tab-panel" id="rsPanelLetter" role="tabpanel" aria-labelledby="rsTabLetterBtn" hidden>
+              <div class="rs-body rs-letter-pre" id="rsLetterBody"></div>
+            </div>
             <div id="templateDownloadBlock" class="template-download-block" hidden>
               <p id="templateDownloadDisclaimer" class="template-download-disclaimer" role="note"></p>
               <div class="template-download-buttons">
@@ -1640,7 +1982,11 @@
                 <button type="button" class="btn-template-download" id="btnDownloadTemplateDocx"></button>
               </div>
             </div>
-          </article>
+          </section>
+
+          <section class="rs-yellow-box" id="rsLegalStrip">
+            <p id="rsDisclaimer"></p>
+          </section>
         </div>
       </section>
     </div>
@@ -1815,6 +2161,7 @@
   </div>
 
   <script src="cookie-consent-i18n.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js" crossorigin="anonymous"></script>
   <script>
     try {
       var _initLang = localStorage.getItem("behordenklar-ui-lang");
@@ -1889,6 +2236,7 @@
       const MAX_LETTER_FILES = 5;
       var stagedLetterFiles = [];
       var lastAntwortvorlageForDownload = "";
+      var lastNormalizedParsed = null;
 
       const uiTranslations = {
         "Deutsch": { uiLangLabel: "🌐 Sprache der Seite wählen:", targetLangLabel: "Zielsprache für die Übersetzung des Dokuments:", modeFile: "Foto oder PDF", modeText: "Text eingeben", uploadLabel: "Datei hochladen", dropTitle: "Datei hierher ziehen", dropHint: "oder klicken und eine oder mehrere JPG-, PNG- oder PDF-Dateien wählen (max. 5)", dropTitleMobile: "Foto oder PDF auswählen", dropHintMobile: "Kamera oder Galerie öffnen", takePhoto: "📷 Kamera öffnen", pickFilesMobile: "🖼️ Foto oder PDF auswählen", uploadHint: "Bis zu 5 Dateien gleichzeitig, je max. ca. 32 MB. Passwortgeschützte PDFs werden nicht unterstützt.", textInputLabel: "Behördenbrief (Deutsch)", textPlaceholder: "Brief hier einfügen oder abtippen…", analyzeText: "Brief analysieren", apiHeading: "API-Schlüssel", apiKeyLabel: "Anthropic API Key", apiHint: "Der Schlüssel wird nur in Ihrem Browser verwendet und nicht gespeichert.", resultsHeading: "Ergebnis", toggleShow: "Anzeigen", toggleHide: "Verbergen", removeFile: "Datei entfernen", filesSelectedMany: "{n} Dateien ausgewählt", welcomeTitle: "Willkommen bei BehördenKlar", welcomeText: "Fügen Sie Ihren Behördenbrief ein oder laden Sie ein Foto oder PDF hoch – wir helfen beim Verstehen, Übersetzen und den nächsten Schritten.", footerTagline: "<span>BehördenKlar</span> – Dokumente verstehen, einfach gemacht", footerDisclaimer: "Keine Rechtsberatung. Bei Fristen und rechtlichen Folgen prüfen Sie die Angaben oder wenden Sie sich an eine Beratungsstelle oder an eine Rechtsanwältin bzw. einen Rechtsanwalt.", maxUploadsReached: "✋ Maximum erreicht – 5 Fotos hochgeladen" },
@@ -2153,6 +2501,45 @@
         "Arabisch (Ägyptisch)": { resultTabTranslation: "الترجمة", resultTabSimpleExplanation: "شرح بسيط" },
       };
 
+      const resultLayoutUiByLang = {
+        Deutsch: {
+          rsBack: "← Zurück",
+          rsSection1Label: "Was bedeutet der Brief?",
+          rsSection3Label: "Überblick",
+          rsWarnTitle: "Wichtige Frist – Handeln erforderlich",
+          rsSection4Label: "Was sollen Sie jetzt tun?",
+          rsSection5Label: "Antwortvorlage",
+          rsTabEnvelope: "Umschlag beschriften",
+          rsTabLetter: "Brief schreiben",
+          rsTabListAria: "Antwortvorlage-Ansicht",
+          rsStampHintDefault: "Bitte hier eine Briefmarke anbringen.",
+          rsDisclaimerYellow:
+            "Kein Ersatz für Rechtsberatung. Prüfen Sie Fristen und Angaben sorgfältig oder holen Sie bei Bedarf professionelle Hilfe.",
+          rsGridAktenzeichen: "Aktenzeichen",
+          rsGridBussgeld: "Bußgeld",
+          rsGridDatum: "Datum",
+          rsGridRechtsgrundlage: "Rechtsgrundlage",
+        },
+        Englisch: {
+          rsBack: "← Back",
+          rsSection1Label: "What does this letter mean?",
+          rsSection3Label: "Overview",
+          rsWarnTitle: "Important deadline – action required",
+          rsSection4Label: "What should you do now?",
+          rsSection5Label: "Reply template",
+          rsTabEnvelope: "Address the envelope",
+          rsTabLetter: "Write the letter",
+          rsTabListAria: "Reply template views",
+          rsStampHintDefault: "Affix a postage stamp here.",
+          rsDisclaimerYellow:
+            "This does not replace legal advice. Check deadlines and details carefully or seek professional help if needed.",
+          rsGridAktenzeichen: "File reference",
+          rsGridBussgeld: "Fine",
+          rsGridDatum: "Date",
+          rsGridRechtsgrundlage: "Legal basis",
+        },
+      };
+
       const loadingStepPlainExplainByUiLang = {
         Deutsch: "Einfache Erklärung wird erstellt...",
         Englisch: "Creating a simple explanation...",
@@ -2203,6 +2590,10 @@
         uiTranslations[langKey].pdfPrintPopupBlocked =
           (templateDownloadUiByLang[langKey] && templateDownloadUiByLang[langKey].pdfPrintPopupBlocked) ||
           templateDownloadUiByLang["Englisch"].pdfPrintPopupBlocked;
+        var rl = resultLayoutUiByLang[langKey] || resultLayoutUiByLang["Englisch"];
+        Object.keys(rl).forEach(function (rk) {
+          uiTranslations[langKey][rk] = rl[rk];
+        });
         var bkCk = typeof window !== "undefined" && window.BK_COOKIE_CONSENT_I18N;
         if (bkCk) {
           var ck = bkCk[langKey] || bkCk["Deutsch"];
@@ -2253,16 +2644,8 @@
       }
 
       function updateTranslationResultTabHeading() {
-        var el = $("h3TitleTranslation");
-        if (!el) {
-          return;
-        }
-        var ui = getUiLang();
-        var t = uiTranslations[ui] || uiTranslations["Deutsch"];
-        if (isTargetLangSameAsUiLang()) {
-          el.textContent = t.resultTabSimpleExplanation || t.resultTabTranslation || "";
-        } else {
-          el.textContent = t.resultTabTranslation || "";
+        if (lastNormalizedParsed && results && results.classList.contains("visible")) {
+          renderResults(lastNormalizedParsed);
         }
       }
 
@@ -3234,6 +3617,7 @@
         results.classList.remove("visible");
         document.body.classList.remove("results-open");
         setTemplateDownloadSectionVisible(false, "");
+        lastNormalizedParsed = null;
         updateTranslationResultTabHeading();
       });
 
@@ -3560,115 +3944,77 @@
         var common =
           "Du bist ein Experte für deutsche Behördenbriefe und unterstützt Menschen mit Migrationshintergrund dabei, Schreiben sicher zu verstehen, Fristen zu erkennen und sinnvoll zu handeln. " +
           "Formuliere respektvoll, klar und ohne Juristenjargon; erkläre aber präzise genug, damit niemand wichtige Folgen übersieht.\n\n" +
+          "AUSGABE: Antworte ausschließlich mit einem gültigen JSON-Objekt nach Schema „schema_version“: 2 (kein Markdown außerhalb des JSON, kein Code-Fence). " +
+          "Alle Felder außer „brief_mit_platzhaltern“ sind in der gewählten ZIELSPRACHE zu schreiben. „brief_mit_platzhaltern“ bleibt ausnahmslos auf Deutsch.\n\n" +
+          "TEXTFORMAT: Verwende kein Markdown (keine Sternchen für Fett, keine # -Überschriften, keine Aufzählung mit * oder -). Nur reiner Text mit \\n für Zeilenumbrüche. " +
+          "Verwende keine Überschrift oder Zwischenzeile „Wer schreibt Ihnen?“; die Absenderinfo gehört nur kurz in „absender_zeile“.\n\n" +
           "BEHÖRDE ERKENNEN: Leite aus Briefkopf, Logo, Betreff und Inhalt ab, von welcher Art von Stelle das Schreiben stammt. " +
           "Ordne es wenn möglich einer dieser Kategorien zu (oder der naheliegendsten): Jobcenter, BAMF, Ausländerbehörde, Finanzamt, " +
           "Krankenversicherung (z. B. Krankenkasse), Rentenversicherung (DRV oder andere Rentenversicherungsträger), Jugendamt, Standesamt, Bürgeramt, Gericht. " +
-          "Wenn keine eindeutige Zuordnung möglich ist, nenne die erkennbare Behörde bzw. „andere Behörde/Institution“ und begründe kurz.\n\n" +
-          "FRISTEN: Hebe alle zeitlichen Vorgaben im Feld „erklaerung“ und erneut konkret in „schritte“ besonders hervor (z. B. „Bis zum … muss … erledigt sein“). " +
-          "Wenn ein Kalenderdatum, eine Frist in Wochen/Monaten oder eine Rechtsbehelfsfrist genannt ist, wiederhole sie gut sichtbar und erkläre in einfachen Worten, was bis wann passieren muss.\n\n" +
-          "BEGRIFFE: Wenn im Brief vorkommend oder für das Verständnis nötig, erkläre kurz und verständlich (in der Zielsprache im Feld „erklaerung“ bzw. „schritte“): " +
-          "Bescheid, Widerspruch, Anhörung, Aktenzeichen, Bewilligungszeitraum, Sanktion, Mahnung. " +
-          "Nur das erklären, was für diesen Brief wirklich relevant ist.\n\n" +
-          "DRINGLICHKEIT UND RISIKEN: Wenn der Brief dringend ist (kurze Frist, Androhung von Sanktionen, Zahlungsaufforderung, Rechtsbehelfsbelehrung, " +
-          "Androhung von Bußgeldern, Ablehnung, Einstellung von Leistungen, gerichtliche Schritte o. Ä.), warne in „erklaerung“ deutlich und verständlich " +
-          "vor den möglichen negativen Konsequenzen, ohne Panik zu machen. " +
-          "Weise darauf hin, dass du keine Rechtsberatung ersetzt und bei Unsicherheit professionelle Hilfe (Beratungsstelle, ggf. Rechtsanwalt) sinnvoll sein kann.\n\n" +
-          "NÄCHSTE SCHRITTE („schritte“): Jeder Schritt soll so konkret wie möglich sein: wohin muss die Person (Behörde/Filiale/Online-Portal, wenn im Brief genannt; " +
-          "sonst allgemein sinnvoller Weg wie „zuständige Ausländerbehörde der Wohnortsgemeinde“), welche Unterlagen sie mitbringen oder einreichen soll " +
-          "(anhand des Briefs, z. B. Pass, Meldebescheinigung, Einkommensnachweise), und in eigenen Worten, was sie vor Ort oder schriftlich sagen bzw. beantragen kann. " +
-          "Nummerierte, umsetzbare Reihenfolge.\n\n" +
-          "ZUERST (intern, ohne separaten Text): Entscheide, ob der Empfänger in der Regel mit einem eigenen Schreiben an die Behörde antworten muss oder soll " +
-          "(z. B. ausdrückliche Aufforderung zur Stellungnahme, Widerspruchsfrist, Anhörung, Nachreichung von Unterlagen auf schriftliche Aufforderung mit Rückmeldung, " +
-          "formale Bitte um Rückantwort). " +
-          "Setze das JSON-Feld „antwort_erforderlich“ auf true nur in diesen Fällen.\n\n" +
-          "Setze „antwort_erforderlich“ auf false bei reinen Informationsschreiben, reinen Bescheiden ohne Erwartung einer Antwort, " +
-          "Mitteilungen ohne Handlungsauftrag zum Zurückschreiben, reinen Zahlungsbestätigungen o. Ä., sofern keine ausdrückliche schriftliche Rückmeldung verlangt wird.\n\n";
+          "Typische Schreibtypen für „brief_typ“ sind z. B. Verwarnung, Anhörung, Bescheid, Mahnung – kurz und für Laien verständlich.\n\n" +
+          "FRISTEN/GELD: Wenn eine konkrete Zahlungs-, Antwort- oder Rechtsbehelfsfrist oder ein Bußgeldbetrag mit Fälligkeit genannt ist, setze „frist_warnung_aktiv“ auf true und trage Datum oder Betrag gut lesbar in „frist_datum_oder_betrag“ ein (z. B. „14.06.2026“ oder „35 €“). " +
+          "Kurze Erklärung in „frist_erlaeuterung“. Wenn nichts Dringendes erkennbar ist: „frist_warnung_aktiv“ false und „frist_datum_oder_betrag“ sowie „frist_erlaeuterung“ als leere Strings \"\".\n\n" +
+          "INFO-RASTER: „info_aktenzeichen“, „info_bussgeld“, „info_datum“, „info_rechtsgrundlage“ mit kurzen Werten aus dem Brief; wenn etwas fehlt „—“.\n\n" +
+          "SCHRITTE: „schritt_1“ erste konkrete Handlung. „schritt_2_option_a“ neutrale Option (z. B. Bußgeld akzeptieren und zahlen). „schritt_2_option_b“ Option mit Einspruch/Widerspruch. " +
+          "„schritt_3“ weiteres Vorgehen. Wenn keine sinnvolle Zwei-Optionen-Gabel existiert, lasse „schritt_2_option_a“ und „schritt_2_option_b“ leer \"\" und packe die Handlung in „schritt_1“/„schritt_3“.\n\n" +
+          "EINSPRUCH: „einspruch_moeglich“ nur true, wenn ein Einspruch/Widerspruch/Beschwerde gegen eine Sanktion oder Bußgeldbescheid realistisch ist; sonst false.\n\n" +
+          "ANTWORT AN DIE BEHÖRDE: Entscheide intern, ob eine schriftliche Antwort nötig oder üblich ist (Stellungnahme, Widerspruch, Nachreichung auf Aufforderung, ausdrückliche Bitte um Rückmeldung). " +
+          "Setze „antwort_erforderlich“ nur dann auf true. Bei reinen Informationsschreiben ohne Rückantwort false.\n\n" +
+          "Wenn „antwort_erforderlich“ true und „einspruch_moeglich“ true: „brief_mit_platzhaltern“ als vollständiger deutscher Geschäftsbrief mit Platzhaltern in eckigen Klammern (Name, Adresse, Datum, persönlicher Widerspruch). " +
+          "„umschlag_absender“ und „umschlag_empfaenger“ mehrzeilig mit Platzhaltern in Klammern; „umschlag_briefmarke_hinweis“ kurzer Hinweis auf Briefmarke.\n\n" +
+          "Wenn „antwort_erforderlich“ false: „brief_mit_platzhaltern“ leer \"\", „umschlag_*“ leer \"\", und „kein_briefkopf_text“ mit kurzem Hinweis in der Zielsprache (keine Behördenantwort nötig).\n\n" +
+          "Wenn „antwort_erforderlich“ true aber „einspruch_moeglich“ false: „brief_mit_platzhaltern“ und „umschlag_*“ leer „\", da keine Einspruch-Antwortvorlage angezeigt wird.\n\n";
 
         var langBlock;
-        var jsonBlock;
         if (sameUi) {
           langBlock =
-            "WICHTIG: Die Benutzeroberfläche ist bereits in derselben Sprache wie die gewählte Zielsprache (" +
+            "ZIELSPRACHE für alle Textfelder (außer brief_mit_platzhaltern): " +
             langLabel +
-            "). " +
-            "Erstelle daher KEINE Übersetzung des Briefs in dieses Feld.\n\n" +
-            "Stattdessen: Im JSON-Feld „uebersetzung“ schreibe eine „Einfache Erklärung“ des Briefs: Wiedergabe des Inhalts in sehr einfachen, alltäglichen Worten in dieser Sprache, " +
-            "so dass auch Menschen ohne Behörden- oder Juristendeutsch alles Wesentliche verstehen. Vermeide komplizierte Fachbegriffe; wenn ein Begriff nötig ist, erkläre ihn kurz in einfachen Worten. " +
-            "Keine wörtliche Behördenformulierung nachahmen – Ziel ist reine Verständlichkeit.\n\n" +
-            "Das Feld „erklaerung“ bleibt die etwas ausführlichere Sinnbeschreibung inkl. Behörde, Fristen, Begriffe, Dringlichkeit/Risiken (wie oben); „uebersetzung“ und „erklaerung“ sollen sich sinnvoll ergänzen, nicht wortgleich doppeln.\n\n" +
-            "Die gewählte Zielsprache (für alle nutzersichtbaren Texte außer der deutschen Antwortvorlage) ist: " +
-            langLabel +
-            ".\n" +
-            "Schreibe „uebersetzung“, „erklaerung“, „schritte“, „kein_briefkopf_text“ sowie die vier Felder „titel_uebersetzung“, „titel_erklaerung“, „titel_schritte“, „titel_briefkopf“ " +
-            "ausschließlich in dieser Sprache (nicht auf Deutsch).\n" +
-            "Die Titel sollen kurze, verständliche Überschriften für die Benutzeroberfläche sein, sinngemäß zu: „Einfache Erklärung“ (für den Block im Feld „uebersetzung“), „Was bedeutet der Brief?“, „Was sollen Sie jetzt tun?“, „Briefkopf“.\n\n";
-
-          jsonBlock =
-            "Wenn „antwort_erforderlich“ true ist: Feld „antwortvorlage“ ausschließlich auf Deutsch, höflich, sachlich und als vollständige, professionelle Geschäftsbrief-Vorlage " +
-            "zum Beantworten der Behörde. Enthalten sein sollen mindestens: Absenderblock (Name, Anschrift, Kontakt wenn sinnvoll), vollständige Empfängeradresse der Behörde " +
-            "(wenn im Schreiben erkennbar, sonst Platzhalter), Datum, Betreffzeile mit Aktenzeichen (Platzhalter falls unbekannt), Anrede, strukturierter Brieftext mit Absätzen, " +
-            "höflicher Schlussformel und Unterschriftszeile (Name klar als Platzhalter). " +
-            "Verwende durchgängig klare Platzhalter in eckigen Klammern, z. B. [Ihr vollständiger Name], [Ihre Straße und Hausnummer], [PLZ Ort], [E-Mail], [Telefon], " +
-            "[Aktenzeichen], [Datum], [Behördenname und Abteilung]. " +
-            "Setze in diesem Fall „kein_briefkopf_text“ auf einen leeren String \"\".\n" +
-            "Wenn „antwort_erforderlich“ false ist: setze „antwortvorlage“ auf \"\". " +
-            "Schreibe in „kein_briefkopf_text“ einen kurzen, verständlichen Hinweis in der Zielsprache (sinngemäß: " +
-            "Für dieses Schreiben ist keine Antwort an die Behörde nötig; die Person soll die Schritte oben befolgen).\n\n" +
-            "Antworte ausschließlich mit einem gültigen JSON-Objekt (kein Markdown, kein Code-Fence, keine Erklärung davor oder danach). " +
-            "„antwort_erforderlich“ muss ein JSON-Boolean sein (true oder false), kein String.\n" +
-            "Verwende exakt diese Schlüssel:\n" +
-            "{\n" +
-            '  "antwort_erforderlich": true,\n' +
-            '  "titel_uebersetzung": "Kurze UI-Überschrift für den Block „Einfache Erklärung“ (Zielsprache).",\n' +
-            '  "titel_erklaerung": "Kurze UI-Überschrift für die Erklärung (Zielsprache).",\n' +
-            '  "titel_schritte": "Kurze UI-Überschrift für die Schritte (Zielsprache).",\n' +
-            '  "titel_briefkopf": "Kurze UI-Überschrift für den Briefkopf-Bereich (Zielsprache).",\n' +
-            '  "uebersetzung": "Einfache, verständliche Erklärung des Briefinhalts in einfachen Worten (keine Übersetzung; Zielsprache).",\n' +
-            '  "erklaerung": "Einfache, verständliche Erklärung, was der Brief bedeutet (Zielsprache); Behörde, Fristen, Begriffe, Dringlichkeit/Risiken wie oben.",\n' +
-            '  "schritte": "Nummerierte, konkrete Schritte: Wohin, welche Dokumente, was sagen/tun (Zielsprache).",\n' +
-            '  "antwortvorlage": "Nur wenn antwort_erforderlich true: vollständiger deutscher Geschäftsbrief mit Platzhaltern; sonst leerer String.",\n' +
-            '  "kein_briefkopf_text": "Nur wenn antwort_erforderlich false: Hinweis in Zielsprache; sonst leerer String."\n' +
-            "}\n\n";
+            ". Es gibt keine separate Übersetzung.\n\n" +
+            "Das Feld „zusatzinhalt“ soll eine ausführliche „Einfache Erklärung“ des Briefinhalts in sehr einfachen Worten sein (nicht wörtlich behördenamtlich). " +
+            "„kurz_erlaeuterung“ bleibt kurz (was ist passiert); „zusatzinhalt“ ergänzt verständlich ohne wortgleiche Doppelung.\n\n";
         } else {
           langBlock =
-            "Die gewählte Zielsprache ist: " +
+            "ZIELSPRACHE für alle Textfelder (außer brief_mit_platzhaltern): " +
             langLabel +
-            ".\n" +
-            "Schreibe „uebersetzung“, „erklaerung“, „schritte“, „kein_briefkopf_text“ sowie die vier Felder „titel_uebersetzung“, „titel_erklaerung“, „titel_schritte“, „titel_briefkopf“ " +
-            "ausschließlich in dieser Zielsprache (nicht auf Deutsch).\n" +
-            "Die Titel sollen kurze, verständliche Überschriften für die Benutzeroberfläche sein, sinngemäß zu: „Übersetzung“, „Was bedeutet der Brief?“, „Was sollen Sie jetzt tun?“, „Briefkopf“.\n\n";
-
-          jsonBlock =
-            "Wenn „antwort_erforderlich“ true ist: Feld „antwortvorlage“ ausschließlich auf Deutsch, höflich, sachlich und als vollständige, professionelle Geschäftsbrief-Vorlage " +
-            "zum Beantworten der Behörde. Enthalten sein sollen mindestens: Absenderblock (Name, Anschrift, Kontakt wenn sinnvoll), vollständige Empfängeradresse der Behörde " +
-            "(wenn im Schreiben erkennbar, sonst Platzhalter), Datum, Betreffzeile mit Aktenzeichen (Platzhalter falls unbekannt), Anrede, strukturierter Brieftext mit Absätzen, " +
-            "höflicher Schlussformel und Unterschriftszeile (Name klar als Platzhalter). " +
-            "Verwende durchgängig klare Platzhalter in eckigen Klammern, z. B. [Ihr vollständiger Name], [Ihre Straße und Hausnummer], [PLZ Ort], [E-Mail], [Telefon], " +
-            "[Aktenzeichen], [Datum], [Behördenname und Abteilung]. " +
-            "Setze in diesem Fall „kein_briefkopf_text“ auf einen leeren String \"\".\n" +
-            "Wenn „antwort_erforderlich“ false ist: setze „antwortvorlage“ auf \"\". " +
-            "Schreibe in „kein_briefkopf_text“ einen kurzen, verständlichen Hinweis in der Zielsprache (sinngemäß: " +
-            "Für dieses Schreiben ist keine Antwort an die Behörde nötig; die Person soll die Schritte oben befolgen).\n\n" +
-            "Antworte ausschließlich mit einem gültigen JSON-Objekt (kein Markdown, kein Code-Fence, keine Erklärung davor oder danach). " +
-            "„antwort_erforderlich“ muss ein JSON-Boolean sein (true oder false), kein String.\n" +
-            "Verwende exakt diese Schlüssel:\n" +
-            "{\n" +
-            '  "antwort_erforderlich": true,\n' +
-            '  "titel_uebersetzung": "Kurze UI-Überschrift für den Übersetzungsblock (Zielsprache).",\n' +
-            '  "titel_erklaerung": "Kurze UI-Überschrift für die Erklärung (Zielsprache).",\n' +
-            '  "titel_schritte": "Kurze UI-Überschrift für die Schritte (Zielsprache).",\n' +
-            '  "titel_briefkopf": "Kurze UI-Überschrift für den Briefkopf-Bereich (Zielsprache).",\n' +
-            '  "uebersetzung": "Vollständige Übersetzung des Briefs in die Zielsprache.",\n' +
-            '  "erklaerung": "Einfache, verständliche Erklärung, was der Brief bedeutet (Zielsprache); Behörde, Fristen, Begriffe, Dringlichkeit/Risiken wie oben.",\n' +
-            '  "schritte": "Nummerierte, konkrete Schritte: Wohin, welche Dokumente, was sagen/tun (Zielsprache).",\n' +
-            '  "antwortvorlage": "Nur wenn antwort_erforderlich true: vollständiger deutscher Geschäftsbrief mit Platzhaltern; sonst leerer String.",\n' +
-            '  "kein_briefkopf_text": "Nur wenn antwort_erforderlich false: Hinweis in Zielsprache; sonst leerer String."\n' +
-            "}\n\n";
+            ".\n\n" +
+            "Das Feld „zusatzinhalt“ enthält die vollständige Übersetzung des Briefs in diese Sprache. " +
+            "„kurz_erlaeuterung“ fasst kurz zusammen, was passiert ist.\n\n";
         }
 
+        var jsonBlock =
+          "„antwort_erforderlich“, „einspruch_moeglich“, „frist_warnung_aktiv“ als JSON-Boolean (true/false), keine Strings.\n" +
+          "Verwende exakt diese Schlüssel:\n" +
+          "{\n" +
+          '  "schema_version": 2,\n' +
+          '  "antwort_erforderlich": true,\n' +
+          '  "einspruch_moeglich": true,\n' +
+          '  "brief_typ": "Kurzer verständlicher Schreibtyp (Zielsprache), z. B. Verwarnungsschreiben.",\n' +
+          '  "absender_zeile": "Kurze eine Zeile: wer schreibt (Behörde/Einrichtung), ohne Zwischenüberschrift.",\n' +
+          '  "kurz_erlaeuterung": "Kurz was passiert ist (Zielsprache).",\n' +
+          '  "zusatzinhalt": "Entweder einfache ausführliche Erklärung oder vollständige Übersetzung je nach Modus (Zielsprache).",\n' +
+          '  "frist_warnung_aktiv": true,\n' +
+          '  "frist_datum_oder_betrag": "Datum oder Betrag, gut sichtbar, oder leer.",\n' +
+          '  "frist_erlaeuterung": "Kurz was bis wann gilt, oder leer.",\n' +
+          '  "info_aktenzeichen": "… oder —",\n' +
+          '  "info_bussgeld": "Betrag oder —",\n' +
+          '  "info_datum": "Datum aus dem Schreiben oder —",\n' +
+          '  "info_rechtsgrundlage": "Kurz oder —",\n' +
+          '  "schritt_1": "Erster Schritt",\n' +
+          '  "schritt_2_option_a": "Option neutral",\n' +
+          '  "schritt_2_option_b": "Option Einspruch",\n' +
+          '  "schritt_3": "Dritter Schritt",\n' +
+          '  "umschlag_absender": "Mehrzeilig mit [Platzhaltern]",\n' +
+          '  "umschlag_empfaenger": "Mehrzeilig mit [Platzhaltern]",\n' +
+          '  "umschlag_briefmarke_hinweis": "Kurzer Hinweis",\n' +
+          '  "brief_mit_platzhaltern": "Deutscher Brief mit [Platzhaltern] oder leer",\n' +
+          '  "kein_briefkopf_text": "Hinweis wenn keine Antwort nötig, sonst leer"\n' +
+          "}\n\n";
+
         var tail =
-          "Wenn der Brief Geldbeträge oder rechtliche Konsequenzen nennt, gib diese in der Erklärung und in den Schritten klar wieder. " +
-          "Wenn etwas im Dokument unleserlich fehlt, weise kurz darauf hin.";
+          "Weise bei Unsicherheit darauf hin, dass du keine Rechtsberatung ersetzt. " +
+          "Wenn der Brief Geldbeträge oder Konsequenzen nennt, greife sie in „info_*“ und in den Schritten auf. " +
+          "Wenn etwas im Dokument unleserlich fehlt, erwähne das kurz.";
         return common + langBlock + jsonBlock + tail;
       }
 
@@ -3708,23 +4054,148 @@
         throw new Error("Unvollständiges JSON in der Modell-Antwort.");
       }
 
-      function parseModelJson(text) {
-        var trimmed = text.trim();
-        if (!trimmed) {
-          throw new Error("Leere Text-Antwort vom Modell.");
-        }
-        var jsonStr = trimmed;
-        var fence = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/);
-        if (fence) {
-          jsonStr = fence[1].trim();
-        } else {
+      function escapeHtml(s) {
+        return String(s ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function stripDangerousHtml(html) {
+        return String(html || "")
+          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+          .replace(/\son\w+=/gi, " data-blocked=");
+      }
+
+      function renderRichPlain(s) {
+        var raw = String(s ?? "").trim();
+        if (!raw) return "";
+        if (/(^#{1,6}\s|\*\*|__|`|\[[^\]]+\]\([^)]+\))/.test(raw)) {
           try {
-            jsonStr = extractJsonObject(trimmed);
-          } catch (e) {
-            jsonStr = trimmed;
-          }
+            if (typeof marked !== "undefined" && marked.parse) {
+              marked.setOptions({ breaks: true, headerIds: false, mangle: false });
+              return stripDangerousHtml(marked.parse(raw));
+            }
+          } catch (e) {}
         }
-        var obj = JSON.parse(jsonStr);
+        return escapeHtml(raw).replace(/\n/g, "<br>");
+      }
+
+      function wrapPlaceholdersLetter(text) {
+        var esc = escapeHtml(String(text || ""));
+        esc = esc.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+        esc = esc.replace(/(\[[^\]\n]+\])/g, '<span class="rs-ph">$1</span>');
+        return esc.replace(/\n/g, "<br>");
+      }
+
+      function envelopeBlocksHtml(block) {
+        var lines = String(block || "")
+          .split(/\r?\n/)
+          .map(function (ln) {
+            return ln.trim();
+          })
+          .filter(Boolean);
+        if (!lines.length) {
+          return '<span class="rs-ph">[ … ]</span>';
+        }
+        return lines
+          .map(function (ln) {
+            var esc = escapeHtml(ln);
+            esc = esc.replace(/(\[[^\]\n]+\])/g, '<span class="rs-ph">$1</span>');
+            return "<div>" + esc + "</div>";
+          })
+          .join("");
+      }
+
+      function coerceBool(v, fieldName) {
+        if (v === true || v === "true") return true;
+        if (v === false || v === "false") return false;
+        throw new Error(fieldName + ": Boolean erwartet.");
+      }
+
+      function coerceStr(v) {
+        if (v == null) return "";
+        return typeof v === "string" ? v : String(v);
+      }
+
+      function validateParsedV2(obj) {
+        if (obj.schema_version !== 2 && obj.schema_version !== "2") {
+          throw new Error('„schema_version“ muss 2 sein.');
+        }
+        var ar = coerceBool(obj.antwort_erforderlich, "antwort_erforderlich");
+        var em = coerceBool(obj.einspruch_moeglich, "einspruch_moeglich");
+        var fw = coerceBool(obj.frist_warnung_aktiv, "frist_warnung_aktiv");
+        var briefTyp = coerceStr(obj.brief_typ).trim() || "Behördenbrief";
+        var abs = coerceStr(obj.absender_zeile).trim();
+        var kurz = coerceStr(obj.kurz_erlaeuterung).trim();
+        if (!kurz) {
+          throw new Error("„kurz_erlaeuterung“ darf nicht leer sein.");
+        }
+        var zus = coerceStr(obj.zusatzinhalt).trim();
+        var fd = coerceStr(obj.frist_datum_oder_betrag).trim();
+        var fe = coerceStr(obj.frist_erlaeuterung).trim();
+        var ia = coerceStr(obj.info_aktenzeichen).trim() || "—";
+        var ib = coerceStr(obj.info_bussgeld).trim() || "—";
+        var id = coerceStr(obj.info_datum).trim() || "—";
+        var ir = coerceStr(obj.info_rechtsgrundlage).trim() || "—";
+        var s1 = coerceStr(obj.schritt_1).trim();
+        var s2a = coerceStr(obj.schritt_2_option_a).trim();
+        var s2b = coerceStr(obj.schritt_2_option_b).trim();
+        var s3 = coerceStr(obj.schritt_3).trim();
+        var ua = coerceStr(obj.umschlag_absender);
+        var ue = coerceStr(obj.umschlag_empfaenger);
+        var uh = coerceStr(obj.umschlag_briefmarke_hinweis).trim();
+        var bm = coerceStr(obj.brief_mit_platzhaltern);
+        var kb = coerceStr(obj.kein_briefkopf_text).trim();
+
+        if (fw && !fd) {
+          throw new Error("Bei aktiver Fristwarnung fehlt „frist_datum_oder_betrag“.");
+        }
+        if (ar && kb) {
+          throw new Error("„kein_briefkopf_text“ muss leer sein, wenn eine Antwort nötig ist.");
+        }
+        if (!ar && !kb) {
+          throw new Error("„kein_briefkopf_text“ fehlt, obwohl keine Antwort nötig ist.");
+        }
+        if (ar && em && !bm.trim()) {
+          throw new Error("„brief_mit_platzhaltern“ fehlt für die Antwortvorlage.");
+        }
+        if (!ar && bm.trim()) {
+          throw new Error("„brief_mit_platzhaltern“ muss leer sein, wenn keine Antwort nötig ist.");
+        }
+        if (ar && !em && bm.trim()) {
+          throw new Error("„brief_mit_platzhaltern“ muss ohne Einspruch leer sein.");
+        }
+
+        return {
+          schema_version: 2,
+          antwort_erforderlich: ar,
+          einspruch_moeglich: em,
+          brief_typ: briefTyp,
+          absender_zeile: abs,
+          kurz_erlaeuterung: kurz,
+          zusatzinhalt: zus,
+          frist_warnung_aktiv: fw,
+          frist_datum_oder_betrag: fd,
+          frist_erlaeuterung: fe,
+          info_aktenzeichen: ia,
+          info_bussgeld: ib,
+          info_datum: id,
+          info_rechtsgrundlage: ir,
+          schritt_1: s1,
+          schritt_2_option_a: s2a,
+          schritt_2_option_b: s2b,
+          schritt_3: s3,
+          umschlag_absender: ua,
+          umschlag_empfaenger: ue,
+          umschlag_briefmarke_hinweis: uh,
+          brief_mit_platzhaltern: bm,
+          kein_briefkopf_text: kb,
+        };
+      }
+
+      function validateLegacyShape(obj) {
         var u = obj.uebersetzung || obj["übersetzung"];
         var e = obj.erklaerung || obj["erklärung"];
         var st = obj.schritte;
@@ -3778,6 +4249,200 @@
           antwortvorlage: a,
           kein_briefkopf_text: kb.trim(),
         };
+      }
+
+      function normalizedFromLegacy(legacy) {
+        var ar = legacy.antwort_erforderlich === true;
+        return {
+          schema_version: 2,
+          antwort_erforderlich: ar,
+          einspruch_moeglich: ar,
+          brief_typ: legacy.titel_erklaerung,
+          absender_zeile: "",
+          kurz_erlaeuterung: legacy.erklaerung.trim(),
+          zusatzinhalt: legacy.uebersetzung.trim(),
+          frist_warnung_aktiv: false,
+          frist_datum_oder_betrag: "",
+          frist_erlaeuterung: "",
+          info_aktenzeichen: "—",
+          info_bussgeld: "—",
+          info_datum: "—",
+          info_rechtsgrundlage: "—",
+          schritt_1:
+            "Lesen Sie die Erklärungen oben und prüfen Sie, welche Fristen und Beträge für Sie gelten.",
+          schritt_2_option_a: "",
+          schritt_2_option_b: "",
+          schritt_3: legacy.schritte.trim(),
+          umschlag_absender: "",
+          umschlag_empfaenger: "",
+          umschlag_briefmarke_hinweis: "",
+          brief_mit_platzhaltern: ar ? legacy.antwortvorlage : "",
+          kein_briefkopf_text: legacy.kein_briefkopf_text,
+        };
+      }
+
+      function parseModelJson(text) {
+        var trimmed = text.trim();
+        if (!trimmed) {
+          throw new Error("Leere Text-Antwort vom Modell.");
+        }
+        var jsonStr = trimmed;
+        var fence = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/);
+        if (fence) {
+          jsonStr = fence[1].trim();
+        } else {
+          try {
+            jsonStr = extractJsonObject(trimmed);
+          } catch (e) {
+            jsonStr = trimmed;
+          }
+        }
+        var obj = JSON.parse(jsonStr);
+        if (obj && (obj.schema_version === 2 || obj.schema_version === "2")) {
+          return validateParsedV2(obj);
+        }
+        return normalizedFromLegacy(validateLegacyShape(obj));
+      }
+
+      function resetTemplateTabs() {
+        var tabs = results.querySelectorAll(".rs-tab");
+        var panels = results.querySelectorAll(".rs-tab-panel");
+        tabs.forEach(function (t, i) {
+          var on = i === 0;
+          t.classList.toggle("is-active", on);
+          t.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        panels.forEach(function (p, i) {
+          p.hidden = i !== 0;
+        });
+      }
+
+      function initResultsTabDelegation() {
+        if (!results || results.dataset.rsTabsBound === "1") {
+          return;
+        }
+        results.dataset.rsTabsBound = "1";
+        results.addEventListener("click", function (ev) {
+          var tab = ev.target && ev.target.closest ? ev.target.closest(".rs-tab") : null;
+          if (!tab || !results.contains(tab)) return;
+          ev.preventDefault();
+          var panelId = tab.getAttribute("data-rs-tab");
+          if (!panelId) return;
+          results.querySelectorAll(".rs-tab").forEach(function (t) {
+            var on = t === tab;
+            t.classList.toggle("is-active", on);
+            t.setAttribute("aria-selected", on ? "true" : "false");
+          });
+          results.querySelectorAll(".rs-tab-panel").forEach(function (p) {
+            p.hidden = p.id !== panelId;
+          });
+        });
+      }
+
+      function renderResults(parsed) {
+        lastNormalizedParsed = parsed;
+        initResultsTabDelegation();
+        var ui = uiTranslations[getUiLang()] || uiTranslations["Deutsch"];
+        if (btnBack) btnBack.textContent = ui.rsBack || "← Zurück";
+
+        $("rsS1Label").textContent = ui.rsSection1Label || "";
+        $("rsS3Label").textContent = ui.rsSection3Label || "";
+        $("rsS4Label").textContent = ui.rsSection4Label || "";
+        $("rsS5Label").textContent = ui.rsSection5Label || "";
+        $("rsGkAz").textContent = ui.rsGridAktenzeichen || "";
+        $("rsGkFine").textContent = ui.rsGridBussgeld || "";
+        $("rsGkDate").textContent = ui.rsGridDatum || "";
+        $("rsGkLaw").textContent = ui.rsGridRechtsgrundlage || "";
+
+        var tb = $("rsTabBar");
+        if (tb) tb.setAttribute("aria-label", ui.rsTabListAria || "");
+
+        $("rsBriefTyp").textContent = parsed.brief_typ || "";
+        var absEl = $("rsAbsender");
+        if (parsed.absender_zeile && String(parsed.absender_zeile).trim()) {
+          absEl.innerHTML = "<strong>" + escapeHtml(String(parsed.absender_zeile).trim()) + "</strong>";
+          absEl.hidden = false;
+        } else {
+          absEl.textContent = "";
+          absEl.hidden = true;
+        }
+
+        $("rsKurz").innerHTML = renderRichPlain(parsed.kurz_erlaeuterung);
+
+        var zus = (parsed.zusatzinhalt || "").trim();
+        var zw = $("rsZusatzWrap");
+        if (zus) {
+          zw.hidden = false;
+          $("rsZusatzTitle").textContent = isTargetLangSameAsUiLang()
+            ? ui.resultTabSimpleExplanation || ui.resultTabTranslation || ""
+            : ui.resultTabTranslation || "";
+          $("rsZusatz").innerHTML = renderRichPlain(zus);
+        } else {
+          zw.hidden = true;
+        }
+
+        var ws = $("rsWarnSection");
+        if (parsed.frist_warnung_aktiv) {
+          ws.hidden = false;
+          $("rsWarnTitle").textContent = ui.rsWarnTitle || "";
+          $("rsWarnHighlight").textContent = parsed.frist_datum_oder_betrag || "";
+          $("rsWarnDetail").innerHTML = renderRichPlain(parsed.frist_erlaeuterung || "");
+        } else {
+          ws.hidden = true;
+        }
+
+        $("rsValAz").innerHTML = renderRichPlain(parsed.info_aktenzeichen || "—");
+        $("rsValFine").innerHTML =
+          '<span class="rs-info-val--fine">' + escapeHtml(parsed.info_bussgeld || "—") + "</span>";
+        $("rsValDate").innerHTML = renderRichPlain(parsed.info_datum || "—");
+        $("rsValLaw").innerHTML = renderRichPlain(parsed.info_rechtsgrundlage || "—");
+
+        $("rsStep1").innerHTML = renderRichPlain(parsed.schritt_1 || "");
+        var optA = (parsed.schritt_2_option_a || "").trim();
+        var optB = (parsed.schritt_2_option_b || "").trim();
+        var s2w = $("rsStep2Wrap");
+        if (optA || optB) {
+          s2w.hidden = false;
+          $("rsOptA").innerHTML = renderRichPlain(optA || "—");
+          $("rsOptB").innerHTML = renderRichPlain(optB || "—");
+        } else {
+          s2w.hidden = true;
+        }
+        $("rsStep3").innerHTML = renderRichPlain(parsed.schritt_3 || "");
+
+        var kn = $("rsKeinAntwort");
+        if (!parsed.antwort_erforderlich && (parsed.kein_briefkopf_text || "").trim()) {
+          kn.hidden = false;
+          kn.innerHTML = renderRichPlain(parsed.kein_briefkopf_text);
+        } else {
+          kn.hidden = true;
+        }
+
+        var tpl = $("rsTemplateSection");
+        var showTpl = parsed.antwort_erforderlich === true && parsed.einspruch_moeglich === true;
+        if (showTpl) {
+          tpl.hidden = false;
+          $("rsTabEnvelopeBtn").textContent = ui.rsTabEnvelope || "";
+          $("rsTabLetterBtn").textContent = ui.rsTabLetter || "";
+          var envS =
+            (parsed.umschlag_absender || "").trim() ||
+            "[Ihr vollständiger Name]\n[Ihre Straße und Hausnummer]\n[PLZ Ort]";
+          var envR =
+            (parsed.umschlag_empfaenger || "").trim() ||
+            "[Name der Behörde]\n[zuständige Abteilung]\n[Straße, Hausnummer]\n[PLZ Ort]";
+          $("rsEnvSender").innerHTML = envelopeBlocksHtml(envS);
+          $("rsEnvRecipient").innerHTML = envelopeBlocksHtml(envR);
+          $("rsStampHint").textContent =
+            (parsed.umschlag_briefmarke_hinweis || "").trim() || ui.rsStampHintDefault || "";
+          $("rsLetterBody").innerHTML = wrapPlaceholdersLetter(parsed.brief_mit_platzhaltern || "");
+          resetTemplateTabs();
+          setTemplateDownloadSectionVisible(true, parsed.brief_mit_platzhaltern || "");
+        } else {
+          tpl.hidden = true;
+          setTemplateDownloadSectionVisible(false, "");
+        }
+
+        $("rsDisclaimer").textContent = ui.rsDisclaimerYellow || "";
       }
 
       function truncateForErrorDisplay(text, maxLen) {
@@ -3846,6 +4511,7 @@
 
       analyzeBtn.addEventListener("click", async function () {
         clearError();
+        lastNormalizedParsed = null;
         results.classList.remove("visible");
         document.body.classList.remove("results-open");
         setTemplateDownloadSectionVisible(false, "");
@@ -4017,20 +4683,7 @@
             );
           }
 
-          $("h3TitleTranslation").textContent = parsed.titel_uebersetzung;
-          $("h3TitleExplain").textContent = parsed.titel_erklaerung;
-          $("h3TitleSteps").textContent = parsed.titel_schritte;
-          $("h3TitleBriefkopf").textContent = parsed.titel_briefkopf;
-          $("outTranslation").textContent = parsed.uebersetzung;
-          $("outExplain").textContent = parsed.erklaerung;
-          $("outSteps").textContent = parsed.schritte;
-          $("outTemplate").textContent = parsed.antwort_erforderlich
-            ? parsed.antwortvorlage
-            : parsed.kein_briefkopf_text;
-          setTemplateDownloadSectionVisible(
-            parsed.antwort_erforderlich === true,
-            parsed.antwort_erforderlich ? parsed.antwortvorlage : ""
-          );
+          renderResults(parsed);
           results.classList.add("visible");
           document.body.classList.add("results-open");
           results.scrollTop = 0;
