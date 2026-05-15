@@ -122,8 +122,11 @@ if body_close == -1:
     raise SystemExit("no </body> in template")
 tpl = tpl[:body_close] + cookie_html + scripts_html + tpl[body_close:]
 
-# Serialize template back into file (JSON string)
+# Serialize template back into file (JSON string).
+# HTML parsers terminate <script> at a literal </script> even inside the JSON string —
+# break the token so the outer script tag is not closed early (JSON allows \/ for /).
 new_json = json.dumps(tpl)
+new_json = new_json.replace("</script>", r"<\/script>")
 new_data = data[:start] + new_json + data[end_tpl:]
 
 with open(OUT, "w", encoding="utf-8") as f:
