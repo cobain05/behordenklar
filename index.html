@@ -948,6 +948,19 @@
       border-color: #fecaca !important;
     }
 
+    .rs-warn-box-neutral {
+      background: #f8fafc;
+      border-color: rgba(15, 23, 42, 0.18) !important;
+    }
+
+    .rs-warn-box-neutral .rs-warn-title {
+      color: #475569;
+    }
+
+    .rs-warn-box-neutral .rs-warn-highlight:empty {
+      display: none;
+    }
+
     .rs-warn-title {
       margin: 0 0 0.35rem;
       font-size: 1rem;
@@ -2504,6 +2517,7 @@
       const resultLayoutUiByLang = {
         Deutsch: {
           rsBack: "← Zurück",
+          rsResultsHeading: "Ergebnis",
           rsSection1Label: "Was bedeutet der Brief?",
           rsSection3Label: "Überblick",
           rsWarnTitle: "Wichtige Frist – Handeln erforderlich",
@@ -2519,9 +2533,15 @@
           rsGridBussgeld: "Bußgeld",
           rsGridDatum: "Datum",
           rsGridRechtsgrundlage: "Rechtsgrundlage",
+          rsZusatzTitleTranslation: "Übersetzung",
+          rsZusatzTitleSimple: "Einfache Erklärung",
+          rsFristNeutralTitle: "Frist im Brief prüfen",
+          rsFristNeutralBody:
+            "Es wurde keine sichere Zahlungs- oder Reaktionsfrist erkannt. Bitte lesen Sie den Brief selbst und achten Sie auf Zahlungs-, Antwort- oder Widerspruchsfristen.",
         },
         Englisch: {
           rsBack: "← Back",
+          rsResultsHeading: "Result",
           rsSection1Label: "What does this letter mean?",
           rsSection3Label: "Overview",
           rsWarnTitle: "Important deadline – action required",
@@ -2537,6 +2557,59 @@
           rsGridBussgeld: "Fine",
           rsGridDatum: "Date",
           rsGridRechtsgrundlage: "Legal basis",
+          rsZusatzTitleTranslation: "Translation",
+          rsZusatzTitleSimple: "Simple explanation",
+          rsFristNeutralTitle: "Check the deadline in your letter",
+          rsFristNeutralBody:
+            "No clear payment or response deadline was detected. Please read the letter yourself and look for payment, reply or appeal deadlines.",
+        },
+        Türkisch: {
+          rsBack: "← Geri",
+          rsResultsHeading: "Sonuç",
+          rsSection1Label: "Bu mektup ne anlama geliyor?",
+          rsSection3Label: "Özet",
+          rsWarnTitle: "Önemli son tarih – işlem gerekli",
+          rsSection4Label: "Şimdi ne yapmalısınız?",
+          rsSection5Label: "Yanıt şablonu",
+          rsTabEnvelope: "Zarfı adresleyin",
+          rsTabLetter: "Mektubu yazın",
+          rsTabListAria: "Yanıt şablonu görünümleri",
+          rsStampHintDefault: "Lütfen buraya pul yapıştırın.",
+          rsDisclaimerYellow:
+            "Hukuki danışmanlığın yerini tutmaz. Son tarihleri ve bilgileri dikkatle kontrol edin veya gerekirse profesyonel yardım alın.",
+          rsGridAktenzeichen: "Dosya numarası",
+          rsGridBussgeld: "Para cezası",
+          rsGridDatum: "Tarih",
+          rsGridRechtsgrundlage: "Hukuki dayanak",
+          rsZusatzTitleTranslation: "Çeviri",
+          rsZusatzTitleSimple: "Basit açıklama",
+          rsFristNeutralTitle: "Son tarihi mektuptan kontrol edin",
+          rsFristNeutralBody:
+            "Net bir ödeme veya yanıt süresi tespit edilemedi. Lütfen mektubu kendiniz okuyun ve ödeme, yanıt veya itiraz sürelerine dikkat edin.",
+        },
+        Arabisch: {
+          rsBack: "← رجوع",
+          rsResultsHeading: "النتيجة",
+          rsSection1Label: "ماذا تعني هذه الرسالة؟",
+          rsSection3Label: "نظرة عامة",
+          rsWarnTitle: "موعد نهائي مهم – يلزم اتخاذ إجراء",
+          rsSection4Label: "ماذا يجب أن تفعل الآن؟",
+          rsSection5Label: "نموذج رد",
+          rsTabEnvelope: "عنونة المظروف",
+          rsTabLetter: "كتابة الرسالة",
+          rsTabListAria: "طرق عرض نموذج الرد",
+          rsStampHintDefault: "الصق طابعًا هنا.",
+          rsDisclaimerYellow:
+            "لا يُعد بديلاً عن استشارة قانونية. تحقق من المواعيد والتفاصيل بعناية أو احترف مساعدة عند الحاجة.",
+          rsGridAktenzeichen: "مرجع الملف",
+          rsGridBussgeld: "غرامة",
+          rsGridDatum: "التاريخ",
+          rsGridRechtsgrundlage: "الأساس القانوني",
+          rsZusatzTitleTranslation: "الترجمة",
+          rsZusatzTitleSimple: "شرح بسيط",
+          rsFristNeutralTitle: "تحقق من الموعد النهائي في الرسالة",
+          rsFristNeutralBody:
+            "لم يتم التعرف على موعد واضح للدفع أو الرد. يُرجى قراءة الرسالة بنفسك والبحث عن مواعيد الدفع أو الرد أو الاعتراض.",
         },
       };
 
@@ -2590,10 +2663,6 @@
         uiTranslations[langKey].pdfPrintPopupBlocked =
           (templateDownloadUiByLang[langKey] && templateDownloadUiByLang[langKey].pdfPrintPopupBlocked) ||
           templateDownloadUiByLang["Englisch"].pdfPrintPopupBlocked;
-        var rl = resultLayoutUiByLang[langKey] || resultLayoutUiByLang["Englisch"];
-        Object.keys(rl).forEach(function (rk) {
-          uiTranslations[langKey][rk] = rl[rk];
-        });
         var bkCk = typeof window !== "undefined" && window.BK_COOKIE_CONSENT_I18N;
         if (bkCk) {
           var ck = bkCk[langKey] || bkCk["Deutsch"];
@@ -2637,6 +2706,31 @@
           return "Dari";
         }
         return dataLang;
+      }
+
+      function normalizeTargetLangForResultLayout(dataLang) {
+        if (dataLang === "Dari/Farsi (Afghanisch)") {
+          return "Dari";
+        }
+        if (dataLang === "Arabisch (Ägyptisch)") {
+          return "Arabisch";
+        }
+        return dataLang;
+      }
+
+      function getResultLayoutStrings() {
+        var key = normalizeTargetLangForResultLayout(getTargetLang());
+        var primary = resultLayoutUiByLang[key];
+        var fallback = resultLayoutUiByLang["Englisch"];
+        if (!primary) {
+          return fallback;
+        }
+        var out = {};
+        Object.keys(fallback).forEach(function (k) {
+          var pv = primary[k];
+          out[k] = pv != null && String(pv).trim() !== "" ? pv : fallback[k];
+        });
+        return out;
       }
 
       function isTargetLangSameAsUiLang() {
@@ -3952,8 +4046,11 @@
           "Ordne es wenn möglich einer dieser Kategorien zu (oder der naheliegendsten): Jobcenter, BAMF, Ausländerbehörde, Finanzamt, " +
           "Krankenversicherung (z. B. Krankenkasse), Rentenversicherung (DRV oder andere Rentenversicherungsträger), Jugendamt, Standesamt, Bürgeramt, Gericht. " +
           "Typische Schreibtypen für „brief_typ“ sind z. B. Verwarnung, Anhörung, Bescheid, Mahnung – kurz und für Laien verständlich.\n\n" +
-          "FRISTEN/GELD: Wenn eine konkrete Zahlungs-, Antwort- oder Rechtsbehelfsfrist oder ein Bußgeldbetrag mit Fälligkeit genannt ist, setze „frist_warnung_aktiv“ auf true und trage Datum oder Betrag gut lesbar in „frist_datum_oder_betrag“ ein (z. B. „14.06.2026“ oder „35 €“). " +
-          "Kurze Erklärung in „frist_erlaeuterung“. Wenn nichts Dringendes erkennbar ist: „frist_warnung_aktiv“ false und „frist_datum_oder_betrag“ sowie „frist_erlaeuterung“ als leere Strings \"\".\n\n" +
+          "WARNBOX „frist_datum_oder_betrag“ (rote Ampel-Zeile): Nur echte Handlungsfristen eintragen: Zahlungsfrist, letzter Tag zur Bußgeldzahlung, Annahmefrist, Antwortfrist oder Rechtsbehelfsfrist/Widerspruchsfrist – also das Datum oder den Betrag, bis zu dem gezahlt oder schriftlich reagiert werden muss.\n" +
+          "NIEMALS die Tatzeit oder den genauen Zeitpunkt der Ordnungswidrigkeit (z. B. mit Uhrzeit wie „saat 10:37“ oder „um 10:37 Uhr“ beim Vorfall).\n" +
+          "NIEMALS das reine Ausstellungs-/Bearbeitungsdatum des Briefes („info_datum“), wenn dadurch keine Zahlungs- oder Reaktionsfrist gemeint ist – für das Briefdatum nur „info_datum“ verwenden.\n" +
+          "Wenn keine sichere Zahlungs-/Reaktionsfrist erkennbar ist: „frist_warnung_aktiv“ auf false setzen und „frist_datum_oder_betrag“ sowie „frist_erlaeuterung“ als leere Strings \"\" (nichts erfinden, nichts von Tatzeit oder Briefdatum kopieren).\n\n" +
+          "Wenn eine konkrete Zahlungs-/Handlungs-/Rechtsbehelfsfrist oder ein Bußgeldbetrag mit klarer Fälligkeit genannt ist, setze „frist_warnung_aktiv“ auf true und „frist_datum_oder_betrag“ auf genau diese Frist bzw. diesen Betrag (lesbar, z. B. „14.06.2026“ oder „35 €“). Kurze Erklärung in „frist_erlaeuterung“.\n\n" +
           "INFO-RASTER: „info_aktenzeichen“, „info_bussgeld“, „info_datum“, „info_rechtsgrundlage“ mit kurzen Werten aus dem Brief; wenn etwas fehlt „—“.\n\n" +
           "SCHRITTE: „schritt_1“ erste konkrete Handlung. „schritt_2_option_a“ neutrale Option (z. B. Bußgeld akzeptieren und zahlen). „schritt_2_option_b“ Option mit Einspruch/Widerspruch. " +
           "„schritt_3“ weiteres Vorgehen. Wenn keine sinnvolle Zwei-Optionen-Gabel existiert, lasse „schritt_2_option_a“ und „schritt_2_option_b“ leer \"\" und packe die Handlung in „schritt_1“/„schritt_3“.\n\n" +
@@ -3994,7 +4091,7 @@
           '  "kurz_erlaeuterung": "Kurz was passiert ist (Zielsprache).",\n' +
           '  "zusatzinhalt": "Entweder einfache ausführliche Erklärung oder vollständige Übersetzung je nach Modus (Zielsprache).",\n' +
           '  "frist_warnung_aktiv": true,\n' +
-          '  "frist_datum_oder_betrag": "Datum oder Betrag, gut sichtbar, oder leer.",\n' +
+          '  "frist_datum_oder_betrag": "Nur Zahlungs-/Antwort-/Widerspruchsfrist oder fälliger Betrag — NICHT Tatzeit/Uhrzeit des Vorfalls, NICHT nur Briefdatum.",\n' +
           '  "frist_erlaeuterung": "Kurz was bis wann gilt, oder leer.",\n' +
           '  "info_aktenzeichen": "… oder —",\n' +
           '  "info_bussgeld": "Betrag oder —",\n' +
@@ -4119,6 +4216,17 @@
         return typeof v === "string" ? v : String(v);
       }
 
+      function deadlineHighlightLooksInvalid(str) {
+        var s = String(str || "").trim();
+        if (!s) return true;
+        var low = s.toLowerCase();
+        if (/\bsaat\b/.test(low)) return true;
+        if (/tatzeit|zeitpunkt\s*(der\s*)?(ordnungswidrigkeit|tat)/i.test(s)) return true;
+        if (/time\s+of\s+(the\s+)?offen[cs]e/i.test(low)) return true;
+        if (/\buhrzeit\s*(der|des)/i.test(low)) return true;
+        return false;
+      }
+
       function validateParsedV2(obj) {
         if (obj.schema_version !== 2 && obj.schema_version !== "2") {
           throw new Error('„schema_version“ muss 2 sein.');
@@ -4134,6 +4242,9 @@
         }
         var zus = coerceStr(obj.zusatzinhalt).trim();
         var fd = coerceStr(obj.frist_datum_oder_betrag).trim();
+        if (deadlineHighlightLooksInvalid(fd)) {
+          fd = "";
+        }
         var fe = coerceStr(obj.frist_erlaeuterung).trim();
         var ia = coerceStr(obj.info_aktenzeichen).trim() || "—";
         var ib = coerceStr(obj.info_bussgeld).trim() || "—";
@@ -4149,9 +4260,6 @@
         var bm = coerceStr(obj.brief_mit_platzhaltern);
         var kb = coerceStr(obj.kein_briefkopf_text).trim();
 
-        if (fw && !fd) {
-          throw new Error("Bei aktiver Fristwarnung fehlt „frist_datum_oder_betrag“.");
-        }
         if (ar && kb) {
           throw new Error("„kein_briefkopf_text“ muss leer sein, wenn eine Antwort nötig ist.");
         }
@@ -4342,20 +4450,21 @@
       function renderResults(parsed) {
         lastNormalizedParsed = parsed;
         initResultsTabDelegation();
-        var ui = uiTranslations[getUiLang()] || uiTranslations["Deutsch"];
-        if (btnBack) btnBack.textContent = ui.rsBack || "← Zurück";
+        var rl = getResultLayoutStrings();
+        if (btnBack) btnBack.textContent = rl.rsBack || "← Back";
+        if (resultsHeading) resultsHeading.textContent = rl.rsResultsHeading || "";
 
-        $("rsS1Label").textContent = ui.rsSection1Label || "";
-        $("rsS3Label").textContent = ui.rsSection3Label || "";
-        $("rsS4Label").textContent = ui.rsSection4Label || "";
-        $("rsS5Label").textContent = ui.rsSection5Label || "";
-        $("rsGkAz").textContent = ui.rsGridAktenzeichen || "";
-        $("rsGkFine").textContent = ui.rsGridBussgeld || "";
-        $("rsGkDate").textContent = ui.rsGridDatum || "";
-        $("rsGkLaw").textContent = ui.rsGridRechtsgrundlage || "";
+        $("rsS1Label").textContent = rl.rsSection1Label || "";
+        $("rsS3Label").textContent = rl.rsSection3Label || "";
+        $("rsS4Label").textContent = rl.rsSection4Label || "";
+        $("rsS5Label").textContent = rl.rsSection5Label || "";
+        $("rsGkAz").textContent = rl.rsGridAktenzeichen || "";
+        $("rsGkFine").textContent = rl.rsGridBussgeld || "";
+        $("rsGkDate").textContent = rl.rsGridDatum || "";
+        $("rsGkLaw").textContent = rl.rsGridRechtsgrundlage || "";
 
         var tb = $("rsTabBar");
-        if (tb) tb.setAttribute("aria-label", ui.rsTabListAria || "");
+        if (tb) tb.setAttribute("aria-label", rl.rsTabListAria || "");
 
         $("rsBriefTyp").textContent = parsed.brief_typ || "";
         var absEl = $("rsAbsender");
@@ -4374,21 +4483,32 @@
         if (zus) {
           zw.hidden = false;
           $("rsZusatzTitle").textContent = isTargetLangSameAsUiLang()
-            ? ui.resultTabSimpleExplanation || ui.resultTabTranslation || ""
-            : ui.resultTabTranslation || "";
+            ? rl.rsZusatzTitleSimple || ""
+            : rl.rsZusatzTitleTranslation || "";
           $("rsZusatz").innerHTML = renderRichPlain(zus);
         } else {
           zw.hidden = true;
         }
 
         var ws = $("rsWarnSection");
-        if (parsed.frist_warnung_aktiv) {
-          ws.hidden = false;
-          $("rsWarnTitle").textContent = ui.rsWarnTitle || "";
-          $("rsWarnHighlight").textContent = parsed.frist_datum_oder_betrag || "";
-          $("rsWarnDetail").innerHTML = renderRichPlain(parsed.frist_erlaeuterung || "");
-        } else {
+        ws.classList.remove("rs-warn-box", "rs-warn-box-neutral");
+        if (!parsed.frist_warnung_aktiv) {
           ws.hidden = true;
+        } else {
+          ws.hidden = false;
+          var fdRaw = (parsed.frist_datum_oder_betrag || "").trim();
+          var fdOk = fdRaw && !deadlineHighlightLooksInvalid(fdRaw);
+          if (fdOk) {
+            ws.classList.add("rs-warn-box");
+            $("rsWarnTitle").textContent = rl.rsWarnTitle || "";
+            $("rsWarnHighlight").textContent = fdRaw;
+            $("rsWarnDetail").innerHTML = renderRichPlain(parsed.frist_erlaeuterung || "");
+          } else {
+            ws.classList.add("rs-warn-box-neutral");
+            $("rsWarnTitle").textContent = rl.rsFristNeutralTitle || "";
+            $("rsWarnHighlight").textContent = "";
+            $("rsWarnDetail").innerHTML = renderRichPlain(rl.rsFristNeutralBody || "");
+          }
         }
 
         $("rsValAz").innerHTML = renderRichPlain(parsed.info_aktenzeichen || "—");
@@ -4422,8 +4542,8 @@
         var showTpl = parsed.antwort_erforderlich === true && parsed.einspruch_moeglich === true;
         if (showTpl) {
           tpl.hidden = false;
-          $("rsTabEnvelopeBtn").textContent = ui.rsTabEnvelope || "";
-          $("rsTabLetterBtn").textContent = ui.rsTabLetter || "";
+          $("rsTabEnvelopeBtn").textContent = rl.rsTabEnvelope || "";
+          $("rsTabLetterBtn").textContent = rl.rsTabLetter || "";
           var envS =
             (parsed.umschlag_absender || "").trim() ||
             "[Ihr vollständiger Name]\n[Ihre Straße und Hausnummer]\n[PLZ Ort]";
@@ -4433,7 +4553,7 @@
           $("rsEnvSender").innerHTML = envelopeBlocksHtml(envS);
           $("rsEnvRecipient").innerHTML = envelopeBlocksHtml(envR);
           $("rsStampHint").textContent =
-            (parsed.umschlag_briefmarke_hinweis || "").trim() || ui.rsStampHintDefault || "";
+            (parsed.umschlag_briefmarke_hinweis || "").trim() || rl.rsStampHintDefault || "";
           $("rsLetterBody").innerHTML = wrapPlaceholdersLetter(parsed.brief_mit_platzhaltern || "");
           resetTemplateTabs();
           setTemplateDownloadSectionVisible(true, parsed.brief_mit_platzhaltern || "");
@@ -4442,7 +4562,7 @@
           setTemplateDownloadSectionVisible(false, "");
         }
 
-        $("rsDisclaimer").textContent = ui.rsDisclaimerYellow || "";
+        $("rsDisclaimer").textContent = rl.rsDisclaimerYellow || "";
       }
 
       function truncateForErrorDisplay(text, maxLen) {
