@@ -4926,6 +4926,14 @@
           "Straßennummern\n" +
           "Steuernummern\n\n" +
           "Diese Zahlen dürfen NIEMALS verändert, gerundet oder geschätzt werden. Wenn eine Zahl nicht eindeutig lesbar ist, schreibe \"[unleserlich]\" statt eine falsche Zahl zu erfinden.\n\n" +
+          "SPRACHE UND ÜBERSETZUNG (alle Felder in der ZIELSPRACHE): Formuliere natürlich und sinngemäß – so, wie ein gebildeter Muttersprachler den Inhalt ausdrücken würde; keine holzschnittartig wörtliche Übertragung aus dem Deutschen.\n\n" +
+          "Behörden-Deutsch und Behördenwendungen in einfache, natürliche Sprache überführen.\n" +
+          "Keine wörtliche Übersetzung, die unnatürlich oder „übersetzt“ klingt.\n" +
+          "Sätze so bauen, wie man sie im Alltag sagen würde.\n" +
+          "Fachbegriffe und Amtsdeutsch kurz erklären oder verständlich umschreiben – nicht nur das Wort austauschen.\n" +
+          "Sinn und Bedeutung des Originals zu 100 % wahren (nichts verdrehen, nichts weglassen und nichts erfinden).\n" +
+          "Zahlen, Daten, Beträge, Kennungen und Fristen immer exakt wie im Original (siehe „KRITISCH - ZAHLEN UND DATEN“).\n" +
+          "Alle für den Adressaten wichtigen Informationen aus dem Brief müssen enthalten sein.\n\n" +
           "BEHÖRDE ERKENNEN: Leite aus Briefkopf, Logo, Betreff und Inhalt ab, von welcher Art von Stelle das Schreiben stammt. " +
           "Ordne es wenn möglich einer dieser Kategorien zu (oder der naheliegendsten): Jobcenter, BAMF, Ausländerbehörde, Finanzamt, " +
           "Krankenversicherung (z. B. Krankenkasse), Rentenversicherung (DRV oder andere Rentenversicherungsträger), Jugendamt, Standesamt, Bürgeramt, Gericht. " +
@@ -4952,15 +4960,15 @@
             "ZIELSPRACHE für alle Textfelder (außer brief_mit_platzhaltern): " +
             langLabel +
             ". Es gibt keine separate Übersetzung.\n\n" +
-            "Das Feld „zusatzinhalt“ soll eine ausführliche „Einfache Erklärung“ des Briefinhalts in sehr einfachen Worten sein (nicht wörtlich behördenamtlich). " +
-            "„kurz_erlaeuterung“ bleibt kurz (was ist passiert); „zusatzinhalt“ ergänzt verständlich ohne wortgleiche Doppelung.\n\n";
+            "Das Feld „zusatzinhalt“ soll eine ausführliche „Einfache Erklärung“ des Briefinhalts in sehr verständlichen Worten sein – denselben Inhalt wie der Brief, aber Behörden-Deutsch in natürliche Alltagssprache dieser Sprache überführt (nicht amtlich nachahmen). " +
+            "Fachbegriffe kurz erläutern. „kurz_erlaeuterung“ bleibt kurz (was ist passiert); „zusatzinhalt“ ergänzt ausführlich ohne wortgleiche Doppelung mit „kurz_erlaeuterung“. Halte dich an „SPRACHE UND ÜBERSETZUNG“ und „KRITISCH - ZAHLEN UND DATEN“.\n\n";
         } else {
           langBlock =
             "ZIELSPRACHE für alle Textfelder (außer brief_mit_platzhaltern): " +
             langLabel +
             ".\n\n" +
-            "Das Feld „zusatzinhalt“ enthält die vollständige Übersetzung des Briefs in diese Sprache. " +
-            "„kurz_erlaeuterung“ fasst kurz zusammen, was passiert ist.\n\n";
+            "Das Feld „zusatzinhalt“ enthält die vollständige Übersetzung des Briefs in diese Sprache: sinngemäß und idiomatisch, nicht wörtlich Satz für Satz aus dem Deutschen. " +
+            "„kurz_erlaeuterung“ fasst kurz zusammen, was passiert ist (ebenfalls natürlich formuliert). Wende „SPRACHE UND ÜBERSETZUNG“ und „KRITISCH - ZAHLEN UND DATEN“ konsequent an.\n\n";
         }
 
         var jsonBlock =
@@ -4972,8 +4980,8 @@
           '  "einspruch_moeglich": true,\n' +
           '  "brief_typ": "Kurzer verständlicher Schreibtyp (Zielsprache), z. B. Verwarnungsschreiben.",\n' +
           '  "absender_zeile": "Kurze eine Zeile: wer schreibt (Behörde/Einrichtung), ohne Zwischenüberschrift.",\n' +
-          '  "kurz_erlaeuterung": "Kurz was passiert ist (Zielsprache).",\n' +
-          '  "zusatzinhalt": "Entweder einfache ausführliche Erklärung oder vollständige Übersetzung je nach Modus (Zielsprache).",\n' +
+          '  "kurz_erlaeuterung": "Kurz was passiert ist, natürlich formuliert (Zielsprache).",\n' +
+          '  "zusatzinhalt": "Vollständige sinngemäße Übersetzung oder ausführliche einfache Erklärung je nach Modus – idiomatisch, nicht wörtlich holprig (Zielsprache).",\n' +
           '  "frist_warnung_aktiv": true,\n' +
           '  "frist_datum_oder_betrag": "Nur Zahlungs-/Antwort-/Widerspruchsfrist oder fälliger Betrag — NICHT Tatzeit/Uhrzeit des Vorfalls, NICHT nur Briefdatum.",\n' +
           '  "frist_erlaeuterung": "Kurz was bis wann gilt, oder leer.",\n' +
