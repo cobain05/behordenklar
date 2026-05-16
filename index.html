@@ -4885,57 +4885,144 @@
       }
 
       function escapeHtmlForPrint(s) {
-        return String(s)
+        return String(s == null ? "" : s)
           .replace(/&/g, "&amp;")
           .replace(/</g, "&lt;")
           .replace(/>/g, "&gt;")
           .replace(/"/g, "&quot;");
       }
 
+      function normalizeExportText(value) {
+        return String(value == null ? "" : value)
+          .replace(/\r\n/g, "\n")
+          .replace(/\u00a0/g, " ")
+          .trim();
+      }
+
+      function exportLines(value) {
+        var text = normalizeExportText(value);
+        return text ? text.split("\n") : [];
+      }
+
+      function exportAnalysisDateLabel() {
+        try {
+          return new Intl.DateTimeFormat("de-DE", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }).format(new Date());
+        } catch (e) {
+          return new Date().toLocaleString("de-DE");
+        }
+      }
+
+      function buildExportSections(parsed, rl) {
+        var p = parsed || lastNormalizedParsed || {};
+        var explanationParts = [];
+        var zus = normalizeExportText(p.zusatzinhalt);
+        var kurz = normalizeExportText(p.kurz_erlaeuterung);
+        if (zus) explanationParts.push(zus);
+        if (kurz && kurz !== zus) explanationParts.push(kurz);
+
+        var steps = [];
+        [p.schritt_1, p.schritt_2_option_a, p.schritt_2_option_b, p.schritt_3]
+          .map(normalizeExportText)
+          .filter(Boolean)
+          .forEach(function (step, i) {
+            steps.push(String(i + 1) + ". " + step);
+          });
+        if (p.frist_warnung_aktiv && normalizeExportText(p.frist_erlaeuterung)) {
+          steps.push("Frist: " + normalizeExportText(p.frist_erlaeuterung));
+        }
+
+        var templateText = normalizeExportText(p.brief_mit_platzhaltern || lastAntwortvorlageForDownload);
+        if (!templateText && normalizeExportText(p.kein_briefkopf_text)) {
+          templateText = normalizeExportText(p.kein_briefkopf_text);
+        }
+
+        return [
+          {
+            title: "Übersetzung / Erklärung",
+            body: explanationParts.join("\n\n") || "—",
+          },
+          {
+            title: "Nächste Schritte",
+            body: steps.join("\n\n") || "—",
+          },
+          {
+            title: "Briefkopf-Vorlage",
+            body: templateText || "—",
+          },
+        ];
+      }
+
+      function writeExportHtmlSection(d, section) {
+        d.write('<section class="export-section">');
+        d.write('<h2>' + escapeHtmlForPrint(section.title) + '</h2>');
+        d.write('<div class="export-body">');
+        exportLines(section.body).forEach(function (line) {
+          d.write('<p>' + (line ? escapeHtmlForPrint(line) : '&nbsp;') + '</p>');
+        });
+        d.write('</div></section>');
+      }
+
       function downloadAntwortvorlagePdf() {
-        var text = lastAntwortvorlageForDownload;
-        if (!text || !String(text).trim()) {
+        var p = lastNormalizedParsed;
+        if (!p && !String(lastAntwortvorlageForDownload || "").trim()) {
           return;
         }
         var rl = getResultLayoutStrings();
         var hint = rl.rsPrintPdfHint || "";
         var popupMsg = rl.rsPdfPrintPopupBlocked || "";
+        var sections = buildExportSections(p, rl);
+        var analysisDate = exportAnalysisDateLabel();
         var win = window.open("", "_blank");
         if (!win || !win.document) {
           showError(popupMsg);
           return;
         }
         try {
-          var safeBody = escapeHtmlForPrint(text.replace(/\r\n/g, "\n"));
-          var safeHint = escapeHtmlForPrint(hint);
           var d = win.document;
           d.open();
-          d.write("<!DOCTYPE html><html><head><meta charset=\"UTF-8\">");
-          d.write("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
-          d.write("<title>BehördenKlar-Antwortbrief</title>");
-          d.write("<style>");
-          d.write(
-            "*{box-sizing:border-box;}body{margin:0;padding:12mm;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:11pt;line-height:1.5;color:#111;}"
-          );
-          d.write(
-            ".print-hint{margin:0 0 14px;padding:10px 12px;background:#fff8e1;border:1px solid #ffc107;border-radius:8px;font-size:10pt;line-height:1.45;}"
-          );
-          d.write(".letter{white-space:pre-wrap;word-wrap:break-word;}");
-          d.write(
-            "@media print{.no-print{display:none!important;}body{padding:18mm;}.letter{font-size:11pt;}}"
-          );
-          d.write("</style></head><body>");
-          d.write('<p class="print-hint no-print" role="note">' + safeHint + "</p>");
-          d.write('<div class="letter">' + safeBody + "</div>");
-          d.write("<script>");
-          d.write("(function(){");
-          d.write("function run(){try{window.focus();window.print();}catch(e){}}");
-          d.write("function closeWin(){try{window.close();}catch(e){}}");
+          d.write('<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">');
+          d.write('<meta name="viewport" content="width=device-width, initial-scale=1">');
+          d.write('<title>BehördenKlar Export</title>');
+          d.write('<style>');
+          d.write('@page{size:A4;margin:18mm 16mm 20mm;}*{box-sizing:border-box;}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#1f2937;font-size:11pt;line-height:1.55;background:#fff;}');
+          d.write('.print-hint{margin:0 0 14px;padding:10px 12px;background:#fff8e1;border:1px solid #ffc107;border-radius:8px;font-size:10pt;line-height:1.45;}');
+          d.write('.export-header{background:#1a73e8;color:#fff;border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:10px;margin-bottom:16px;}');
+          d.write('.brand-icon{width:30px;height:30px;border-radius:8px;background:#fff;color:#1a73e8;display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;}');
+          d.write('.brand-text{font-weight:800;font-size:17px;letter-spacing:-.02em;}');
+          d.write('.analysis-date{text-align:right;color:#4b5563;font-size:10pt;margin:0 0 12px;}');
+          d.write('.separator{border:0;border-top:1px solid #d7dde8;margin:0 0 18px;}');
+          d.write('h1{margin:0 0 12px;font-size:20pt;color:#111827;}h2{margin:0 0 8px;color:#1a73e8;font-size:14pt;font-weight:800;}');
+          d.write('.meta{margin:0 0 18px;color:#4b5563;font-size:10.5pt;}.export-section{break-inside:avoid;margin:0 0 18px;padding:0 0 14px;border-bottom:1px solid #e5e7eb;}');
+          d.write('.export-body p{margin:0 0 8px;white-space:pre-wrap;word-break:break-word;}.export-footer{position:fixed;left:16mm;right:16mm;bottom:8mm;text-align:center;color:#8a94a6;font-size:9pt;}');
+          d.write('@media print{.no-print{display:none!important;}body{padding:0;}.export-section{page-break-inside:avoid;}}@media screen{body{padding:18mm 16mm 24mm;max-width:850px;margin:0 auto;}.export-footer{position:static;margin-top:24px;}}');
+          d.write('</style></head><body>');
+          d.write('<p class="print-hint no-print" role="note">' + escapeHtmlForPrint(hint) + '</p>');
+          d.write('<header class="export-header"><span class="brand-icon">B</span><span class="brand-text">BehördenKlar</span></header>');
+          d.write('<p class="analysis-date">Datum der Analyse: ' + escapeHtmlForPrint(analysisDate) + '</p>');
+          d.write('<hr class="separator">');
+          d.write('<h1>BehördenKlar</h1>');
+          if (p && p.brief_typ) {
+            d.write('<p class="meta">' + escapeHtmlForPrint(p.brief_typ) + '</p>');
+          }
+          sections.forEach(function (section) {
+            writeExportHtmlSection(d, section);
+          });
+          d.write('<footer class="export-footer">Erstellt mit BehördenKlar • behördenklar.de</footer>');
+          d.write('<script>');
+          d.write('(function(){');
+          d.write('function run(){try{window.focus();window.print();}catch(e){}}');
+          d.write('function closeWin(){try{window.close();}catch(e){}}');
           d.write('window.addEventListener("afterprint",closeWin);');
-          d.write("if(document.readyState===\"complete\"){setTimeout(run,200);}");
-          d.write('else{window.addEventListener("load",function(){setTimeout(run,200);});}');
-          d.write("})();");
-          d.write("<\/script></body></html>");
+          d.write('if(document.readyState==="complete"){setTimeout(run,250);}');
+          d.write('else{window.addEventListener("load",function(){setTimeout(run,250);});}');
+          d.write('})();');
+          d.write('<\/script></body></html>');
           d.close();
         } catch (e) {
           try {
@@ -4945,9 +5032,24 @@
         }
       }
 
+      function docxTextParagraph(Paragraph, TextRun, text, options) {
+        options = options || {};
+        return new Paragraph({
+          spacing: options.spacing || { after: 120 },
+          children: [
+            new TextRun({
+              text: text && text.length ? text : " ",
+              bold: !!options.bold,
+              color: options.color || "1F2937",
+              size: options.size || 22,
+            }),
+          ],
+        });
+      }
+
       async function downloadAntwortvorlageDocx() {
-        var text = lastAntwortvorlageForDownload;
-        if (!text || !String(text).trim()) {
+        var p = lastNormalizedParsed;
+        if (!p && !String(lastAntwortvorlageForDownload || "").trim()) {
           return;
         }
         var rl = getResultLayoutStrings();
@@ -4958,17 +5060,78 @@
           var Packer = docxMod.Packer;
           var Paragraph = docxMod.Paragraph;
           var TextRun = docxMod.TextRun;
-          var raw = text.replace(/\r\n/g, "\n");
-          var parts = raw.split("\n");
-          var children = parts.map(function (line) {
-            return new Paragraph({
-              children: [new TextRun({ text: line.length ? line : " " })],
+          var AlignmentType = docxMod.AlignmentType;
+          var HeadingLevel = docxMod.HeadingLevel;
+          var sections = buildExportSections(p, rl);
+          var analysisDate = exportAnalysisDateLabel();
+          var children = [];
+
+          children.push(
+            new Paragraph({
+              shading: { fill: "1A73E8", color: "auto" },
+              spacing: { after: 240 },
+              children: [
+                new TextRun({ text: "B", bold: true, color: "FFFFFF", size: 28 }),
+                new TextRun({ text: "  BehördenKlar", bold: true, color: "FFFFFF", size: 30 }),
+              ],
+            })
+          );
+          children.push(
+            new Paragraph({
+              alignment: AlignmentType.RIGHT,
+              spacing: { after: 160 },
+              children: [new TextRun({ text: "Datum der Analyse: " + analysisDate, color: "4B5563", size: 20 })],
+            })
+          );
+          children.push(
+            new Paragraph({
+              border: { bottom: { color: "D7DDE8", space: 1, style: "single", size: 6 } },
+              spacing: { after: 260 },
+              children: [new TextRun({ text: " " })],
+            })
+          );
+          children.push(
+            new Paragraph({
+              heading: HeadingLevel.TITLE,
+              spacing: { after: 160 },
+              children: [new TextRun({ text: "BehördenKlar", bold: true, color: "111827", size: 36 })],
+            })
+          );
+          if (p && p.brief_typ) {
+            children.push(docxTextParagraph(Paragraph, TextRun, p.brief_typ, { color: "4B5563", size: 20 }));
+          }
+
+          sections.forEach(function (section) {
+            children.push(
+              new Paragraph({
+                spacing: { before: 180, after: 100 },
+                children: [new TextRun({ text: section.title, bold: true, color: "1A73E8", size: 28 })],
+              })
+            );
+            exportLines(section.body).forEach(function (line) {
+              children.push(docxTextParagraph(Paragraph, TextRun, line, { spacing: { after: 100 } }));
             });
           });
+
+          children.push(
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              spacing: { before: 360 },
+              children: [new TextRun({ text: "Erstellt mit BehördenKlar • behördenklar.de", color: "8A94A6", size: 18 })],
+            })
+          );
+
           var d = new Document({
+            creator: "BehördenKlar",
+            title: "BehördenKlar",
+            description: "BehördenKlar Export",
             sections: [
               {
-                properties: {},
+                properties: {
+                  page: {
+                    margin: { top: 720, right: 720, bottom: 720, left: 720 },
+                  },
+                },
                 children: children,
               },
             ],
@@ -4977,7 +5140,7 @@
           var a = document.createElement("a");
           var url = URL.createObjectURL(blob);
           a.href = url;
-          a.download = "BehördenKlar-Antwortbrief.docx";
+          a.download = "BehördenKlar-Export.docx";
           a.rel = "noopener";
           document.body.appendChild(a);
           a.click();
