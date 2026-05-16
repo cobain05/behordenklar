@@ -874,15 +874,20 @@
       padding: 0.62rem 0.95rem;
       box-shadow: var(--shadow);
       cursor: pointer;
-      margin: 0;
+      margin: 0 0 1rem;
     }
 
-    .results-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.65rem;
+    .results-download-share-stack {
       margin-bottom: 1rem;
+    }
+
+    .results-download-share-stack .btn-whatsapp-share {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .results-download-share-stack .template-download-block:not([hidden]) ~ .btn-whatsapp-share {
+      margin-top: 0.75rem;
     }
 
     .btn-whatsapp-share {
@@ -1946,25 +1951,7 @@
 
       <section id="results" aria-live="polite">
         <div class="results-view results-shell">
-          <div class="results-toolbar">
-            <button type="button" class="btn-back" id="btnBack">← Zurück</button>
-            <button type="button" class="btn-whatsapp-share" id="btnWhatsAppShare" aria-label="WhatsApp">
-              <svg
-                class="btn-wa-icon"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.718 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
-                />
-              </svg>
-              <span>WhatsApp</span>
-            </button>
-          </div>
+          <button type="button" class="btn-back" id="btnBack">← Zurück</button>
           <h2 class="results-page-title" id="resultsHeading">Ergebnis</h2>
 
           <section class="rs-card" aria-labelledby="rsS1Label">
@@ -2047,6 +2034,9 @@
             <div class="rs-tab-panel" id="rsPanelLetter" role="tabpanel" aria-labelledby="rsTabLetterBtn" hidden>
               <div class="rs-body rs-letter-pre" id="rsLetterBody"></div>
             </div>
+          </section>
+
+          <div class="results-download-share-stack" id="resultsDownloadShareStack">
             <div id="templateDownloadBlock" class="template-download-block" hidden>
               <p id="templateDownloadDisclaimer" class="template-download-disclaimer" role="note"></p>
               <div class="template-download-buttons">
@@ -2054,7 +2044,23 @@
                 <button type="button" class="btn-template-download" id="btnDownloadTemplateDocx"></button>
               </div>
             </div>
-          </section>
+            <button type="button" class="btn-whatsapp-share" id="btnWhatsAppShare" aria-label="WhatsApp">
+              <svg
+                class="btn-wa-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.718 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
+                />
+              </svg>
+              <span class="btn-whatsapp-share-label">WhatsApp</span>
+            </button>
+          </div>
 
           <section class="rs-yellow-box" id="rsLegalStrip">
             <p id="rsDisclaimer"></p>
@@ -3504,6 +3510,46 @@
         });
       })();
 
+      (function attachWhatsAppShareStringsToResultLayout() {
+        var keys = ["rsWhatsAppShareLabel", "rsWaTitleLine", "rsWaSectionMeta", "rsWaLabelDatum", "rsWaLabelAktenzeichen", "rsWaSectionExplain", "rsWaSectionDeadline", "rsWaSectionSteps", "rsWaSectionConsequences", "rsWaSectionAdvice", "rsWaAdviceText", "rsWaFooterLine"];
+        var rows = {
+          "Deutsch": ["Via WhatsApp teilen", "📄 Behördenbrief analysiert mit BehördenKlar", "🏛️ Absender · Datum · Aktenzeichen", "Datum", "Aktenzeichen", "📝 Was steht in diesem Brief?", "⚠️ WICHTIGE FRIST", "✅ Was musst du konkret tun?", "⚡ Konsequenzen wenn nichts getan wird", "💡 Tipp zur Beratung", "Das ist keine Rechtsberatung. Bei Unsicherheit wende dich an eine Beratungsstelle oder an eine Rechtsanwältin bzw. einen Rechtsanwalt.", "🔗 Analysiert mit BehördenKlar 💙 www.behördenklar.de"],
+          "Englisch": ["Share via WhatsApp", "📄 Official letter analysed with BehördenKlar", "🏛️ Sender · Date · File reference", "Date", "File reference", "📝 What does this letter say?", "⚠️ IMPORTANT DEADLINE", "✅ What do you need to do?", "⚡ Consequences if you take no action", "💡 Counselling tip", "This is not legal advice. If unsure, contact an advice centre or a solicitor.", "🔗 Analysed with BehördenKlar 💙 www.behördenklar.de"],
+          "T\u00fcrkisch": ["WhatsApp ile paylaş", "📄 BehördenKlar ile analiz edilmiş resmi yazı", "🏛️ Gönderen · Tarih · Dosya numarası", "Tarih", "Dosya numarası", "📝 Bu yazıda ne yazıyor?", "⚠️ ÖNEMLİ SON TARİH", "✅ Sonunda ne yapmalısın?", "⚡ Hiçbir şey yapmazsan olası sonuçlar", "💡 Danışmanlık için ipucu", "Bu hukuki danışmanlık değildir. Emin değilsen bir danışma merkezine veya avukata başvur.", "🔗 BehördenKlar ile analiz edildi 💙 www.behördenklar.de"],
+          "Arabisch": ["مشاركة عبر واتساب", "📄 خطاب رسمي تم تحليله بواسطة BehördenKlar", "🏛️ المرسل · التاريخ · مرجع الملف", "التاريخ", "مرجع الملف", "📝 ماذا يقول هذا الخطاب؟", "⚠️ الموعد النهائي المهم", "✅ ماذا تحتاج أن تفعل تحديدًا؟", "⚡ العواقب إذا لم تفعل شيئًا", "💡 نصيحة للاستشارة", "هذا ليس استشارة قانونية. إذا لم تكن متأكدًا، تواصل مع مركز استشارات أو محامٍ.", "🔗 تم التحليل بواسطة BehördenKlar 💙 www.behördenklar.de"],
+          "Russisch": ["Поделиться в WhatsApp", "📄 Официальное письмо проанализировано с BehördenKlar", "🏛️ Отправитель · Дата · Номер дела", "Дата", "Номер дела", "📝 Что говорится в этом письме?", "⚠️ ВАЖНЫЙ СРОК", "✅ Что конкретно нужно сделать?", "⚡ Последствия, если ничего не делать", "💡 Совет по консультации", "Это не юридическая консультация. При сомнениях обратитесь в консультационный центр или к юристу.", "🔗 Проанализировано с BehördenKlar 💙 www.behördenklar.de"],
+          "Ukrainisch": ["Поділитися в WhatsApp", "📄 Офіційний лист проаналізовано за допомогою BehördenKlar", "🏛️ Відправник · Дата · Номер справи", "Дата", "Номер справи", "📝 Що написано в цьому листі?", "⚠️ ВАЖЛИВИЙ ТЕРМІН", "✅ Що саме потрібно зробити?", "⚡ Наслідки, якщо нічого не робити", "💡 Порада щодо консультації", "Це не юридична консультація. Якщо не впевнені — зверніться до консультаційного центру або адвоката.", "🔗 Проаналізовано з BehördenKlar 💙 www.behördenklar.de"],
+          "Rum\u00e4nisch": ["Distribuie prin WhatsApp", "📄 Scrisoare oficială analizată cu BehördenKlar", "🏛️ Expeditor · Dată · Referință dosar", "Dată", "Referință dosar", "📝 Ce spune această scrisoare?", "⚠️ TERMEN IMPORTANT", "✅ Ce trebuie să faci concret?", "⚡ Consecințe dacă nu faci nimic", "💡 Sfat pentru consultanță", "Aceasta nu este consultanță juridică. În caz de îndoială, contactează un centru de consultanță sau un avocat.", "🔗 Analizat cu BehördenKlar 💙 www.behördenklar.de"],
+          "Polnisch": ["Udostępnij przez WhatsApp", "📄 Analiza urzędowego pisma z BehördenKlar", "🏛️ Nadawca · Data · Sygnatura sprawy", "Data", "Sygnatura sprawy", "📝 Co jest w tym piśmie?", "⚠️ WAŻNY TERMIN", "✅ Co konkretnie musisz zrobić?", "⚡ Konsekwencje, jeśli nic nie zrobisz", "💡 Wskazówka dotycząca porady", "To nie jest porada prawna. W razie wątpliwości skontaktuj się z punktem doradztwa lub adwokatem.", "🔗 Przeanalizowano z BehördenKlar 💙 www.behördenklar.de"],
+          "Dari": ["اشتراک‌گذاری در واتساپ", "📄 نامه رسمی با BehördenKlar تحلیل شده است", "🏛️ فرستنده · تاریخ · شماره پرونده", "تاریخ", "شماره پرونده", "📝 در این نامه چه آمده است؟", "⚠️ مهلت مهم", "✅ دقیقاً باید چه کار کنی؟", "⚡ پیامدها اگر کاری نکنی", "💡 نکته برای مشاوره", "این مشاوره حقوقی نیست. در صورت تردید با مرکز مشاوره یا وکیل تماس بگیر.", "🔗 تحلیل‌شده با BehördenKlar 💙 www.behördenklar.de"],
+          "Bulgarisch": ["Сподели чрез WhatsApp", "📄 Официално писмо, анализирано с BehördenKlar", "🏛️ Подател · Дата · Референтен номер", "Дата", "Референтен номер", "📝 Какво пише в това писмо?", "⚠️ ВАЖЕН СРОК", "✅ Какво конкретно трябва да направиш?", "⚡ Последици, ако не предприемеш нищо", "💡 Съвет за консултация", "Това не е правен съвет. При съмнение се обърни към консултационен център или адвокат.", "🔗 Анализирано с BehördenKlar 💙 www.behördenklar.de"],
+          "Georgisch": ["WhatsApp-ით გაზიარება", "📄 ოფიციალური წერილი BehördenKlar-ით გაანალიზეს", "🏛️ გამომგზავნელი · თარიღი · საქმის ნომერი", "თარიღი", "საქმის ნომერი", "📝 რას ამბობს ეს წერილი?", "⚠️ მნიშვნელოვანი ვადა", "✅ რა უნდა გააკეთო კონკრეტულად?", "⚡ შედეგები თუ არაფერს გააკეთებ", "💡 რჩევა კონსულტაციისთვის", "ეს არ არის იურიდიული კონსულტაცია. ეჭვის შემთხვევაში მიმართეთ საკონსულტაციო ცენტრს ან ადვოკატს.", "🔗 გაანალიზდა BehördenKlar-ით 💙 www.behördenklar.de"],
+          "Spanisch": ["Compartir por WhatsApp", "📄 Carta oficial analizada con BehördenKlar", "🏛️ Remitente · Fecha · Referencia del expediente", "Fecha", "Referencia del expediente", "📝 ¿Qué dice esta carta?", "⚠️ PLAZO IMPORTANTE", "✅ ¿Qué tienes que hacer exactamente?", "⚡ Consecuencias si no haces nada", "💡 Consejo sobre asesoramiento", "Esto no es asesoramiento jurídico. Si tienes dudas, contacta un centro de orientación o un abogado.", "🔗 Analizado con BehördenKlar 💙 www.behördenklar.de"],
+          "Portugiesisch": ["Partilhar via WhatsApp", "📄 Ofício analisado com BehördenKlar", "🏛️ Remetente · Data · Referência do processo", "Data", "Referência do processo", "📝 O que diz esta carta?", "⚠️ PRAZO IMPORTANTE", "✅ O que tens de fazer concretamente?", "⚡ Consequências se não fizeres nada", "💡 Dica sobre aconselhamento", "Isto não é aconselhamento jurídico. Em caso de dúvida, contacta um centro de apoio ou um advogado.", "🔗 Analisado com BehördenKlar 💙 www.behördenklar.de"],
+          "Franz\u00f6sisch": ["Partager via WhatsApp", "📄 Courrier officiel analysé avec BehördenKlar", "🏛️ Expéditeur · Date · Référence du dossier", "Date", "Référence du dossier", "📝 Que dit ce courrier ?", "⚠️ ÉCHÉANCE IMPORTANTE", "✅ Que dois-tu faire concrètement ?", "⚡ Conséquences si tu ne fais rien", "💡 Conseil pour un accompagnement", "Ceci ne remplace pas un conseil juridique. En cas de doute, contacte une permanence ou un avocat.", "🔗 Analysé avec BehördenKlar 💙 www.behördenklar.de"],
+          "Italienisch": ["Condividi con WhatsApp", "📄 Lettera ufficiale analizzata con BehördenKlar", "🏛️ Mittente · Data · Riferimento pratica", "Data", "Riferimento pratica", "📝 Cosa dice questa lettera?", "⚠️ SCADENZA IMPORTANTE", "✅ Cosa devi fare in concreto?", "⚡ Conseguenze se non fai nulla", "💡 Suggerimento per una consulenza", "Questo non è parere legale. In caso di dubbi rivolgiti a uno sportello di consulenza o a un avvocato.", "🔗 Analizzato con BehördenKlar 💙 www.behördenklar.de"],
+          "Griechisch": ["Κοινοποίηση μέσω WhatsApp", "📄 Επίσημη επιστολή αναλύθηκε με το BehördenKlar", "🏛️ Αποστολέας · Ημερομηνία · Αριθμός φακέλου", "Ημερομηνία", "Αριθμός φακέλου", "📝 Τι λέει αυτή η επιστολή;", "⚠️ ΣΗΜΑΝΤΙΚΗ ΠΡΟΘΕΣΜΙΑ", "✅ Τι πρέπει να κάνεις συγκεκριμένα;", "⚡ Συνέπειες αν δεν κάνεις τίποτα", "💡 Συμβουλή για συμβουλευτική", "Αυτό δεν είναι νομική συμβουλή. Σε περίπτωση αμφιβολίας απευθύνσου σε κέντρο συμβουλευτικής ή δικηγόρο.", "🔗 Αναλύθηκε με το BehördenKlar 💙 www.behördenklar.de"],
+          "Albanisch": ["Ndaj në WhatsApp", "📄 Letër zyrtare e analizuar me BehördenKlar", "🏛️ Dërguesi · Data · Numri i çështjes", "Data", "Numri i çështjes", "📝 Çfarë thotë kjo letër?", "⚠️ AFATI I RËNDËSISHËM", "✅ Çfarë duhet të bësh konkretisht?", "⚡ Pasojat nëse nuk bën asgjë", "💡 Këshillë për këshillim", "Kjo nuk është këshillim juridik. Në rast dyshimi kontakto një qendër këshillimi ose një avokat.", "🔗 Analizuar me BehördenKlar 💙 www.behördenklar.de"],
+          "Bosnisch": ["Podijeli putem WhatsAppa", "📄 Službeno pismo analizirano s BehördenKlar", "🏛️ Pošiljalac · Datum · Broj predmeta", "Datum", "Broj predmeta", "📝 Šta piše u ovom pismu?", "⚠️ VAŽAN ROK", "✅ Šta konkretno treba uraditi?", "⚡ Posljedice ako se ništa ne uradi", "💡 Savjet za savjetovanje", "Ovo nije pravni savjet. U sumnji se obratite savjetovalištu ili odvjetniku.", "🔗 Analizirano s BehördenKlar 💙 www.behördenklar.de"],
+          "Serbisch": ["Podeli putem WhatsApp-a", "📄 Službeno pismo analizirano sa BehördenKlar", "🏛️ Pošiljalac · Datum · Broj predmeta", "Datum", "Broj predmeta", "📝 Šta piše u ovom pismu?", "⚠️ VAŽAN ROK", "✅ Šta konkretno treba uraditi?", "⚡ Posledice ako se ništa ne uradi", "💡 Savet za savetovanje", "Ovo nije pravni savet. U sumnji se obratite savetovalištu ili advokatu.", "🔗 Analizirano sa BehördenKlar 💙 www.behördenklar.de"],
+          "Kroatisch": ["Podijeli putem WhatsAppa", "📄 Službeno pismo analizirano s BehördenKlar", "🏛️ Pošiljatelj · Datum · Broj predmeta", "Datum", "Broj predmeta", "📝 Što piše u ovom pismu?", "⚠️ VAŽAN ROK", "✅ Što konkretno treba učiniti?", "⚡ Posljedice ako se ništa ne učini", "💡 Savjet za savjetovanje", "Ovo nije pravni savjet. U sumnji se obratite savjetovalištu ili odvjetniku.", "🔗 Analizirano s BehördenKlar 💙 www.behördenklar.de"],
+          "Chinesisch": ["通过 WhatsApp 分享", "📄 使用 BehördenKlar 分析的官方信函", "🏛️ 发件人 · 日期 · 案卷编号", "日期", "案卷编号", "📝 这封信写了什么？", "⚠️ 重要截止日期", "✅ 你具体需要做什么？", "⚡ 如果不采取任何行动的后果", "💡 咨询提示", "这不是法律咨询。如有疑问，请咨询辅导中心或律师。", "🔗 使用 BehördenKlar 分析 💙 www.behördenklar.de"],
+          "Vietnamesisch": ["Chia sẻ qua WhatsApp", "📄 Thư chính thức được phân tích bằng BehördenKlar", "🏛️ Người gửi · Ngày · Số hồ sơ", "Ngày", "Số hồ sơ", "📝 Thư này nói gì?", "⚠️ THỜI HẠN QUAN TRỌNG", "✅ Bạn cần làm gì cụ thể?", "⚡ Hậu quả nếu không làm gì", "💡 Gợi ý tư vấn", "Đây không phải là tư vấn pháp lý. Nếu không chắc, hãy liên hệ trung tâm tư vấn hoặc luật sư.", "🔗 Đã phân tích bằng BehördenKlar 💙 www.behördenklar.de"],
+          "Persisch": ["اشتراک در واتساپ", "📄 نامه رسمی با BehördenKlar تحلیل شده است", "🏛️ فرستنده · تاریخ · شماره پرونده", "تاریخ", "شماره پرونده", "📝 این نامه چه می‌گوید؟", "⚠️ مهلت مهم", "✅ دقیقاً باید چه کار کنی؟", "⚡ پیامدها اگر کاری نکنی", "💡 نکته برای مشاوره", "این مشاوره حقوقی نیست. در صورت تردید با مرکز مشاوره یا وکیل تماس بگیر.", "🔗 تحلیل‌شده با BehördenKlar 💙 www.behördenklar.de"],
+          "Somali": ["La wadaag WhatsApp", "📄 Warqad rasmi ah oo lagu falanqeeyay BehördenKlar", "🏛️ Qofka diray · Taariikhda · Lambarka faylka", "Taariikhda", "Lambarka faylka", "📝 Maxaa ku qoran warqaddan?", "⚠️ WAQTI MUHIIM AH", "✅ Maxaad tahay inaad si cad sameyso?", "⚡ Cawaaqibka haddii aadan wax samayn", "💡 Talo la-talin", "Tani maahan la-talin sharci. Haddii aadan hubin la xiriir xarun la-talin ama qareen.", "🔗 Lagu falanqeeyay BehördenKlar 💙 www.behördenklar.de"],
+          "Tigrinya": ["ን WhatsApp ምክፋል", "📄 ብ BehördenKlar ዝተንተን ወግዓዊ ደብዳብ", "🏛️ ተላጋኢ · ዕለት · ቁጽሪ ፋይል", "ዕለት", "ቁጽሪ ፋይል", "📝 እዚ ደብዳብ እንታይ ይብል?", "⚠️ ኣገዳሲ ግዜ", "✅ ብንጹር እንታይ ክትገብር ይግባእ?", "⚡ ውጽኢት እንተ ዋላ እንዳተገበርካ", "💡 ምኽርታት መምርሒ", "እዚ ሕጊ ምኽርታት ኣይኮነን። እንተ ምዝነን ብጽሒ ናብ ምኽርታት ማእከል ወይ መጠንቀቕቲ።", "🔗 ብ BehördenKlar ተንተንዎ 💙 www.behördenklar.de"],
+          "Litauisch": ["Bendrinti per WhatsApp", "📄 Oficialus laiškas analizuotas su BehördenKlar", "🏛️ Siuntėjas · Data · Bylos numeris", "Data", "Bylos numeris", "📝 Ką rašoma šiame laiške?", "⚠️ SVARBUS TERMINAS", "✅ Ką konkrečiai reikia padaryti?", "⚡ Pasekmės, jei nieko nepadarysi", "💡 Patarimas dėl konsultacijos", "Tai ne teisinė konsultacija. Jei abejojate, kreipkitės į konsultacinį centrą ar advokatą.", "🔗 Analizuota su BehördenKlar 💙 www.behördenklar.de"],
+          "Arabisch (\u00c4gyptisch)": ["شارك على واتساب", "📄 خطاب رسمي اتتحلّل بـ BehördenKlar", "🏛️ المرسل · التاريخ · رقم الملف", "التاريخ", "رقم الملف", "📝 إيه اللي مكتوب في الخطاب ده؟", "⚠️ ميعاد مهم", "✅ إيه المطلوب تعمله بالظبط؟", "⚡ اللي هيحصل لو ما عملتش حاجة", "💡 نصيحة للاستشارة", "ده مش استشارة قانونية. لو مش متأكد كلم مركز استشارات أو محامي.", "🔗 اتتحلّل بـ BehördenKlar 💙 www.behördenklar.de"],
+        };
+        Object.keys(rows).forEach(function (lang) {
+          if (!resultLayoutUiByLang[lang]) return;
+          var vals = rows[lang];
+          var o = {};
+          for (var i = 0; i < keys.length; i++) o[keys[i]] = vals[i];
+          Object.assign(resultLayoutUiByLang[lang], o);
+        });
+      })();
+
       const loadingStepPlainExplainByUiLang = {
         Deutsch: "Einfache Erklärung wird erstellt...",
         Englisch: "Creating a simple explanation...",
@@ -4442,6 +4488,9 @@
           btnDownloadTemplateDocx.textContent = rl.rsDownloadDocxLabel || "";
           btnDownloadTemplateDocx.setAttribute("aria-label", rl.rsDownloadDocxLabel || "");
         }
+        var waLabEl = btnWhatsAppShare && btnWhatsAppShare.querySelector(".btn-whatsapp-share-label");
+        if (waLabEl) waLabEl.textContent = rl.rsWhatsAppShareLabel || "WhatsApp";
+        if (btnWhatsAppShare) btnWhatsAppShare.setAttribute("aria-label", rl.rsWhatsAppShareLabel || "WhatsApp");
       }
 
       function setTemplateDownloadSectionVisible(visible, antwortText) {
@@ -4659,7 +4708,7 @@
         btnWhatsAppShare.addEventListener("click", function () {
           var p = lastNormalizedParsed;
           if (!p) return;
-          var text = buildWhatsAppShareBody(p);
+          var text = buildWhatsAppShareBody(p, getResultLayoutStrings());
           var url = "https://wa.me/?text=" + encodeURIComponent(text);
           window.open(url, "_blank", "noopener,noreferrer");
         });
@@ -5189,35 +5238,61 @@
         return t.replace(/\n{3,}/g, "\n\n").trim();
       }
 
-      function buildWhatsAppShareBody(parsed) {
-        if (!parsed) return "";
-        var beh = plaintextSnippetFromModelField(parsed.absender_zeile);
-        if (!beh) beh = plaintextSnippetFromModelField(parsed.brief_typ);
-        var kurz = plaintextSnippetFromModelField(parsed.kurz_erlaeuterung);
-        var chunks = [];
-        if (beh) chunks.push(beh);
-        if (kurz) {
-          if (chunks.length) chunks.push("");
-          chunks.push(kurz);
+      function buildWhatsAppShareBody(parsed, rl) {
+        if (!parsed || !rl) return "";
+        var parts = [];
+        parts.push(rl.rsWaTitleLine || "");
+        parts.push("");
+        parts.push(rl.rsWaSectionMeta || "");
+        var sender = plaintextSnippetFromModelField(parsed.absender_zeile);
+        if (!sender) sender = plaintextSnippetFromModelField(parsed.brief_typ);
+        if (sender) parts.push(sender);
+        var dat = plaintextSnippetFromModelField(parsed.info_datum);
+        if (dat && dat !== "—") parts.push((rl.rsWaLabelDatum || "") + ": " + dat);
+        var az = plaintextSnippetFromModelField(parsed.info_aktenzeichen);
+        if (az && az !== "—") parts.push((rl.rsWaLabelAktenzeichen || "") + ": " + az);
+        parts.push("");
+        parts.push(rl.rsWaSectionExplain || "");
+        var explainBody = plaintextSnippetFromModelField(parsed.zusatzinhalt);
+        if (!explainBody) explainBody = plaintextSnippetFromModelField(parsed.kurz_erlaeuterung);
+        parts.push(explainBody);
+        parts.push("");
+        var fd = plaintextSnippetFromModelField(parsed.frist_datum_oder_betrag);
+        var fw = parsed.frist_warnung_aktiv === true && fd && !deadlineHighlightLooksInvalid(fd);
+        if (fw) {
+          parts.push(rl.rsWaSectionDeadline || "");
+          parts.push(fd);
+          var fe = plaintextSnippetFromModelField(parsed.frist_erlaeuterung);
+          if (fe) parts.push(fe);
+          parts.push("");
         }
-        var steps = [];
+        parts.push(rl.rsWaSectionSteps || "");
+        var stepTexts = [];
         var s1 = plaintextSnippetFromModelField(parsed.schritt_1);
-        if (s1) steps.push(s1);
         var oa = plaintextSnippetFromModelField(parsed.schritt_2_option_a);
         var ob = plaintextSnippetFromModelField(parsed.schritt_2_option_b);
-        if (oa) steps.push(oa);
-        if (ob) steps.push(ob);
         var s3 = plaintextSnippetFromModelField(parsed.schritt_3);
-        if (s3) steps.push(s3);
-        if (steps.length) {
-          if (chunks.length) chunks.push("");
-          for (var i = 0; i < steps.length; i++) {
-            chunks.push(String(i + 1) + ". " + steps[i]);
-          }
+        if (s1) stepTexts.push(s1);
+        if (oa) stepTexts.push(oa);
+        if (ob) stepTexts.push(ob);
+        if (s3) stepTexts.push(s3);
+        var emojiNums = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
+        for (var si = 0; si < stepTexts.length; si++) {
+          var pref = emojiNums[si] || String(si + 1) + ".";
+          parts.push(pref + " " + stepTexts[si]);
         }
-        chunks.push("");
-        chunks.push("Analysiert mit BehördenKlar 💙 www.behördenklar.de");
-        return chunks.join("\n").trim();
+        parts.push("");
+        var ir = plaintextSnippetFromModelField(parsed.info_rechtsgrundlage);
+        if (ir && ir !== "—") {
+          parts.push(rl.rsWaSectionConsequences || "");
+          parts.push(ir);
+          parts.push("");
+        }
+        parts.push(rl.rsWaSectionAdvice || "");
+        parts.push(rl.rsWaAdviceText || "");
+        parts.push("");
+        parts.push(rl.rsWaFooterLine || "");
+        return parts.join("\n").trim();
       }
 
       function coerceBool(v, fieldName) {
@@ -5585,6 +5660,9 @@
         }
 
         $("rsDisclaimer").textContent = rl.rsDisclaimerYellow || "";
+        var waLabEl2 = btnWhatsAppShare && btnWhatsAppShare.querySelector(".btn-whatsapp-share-label");
+        if (waLabEl2) waLabEl2.textContent = rl.rsWhatsAppShareLabel || "WhatsApp";
+        if (btnWhatsAppShare) btnWhatsAppShare.setAttribute("aria-label", rl.rsWhatsAppShareLabel || "WhatsApp");
       }
 
       function truncateForErrorDisplay(text, maxLen) {
