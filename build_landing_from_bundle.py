@@ -109,7 +109,8 @@ tpl = tpl.replace(
     '<li><a id="lpNavImpressum" href="impressum.html">Impressum</a></li>\n'
     '          <li><a id="lpNavAgb" href="agb.html">AGB</a></li>\n'
     '          <li><a id="lpNavDatenschutz" href="datenschutz.html">Datenschutz</a></li>\n'
-    '          <li><a href="#" id="lpFooterCookieSettings">Cookie-Einstellungen</a></li>',
+    '          <li><a href="#" id="lpFooterCookieSettings" role="button" '
+    'aria-haspopup="dialog" aria-controls="cookieSettingsModal">Cookie-Einstellungen</a></li>',
     1,
 )
 

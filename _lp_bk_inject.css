@@ -241,8 +241,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: max(16px, env(safe-area-inset-top))
+        max(16px, env(safe-area-inset-right))
+        max(16px, env(safe-area-inset-bottom))
+        max(16px, env(safe-area-inset-left));
       box-sizing: border-box;
+    }
+
+    html.bk-cookie-settings-open,
+    html.bk-cookie-settings-open body {
+      overflow: hidden;
     }
 
     .cookie-settings-modal[hidden] {
@@ -260,8 +268,9 @@
       position: relative;
       width: 100%;
       max-width: 440px;
-      max-height: min(90vh, 560px);
+      max-height: min(90vh, 560px, calc(100dvh - 32px));
       overflow: auto;
+      -webkit-overflow-scrolling: touch;
       margin: 0;
       padding: 22px 22px 18px;
       border-radius: 12px;

@@ -1653,8 +1653,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: max(16px, env(safe-area-inset-top))
+        max(16px, env(safe-area-inset-right))
+        max(16px, env(safe-area-inset-bottom))
+        max(16px, env(safe-area-inset-left));
       box-sizing: border-box;
+    }
+
+    html.bk-cookie-settings-open,
+    html.bk-cookie-settings-open body {
+      overflow: hidden;
     }
 
     .cookie-settings-modal[hidden] {
@@ -1672,8 +1680,9 @@
       position: relative;
       width: 100%;
       max-width: 440px;
-      max-height: min(90vh, 560px);
+      max-height: min(90vh, 560px, calc(100dvh - 32px));
       overflow: auto;
+      -webkit-overflow-scrolling: touch;
       margin: 0;
       padding: 22px 22px 18px;
       border-radius: 12px;
@@ -3795,7 +3804,7 @@
 
       function updateCookieSettingsModalUi(lang) {
         var mod = $("cookieSettingsModal");
-        if (!mod || mod.hidden) return;
+        if (!mod) return;
         var t = uiTranslations[lang] || uiTranslations["Deutsch"];
         var setTx = function (id, key) {
           var el = $(id);
@@ -3829,6 +3838,11 @@
         updateCookieSettingsModalUi(getUiLang());
         mod.hidden = false;
         mod.setAttribute("aria-hidden", "false");
+        document.documentElement.classList.add("bk-cookie-settings-open");
+        requestAnimationFrame(function () {
+          var closeBtn = $("cookieSettingsClose");
+          if (closeBtn && typeof closeBtn.focus === "function") closeBtn.focus();
+        });
       }
 
       function closeCookieSettingsModal() {
@@ -3836,6 +3850,7 @@
         if (!mod) return;
         mod.hidden = true;
         mod.setAttribute("aria-hidden", "true");
+        document.documentElement.classList.remove("bk-cookie-settings-open");
       }
 
       function updateCookieBannerUi(lang) {

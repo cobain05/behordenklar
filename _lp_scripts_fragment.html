@@ -130,7 +130,7 @@
 
   function updateCookieSettingsModalUi(lang) {
     var mod = $("cookieSettingsModal");
-    if (!mod || mod.hidden) return;
+    if (!mod) return;
     var t = uiTranslations[lang] || uiTranslations["Deutsch"];
     var setTx = function (id, key) {
       var el = $(id);
@@ -164,6 +164,11 @@
     updateCookieSettingsModalUi(getUiLang());
     mod.hidden = false;
     mod.setAttribute("aria-hidden", "false");
+    document.documentElement.classList.add("bk-cookie-settings-open");
+    requestAnimationFrame(function () {
+      var closeBtn = $("cookieSettingsClose");
+      if (closeBtn && typeof closeBtn.focus === "function") closeBtn.focus();
+    });
   }
 
   function closeCookieSettingsModal() {
@@ -171,6 +176,7 @@
     if (!mod) return;
     mod.hidden = true;
     mod.setAttribute("aria-hidden", "true");
+    document.documentElement.classList.remove("bk-cookie-settings-open");
   }
 
   function updateCookieBannerUi(lang) {
@@ -246,13 +252,16 @@
       };
     }
 
-    var footerCookie = $("lpFooterCookieSettings");
-    if (footerCookie) {
-      footerCookie.addEventListener("click", function (e) {
+    document.addEventListener(
+      "click",
+      function lpFooterCookieOpen(e) {
+        var a = e.target && e.target.closest && e.target.closest("#lpFooterCookieSettings");
+        if (!a) return;
         e.preventDefault();
         openCookieSettingsModal();
-      });
-    }
+      },
+      true
+    );
 
     document.addEventListener("keydown", function cookieSettingsEsc(e) {
       if (e.key !== "Escape") return;
