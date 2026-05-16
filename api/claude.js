@@ -7,7 +7,12 @@
 
 const DEFAULT_ANTHROPIC_MODEL = "claude-haiku-4-5-20251001";
 const ANTHROPIC_MESSAGES_URL = "https://api.anthropic.com/v1/messages";
-const MAX_BODY_BYTES = 40 * 1024 * 1024;
+const MAX_BODY_BYTES = 60 * 1024 * 1024;
+const MAX_FILE_BYTES = 32 * 1024 * 1024;
+const ALLOWED_FILE_EXTENSIONS = new Set(["jpg", "jpeg", "png", "webp", "pdf"]);
+const INVALID_FILE_TYPE_MESSAGE =
+  "Bitte lade nur Dateien im Format JPG, JPEG, PNG, WEBP oder PDF hoch.";
+const FILE_TOO_LARGE_MESSAGE = "Eine Datei ist zu groß. Bitte lade nur Dateien bis maximal 32 MB hoch.";
 const RATE_LIMIT_MAX_REQUESTS = 5;
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
 const RATE_LIMIT_MESSAGE =
@@ -28,11 +33,12 @@ function setCors(res) {
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
 }
 
-function sendJsonError(res, status, message, type) {
+function sendJsonError(res, status, message, type, extra) {
   setCors(res);
   res.statusCode = status;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
-  res.end(JSON.stringify({ error: { type: type || "proxy_error", message: message } }));
+  var error = Object.assign({ type: type || "proxy_error", message: message }, extra || {});
+  res.end(JSON.stringify({ error: error }));
 }
 
 function getClientIp(req) {
@@ -72,6 +78,62 @@ function checkRateLimit(ip) {
 
   bucket.count += 1;
   return { allowed: true, retryAfterSeconds: 0 };
+}
+
+function fileExtension(name) {
+  var base = String(name || "").split(/[\\/]/).pop();
+  var i = base.lastIndexOf(".");
+  return i >= 0 ? base.slice(i + 1).toLowerCase() : "";
+}
+
+function countBase64Attachments(bodyObj) {
+  var count = 0;
+  var messages = Array.isArray(bodyObj && bodyObj.messages) ? bodyObj.messages : [];
+  messages.forEach(function (message) {
+    var content = Array.isArray(message && message.content) ? message.content : [];
+    content.forEach(function (part) {
+      var source = part && part.source;
+      if (source && source.type === "base64") {
+        count += 1;
+      }
+    });
+  });
+  return count;
+}
+
+function validateUploadedFiles(bodyObj) {
+  var attachmentCount = countBase64Attachments(bodyObj);
+  if (!attachmentCount) {
+    return null;
+  }
+
+  var files = Array.isArray(bodyObj._bk_files) ? bodyObj._bk_files : [];
+  if (files.length < attachmentCount) {
+    return {
+      code: "invalid_file_type",
+      message: INVALID_FILE_TYPE_MESSAGE,
+    };
+  }
+
+  for (var i = 0; i < files.length; i += 1) {
+    var file = files[i] || {};
+    var ext = fileExtension(file.name);
+    var size = Number(file.size);
+    if (!ALLOWED_FILE_EXTENSIONS.has(ext)) {
+      return {
+        code: "invalid_file_type",
+        message: INVALID_FILE_TYPE_MESSAGE,
+      };
+    }
+    if (!Number.isFinite(size) || size < 0 || size > MAX_FILE_BYTES) {
+      return {
+        code: "file_too_large",
+        message: FILE_TOO_LARGE_MESSAGE,
+      };
+    }
+  }
+
+  return null;
 }
 
 module.exports = async function handler(req, res) {
@@ -119,10 +181,18 @@ module.exports = async function handler(req, res) {
     bodyObj.model = DEFAULT_ANTHROPIC_MODEL;
   }
 
+  var fileValidationError = validateUploadedFiles(bodyObj);
+  if (fileValidationError) {
+    return sendJsonError(res, 400, fileValidationError.message, "file_validation", {
+      code: fileValidationError.code,
+    });
+  }
+  delete bodyObj._bk_files;
+
   var payloadOut = JSON.stringify(bodyObj);
   var payloadBytes = Buffer.byteLength(payloadOut, "utf8");
   if (payloadBytes > MAX_BODY_BYTES) {
-    return sendJsonError(res, 413, "Anfrage zu groß (max. ca. 40 MB).");
+    return sendJsonError(res, 413, "Anfrage zu groß.");
   }
   if (payloadBytes <= 0) {
     return sendJsonError(res, 400, "Leerer Request-Body.");
