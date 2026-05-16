@@ -159,6 +159,10 @@ module.exports = async function handler(req, res) {
 
   var origin = getRequestOrigin(req);
   if (!isAllowedOrigin(origin)) {
+    console.error("[security] CORS violation", {
+      origin: origin || "(missing)",
+      timestamp: new Date().toISOString(),
+    });
     return sendJsonError(req, res, 403, "Zugriff verweigert", "forbidden");
   }
 
@@ -207,6 +211,12 @@ module.exports = async function handler(req, res) {
 
   var fileValidationError = validateUploadedFiles(bodyObj);
   if (fileValidationError) {
+    console.error("[security] Invalid file upload", {
+      code: fileValidationError.code,
+      message: fileValidationError.message,
+      ip: getClientIp(req),
+      timestamp: new Date().toISOString(),
+    });
     return sendJsonError(req, res, 400, fileValidationError.message, "file_validation", {
       code: fileValidationError.code,
     });
@@ -225,6 +235,11 @@ module.exports = async function handler(req, res) {
   var clientIp = getClientIp(req);
   var rateLimit = checkRateLimit(clientIp);
   if (!rateLimit.allowed) {
+    console.error("[security] Rate limit exceeded", {
+      ip: clientIp,
+      retryAfterSeconds: rateLimit.retryAfterSeconds,
+      timestamp: new Date().toISOString(),
+    });
     setCors(req, res);
     res.setHeader("Retry-After", String(rateLimit.retryAfterSeconds));
     return sendJsonError(req, res, 429, RATE_LIMIT_MESSAGE, "rate_limit");
@@ -243,6 +258,14 @@ module.exports = async function handler(req, res) {
 
     var respBody = await upstream.text();
     var ct = upstream.headers.get("content-type") || "application/json";
+
+    if (!upstream.ok) {
+      console.error("[upstream] Anthropic API error", {
+        status: upstream.status,
+        body: respBody.slice(0, 2000),
+        timestamp: new Date().toISOString(),
+      });
+    }
 
     res.statusCode = upstream.status;
     res.setHeader("Content-Type", ct);
