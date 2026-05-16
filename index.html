@@ -891,6 +891,12 @@
       display: block;
     }
 
+    .error.is-friendly {
+      background: #e8f0fe;
+      border-color: rgba(26, 115, 232, 0.24);
+      color: #174ea6;
+    }
+
     /* Full-screen result view */
     #results {
       display: none;
@@ -2488,6 +2494,36 @@
         "Tigrinya": { uiLangLabel: "🌐 ቋንቋ ገጽ ምረጽ:", targetLangLabel: "ናይ ሰነድ ትርጉም ዕላማ ቋንቋ:", modeFile: "ስእሊ ወይ PDF", modeText: "ጽሑፍ ኣእቱ", uploadLabel: "ሰነድ ኣምጽእ", dropTitle: "ፋይል ኣብዚ ኣንብር", dropHint: "ወይ ጠውቕ እሞ ስእሊ ወይ PDF ምረጽ", takePhoto: "ስእሊ ኣንሳ", uploadHint: "ኣብ 32 MB ኣካባቢ። ብፓስዎርድ ዝተጠበቐ PDF ኣይደገፍን።", textInputLabel: "ወግዓዊ ደብዳቤ (ጀርመን)", textPlaceholder: "ደብዳበ ኣብዚ ለጥፍ ወይ ጻሕፍ…", analyzeText: "ደብዳበ ተንትን", apiHeading: "API መፍትሕ", apiKeyLabel: "Anthropic API Key", apiHint: "መፍትሑ ኣብ ብራውዘርካ ጥራይ ይጥቀም፣ ኣይተኸዝን።", resultsHeading: "ውጽኢት", welcomeTitle: "ናብ BehördenKlar እንኳን ደህና መጹ", welcomeText: "ወግዓዊ ደብዳበ ኣብዚ ለጥፍ ወይ ስእሊ ወይ PDF ኣምጽእ – ኣብ ምርዳእ፣ ትርጉምን ዝቕጽሉ ስጉምትታትን ንሕግዝ።", footerTagline: "<span>BehördenKlar</span> – ሰነዳት ምርዳእ፣ ብቐሊል መንገዲ", footerDisclaimer: "ናይ ሕጊ ምኽርቲ ኣይኮነን። ንናይ ግዜ ገደባትን ናይ ሕጊ መዘኻኸርታትን፣ ሓበሬታ ኣረጋግጹ ወይ ናይ ምኽርቲ ቦታ ወይ ናይ ሕጊ ጸሓፍቲ ርከቡ።", maxUploadsReached: "✋ ናይ ልዕሊ ደረጃ ተሰሊጡ – 5 ፋይላት ተሓቒኦም" },
         "Litauisch": { uiLangLabel: "🌐 Pasirinkite puslapio kalbą:", targetLangLabel: "Dokumento vertimo tikslinė kalba:", modeFile: "Nuotrauka arba PDF", modeText: "Įvesti tekstą", uploadLabel: "Įkelti dokumentą", dropTitle: "Įmeskite failą čia", dropHint: "arba spustelėkite ir pasirinkite vaizdą arba PDF", takePhoto: "Nufotografuoti", uploadHint: "Maks. apie 32 MB. Slaptažodžiu apsaugoti PDF nepalaikomi.", textInputLabel: "Oficialus laiškas (vokiečių)", textPlaceholder: "Įklijuokite arba įveskite laišką čia…", analyzeText: "Analizuoti laišką", apiHeading: "API raktas", apiKeyLabel: "Anthropic API Key", apiHint: "Raktas naudojamas tik naršyklėje ir nėra saugomas.", resultsHeading: "Rezultatas", welcomeTitle: "Sveiki atvykę į BehördenKlar", welcomeText: "Įklijuokite oficialų laišką arba įkelkite nuotrauką arba PDF – padedame suprasti, išversti ir dėl tolesnių žingsnių.", footerTagline: "<span>BehördenKlar</span> – Suprasti dokumentus paprasčiau", footerDisclaimer: "Tai ne teisinė konsultacija. Dėl terminų ir teisinių pasekmių patikrinkite informaciją arba kreipkitės į konsultacijos centrą ar advokatą.", maxUploadsReached: "✋ Pasiektas limitas – 5 failai įkelti" },
         "Arabisch (Ägyptisch)": { uiLangLabel: "🌐 اختر لغة الصفحة:", targetLangLabel: "لغة ترجمة المستند:", modeFile: "صورة أو PDF", modeText: "اكتب النص", uploadLabel: "ارفع المستند", dropTitle: "اسحب الملف هنا", dropHint: "أو اضغط واختر صورة أو PDF", takePhoto: "التقاط صورة", uploadHint: "الحد الأقصى حوالي 32 ميجابايت. ملفات PDF المحمية غير مدعومة.", textInputLabel: "خطاب رسمي (ألماني)", textPlaceholder: "الصق الخطاب أو اكتبه هنا…", analyzeText: "حلّل الخطاب", apiHeading: "مفتاح API", apiKeyLabel: "Anthropic API Key", apiHint: "يُستخدم المفتاح داخل المتصفح فقط ولا يتم حفظه.", resultsHeading: "النتيجة", toggleShow: "إظهار", toggleHide: "إخفاء", welcomeTitle: "أهلاً بكم في BehördenKlar", welcomeText: "الصق خطابك الرسمي أو ارفع صورة أو ملف PDF – نساعدك على الفهم والترجمة والخطوات التالية.", footerTagline: "<span>BehördenKlar</span> – فهم المستندات بسهولة", footerDisclaimer: "ليس استشارة قانونية. بشأن المواعيد والآثار القانونية، راجع المعلومات أو تواصل مع مركز استشارات أو محامٍ.", maxUploadsReached: "✋ تم بلوغ الحد الأقصى – تم رفع 5 ملفات" }
+      };
+
+      const rateLimitMessageByLang = {
+        "Deutsch": "Du hast in dieser Stunde bereits 5 Briefe analysiert. Bitte warte eine Stunde und versuche es erneut.",
+        "Englisch": "You have already analysed 5 letters this hour. Please wait one hour and try again.",
+        "Türkisch": "Bu saat içinde zaten 5 mektup analiz ettin. Lütfen bir saat bekleyip tekrar dene.",
+        "Arabisch": "لقد حللت بالفعل 5 رسائل خلال هذه الساعة. يرجى الانتظار ساعة واحدة ثم المحاولة مرة أخرى.",
+        "Russisch": "Вы уже проанализировали 5 писем за этот час. Пожалуйста, подождите час и попробуйте снова.",
+        "Ukrainisch": "Ви вже проаналізували 5 листів за цю годину. Будь ласка, зачекайте годину й спробуйте ще раз.",
+        "Rumänisch": "Ai analizat deja 5 scrisori în această oră. Te rugăm să aștepți o oră și să încerci din nou.",
+        "Polnisch": "W tej godzinie przeanalizowano już 5 pism. Poczekaj godzinę i spróbuj ponownie.",
+        "Dari": "در این ساعت قبلاً ۵ نامه را تحلیل کرده‌اید. لطفاً یک ساعت صبر کنید و دوباره تلاش کنید.",
+        "Bulgarisch": "Вече анализирахте 5 писма през този час. Моля, изчакайте един час и опитайте отново.",
+        "Georgisch": "ამ საათში უკვე გააანალიზეთ 5 წერილი. გთხოვთ, დაელოდოთ ერთ საათს და სცადოთ ხელახლა.",
+        "Spanisch": "Ya has analizado 5 cartas en esta hora. Espera una hora e inténtalo de nuevo.",
+        "Portugiesisch": "Já analisaste 5 cartas nesta hora. Aguarda uma hora e tenta novamente.",
+        "Französisch": "Vous avez déjà analysé 5 courriers cette heure-ci. Veuillez attendre une heure puis réessayer.",
+        "Italienisch": "Hai già analizzato 5 lettere in quest'ora. Attendi un'ora e riprova.",
+        "Griechisch": "Έχετε ήδη αναλύσει 5 επιστολές αυτήν την ώρα. Περιμένετε μία ώρα και δοκιμάστε ξανά.",
+        "Albanisch": "Ke analizuar tashmë 5 letra këtë orë. Ju lutemi prit një orë dhe provo përsëri.",
+        "Bosnisch": "Već ste analizirali 5 pisama u ovom satu. Molimo sačekajte jedan sat i pokušajte ponovo.",
+        "Serbisch": "Već ste analizirali 5 pisama u ovom satu. Molimo sačekajte jedan sat i pokušajte ponovo.",
+        "Kroatisch": "Već ste analizirali 5 pisama u ovom satu. Pričekajte jedan sat i pokušajte ponovno.",
+        "Chinesisch": "你在这一小时内已经分析了 5 封信。请等待一小时后再试。",
+        "Vietnamesisch": "Bạn đã phân tích 5 thư trong giờ này. Vui lòng chờ một giờ rồi thử lại.",
+        "Persisch": "در این ساعت قبلاً ۵ نامه را تحلیل کرده‌اید. لطفاً یک ساعت صبر کنید و دوباره تلاش کنید.",
+        "Somali": "Waxaad saacaddan hore u falanqaysay 5 warqadood. Fadlan sug hal saac ka dibna mar kale isku day.",
+        "Tigrinya": "ኣብዚ ሰዓት እዚ ድሮ 5 ደብዳበታት ተንቲንካ ኣለኻ። በጃኻ ሓደ ሰዓት ተጸበ እሞ እንደገና ፈትን።",
+        "Litauisch": "Šią valandą jau išanalizavote 5 laiškus. Palaukite vieną valandą ir bandykite dar kartą.",
+        "Arabisch (Ägyptisch)": "إنت حللت 5 خطابات في الساعة دي بالفعل. من فضلك استنى ساعة وجرب تاني."
       };
 
       const templateDownloadUiByLang = {
@@ -4637,14 +4673,15 @@
         targetLangMobileTrigger.setAttribute("aria-expanded", "false");
       }
 
-      function showError(msg) {
+      function showError(msg, kind) {
         errorBox.textContent = msg;
+        errorBox.classList.toggle("is-friendly", kind === "friendly");
         errorBox.classList.add("visible");
       }
 
       function clearError() {
         errorBox.textContent = "";
-        errorBox.classList.remove("visible");
+        errorBox.classList.remove("visible", "is-friendly");
       }
 
       function updateTemplateDownloadUi(lang) {
@@ -5919,6 +5956,15 @@
         return s.slice(0, maxLen) + "\n\n… (" + (s.length - maxLen) + " weitere Zeichen, Anzeige gekürzt.)";
       }
 
+      function getRateLimitMessageForTarget(data) {
+        var target = getTargetLang();
+        if (target === "Dari/Farsi (Afghanisch)") target = "Dari";
+        var translated = rateLimitMessageByLang[target];
+        if (translated) return translated;
+        var serverMsg = data && data.error && data.error.message;
+        return serverMsg || rateLimitMessageByLang["Deutsch"];
+      }
+
       function formatAnthropicError(data, httpStatus) {
         if (!data || typeof data !== "object") {
           return "API-Fehler" + (httpStatus ? " (HTTP " + httpStatus + ")" : "") + ".";
@@ -6101,6 +6147,10 @@
           }
 
           if (!res.ok) {
+            if (res.status === 429) {
+              showError(getRateLimitMessageForTarget(data), "friendly");
+              return;
+            }
             var errMsg = formatAnthropicError(data, res.status);
             if (!rawText || !String(rawText).trim()) {
               errMsg =

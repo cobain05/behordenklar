@@ -8,6 +8,11 @@
 const DEFAULT_ANTHROPIC_MODEL = "claude-haiku-4-5-20251001";
 const ANTHROPIC_MESSAGES_URL = "https://api.anthropic.com/v1/messages";
 const MAX_BODY_BYTES = 40 * 1024 * 1024;
+const RATE_LIMIT_MAX_REQUESTS = 5;
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
+const RATE_LIMIT_MESSAGE =
+  "Du hast in dieser Stunde bereits 5 Briefe analysiert. Bitte warte eine Stunde und versuche es erneut.";
+const rateLimitBuckets = new Map();
 
 function headerValue(req, name) {
   var v = req.headers[name.toLowerCase()];
@@ -23,11 +28,50 @@ function setCors(res) {
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
 }
 
-function sendJsonError(res, status, message) {
+function sendJsonError(res, status, message, type) {
   setCors(res);
   res.statusCode = status;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
-  res.end(JSON.stringify({ error: { type: "proxy_error", message: message } }));
+  res.end(JSON.stringify({ error: { type: type || "proxy_error", message: message } }));
+}
+
+function getClientIp(req) {
+  var forwarded = headerValue(req, "x-forwarded-for");
+  if (forwarded) {
+    return forwarded.split(",")[0].trim();
+  }
+  return (
+    headerValue(req, "x-real-ip") ||
+    headerValue(req, "cf-connecting-ip") ||
+    (req.socket && req.socket.remoteAddress) ||
+    "unknown"
+  ).toString();
+}
+
+function checkRateLimit(ip) {
+  var now = Date.now();
+  var bucket = rateLimitBuckets.get(ip);
+  if (!bucket || now >= bucket.resetAt) {
+    bucket = { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS };
+    rateLimitBuckets.set(ip, bucket);
+  }
+
+  // Opportunistic cleanup keeps long-lived serverless instances bounded.
+  rateLimitBuckets.forEach(function (entry, key) {
+    if (now >= entry.resetAt) {
+      rateLimitBuckets.delete(key);
+    }
+  });
+
+  if (bucket.count >= RATE_LIMIT_MAX_REQUESTS) {
+    return {
+      allowed: false,
+      retryAfterSeconds: Math.max(1, Math.ceil((bucket.resetAt - now) / 1000)),
+    };
+  }
+
+  bucket.count += 1;
+  return { allowed: true, retryAfterSeconds: 0 };
 }
 
 module.exports = async function handler(req, res) {
@@ -82,6 +126,14 @@ module.exports = async function handler(req, res) {
   }
   if (payloadBytes <= 0) {
     return sendJsonError(res, 400, "Leerer Request-Body.");
+  }
+
+  var clientIp = getClientIp(req);
+  var rateLimit = checkRateLimit(clientIp);
+  if (!rateLimit.allowed) {
+    setCors(res);
+    res.setHeader("Retry-After", String(rateLimit.retryAfterSeconds));
+    return sendJsonError(res, 429, RATE_LIMIT_MESSAGE, "rate_limit");
   }
 
   try {
