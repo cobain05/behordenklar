@@ -979,6 +979,69 @@
       display: block;
     }
 
+    .result-feedback {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.72);
+      text-align: center;
+    }
+
+    .result-feedback[hidden] {
+      display: none !important;
+    }
+
+    .result-feedback-question {
+      margin: 0 0 0.65rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .result-feedback-actions {
+      display: inline-flex;
+      justify-content: center;
+      gap: 0.65rem;
+    }
+
+    .result-feedback-actions[hidden] {
+      display: none !important;
+    }
+
+    .result-feedback-btn {
+      appearance: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+      cursor: pointer;
+      font: inherit;
+      font-size: 1.15rem;
+      line-height: 1;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .result-feedback-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(26, 115, 232, 0.35);
+      box-shadow: var(--shadow);
+    }
+
+    .result-feedback-btn:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    .result-feedback-thanks {
+      margin: 0;
+      color: var(--primary);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
     .results-page-title {
       margin: 0 0 1rem;
       font-size: clamp(1.35rem, 2.9vw, 2rem);
@@ -2125,6 +2188,14 @@
               </svg>
               <span class="btn-whatsapp-share-label">WhatsApp</span>
             </button>
+            <div class="result-feedback" id="resultFeedback" hidden>
+              <p class="result-feedback-question" id="resultFeedbackQuestion"></p>
+              <div class="result-feedback-actions" id="resultFeedbackActions">
+                <button type="button" class="result-feedback-btn" id="resultFeedbackPositive" data-feedback-value="positive">👍</button>
+                <button type="button" class="result-feedback-btn" id="resultFeedbackNegative" data-feedback-value="negative">👎</button>
+              </div>
+              <p class="result-feedback-thanks" id="resultFeedbackThanks" hidden></p>
+            </div>
           </div>
 
           <section class="rs-yellow-box" id="rsLegalStrip">
@@ -2343,6 +2414,12 @@
       const dropFileName = $("dropFileName");
       const btnBack = $("btnBack");
       const btnWhatsAppShare = $("btnWhatsAppShare");
+      const resultFeedback = $("resultFeedback");
+      const resultFeedbackQuestion = $("resultFeedbackQuestion");
+      const resultFeedbackActions = $("resultFeedbackActions");
+      const resultFeedbackPositive = $("resultFeedbackPositive");
+      const resultFeedbackNegative = $("resultFeedbackNegative");
+      const resultFeedbackThanks = $("resultFeedbackThanks");
       const templateDownloadBlock = $("templateDownloadBlock");
       const btnDownloadTemplatePdf = $("btnDownloadTemplatePdf");
       const btnDownloadTemplateDocx = $("btnDownloadTemplateDocx");
@@ -3615,6 +3692,46 @@
         });
       })();
 
+      (function attachFeedbackStringsToResultLayout() {
+        var keys = ["rsFeedbackQuestion", "rsFeedbackThanks", "rsFeedbackPositiveLabel", "rsFeedbackNegativeLabel"];
+        var rows = {
+          "Deutsch": ["War diese Erklärung hilfreich?", "Danke für dein Feedback! 💙", "Hilfreich", "Nicht hilfreich"],
+          "Englisch": ["Was this explanation helpful?", "Thank you for your feedback! 💙", "Helpful", "Not helpful"],
+          "Türkisch": ["Bu açıklama yardımcı oldu mu?", "Geri bildirimin için teşekkürler! 💙", "Yardımcı oldu", "Yardımcı olmadı"],
+          "Arabisch": ["هل كان هذا الشرح مفيدًا؟", "شكرًا على ملاحظاتك! 💙", "مفيد", "غير مفيد"],
+          "Russisch": ["Было ли это объяснение полезным?", "Спасибо за отзыв! 💙", "Полезно", "Неполезно"],
+          "Ukrainisch": ["Чи було це пояснення корисним?", "Дякуємо за відгук! 💙", "Корисно", "Не корисно"],
+          "Rumänisch": ["A fost utilă această explicație?", "Îți mulțumim pentru feedback! 💙", "Util", "Neutil"],
+          "Polnisch": ["Czy to wyjaśnienie było pomocne?", "Dziękujemy za opinię! 💙", "Pomocne", "Niepomocne"],
+          "Dari": ["آیا این توضیح مفید بود؟", "از بازخوردت سپاسگزاریم! 💙", "مفید", "غیرمفید"],
+          "Bulgarisch": ["Беше ли полезно това обяснение?", "Благодарим за обратната връзка! 💙", "Полезно", "Неполезно"],
+          "Georgisch": ["ეს ახსნა დაგეხმარა?", "გმადლობთ უკუკავშირისთვის! 💙", "სასარგებლო", "არასასარგებლო"],
+          "Spanisch": ["¿Te resultó útil esta explicación?", "¡Gracias por tu feedback! 💙", "Útil", "No útil"],
+          "Portugiesisch": ["Esta explicação foi útil?", "Obrigado pelo teu feedback! 💙", "Útil", "Não útil"],
+          "Französisch": ["Cette explication était-elle utile ?", "Merci pour votre retour ! 💙", "Utile", "Pas utile"],
+          "Italienisch": ["Questa spiegazione è stata utile?", "Grazie per il tuo feedback! 💙", "Utile", "Non utile"],
+          "Griechisch": ["Ήταν χρήσιμη αυτή η εξήγηση;", "Ευχαριστούμε για τα σχόλιά σου! 💙", "Χρήσιμο", "Μη χρήσιμο"],
+          "Albanisch": ["A ishte i dobishëm ky shpjegim?", "Faleminderit për feedback-un! 💙", "I dobishëm", "Jo i dobishëm"],
+          "Bosnisch": ["Da li je ovo objašnjenje bilo korisno?", "Hvala na povratnoj informaciji! 💙", "Korisno", "Nije korisno"],
+          "Serbisch": ["Da li je ovo objašnjenje bilo korisno?", "Hvala na povratnoj informaciji! 💙", "Korisno", "Nije korisno"],
+          "Kroatisch": ["Je li ovo objašnjenje bilo korisno?", "Hvala na povratnoj informaciji! 💙", "Korisno", "Nije korisno"],
+          "Chinesisch": ["这个解释有帮助吗？", "感谢你的反馈！💙", "有帮助", "没有帮助"],
+          "Vietnamesisch": ["Phần giải thích này có hữu ích không?", "Cảm ơn phản hồi của bạn! 💙", "Hữu ích", "Không hữu ích"],
+          "Persisch": ["آیا این توضیح مفید بود؟", "از بازخوردت ممنونیم! 💙", "مفید", "غیرمفید"],
+          "Somali": ["Sharaxaadani ma ku caawisay?", "Waad ku mahadsan tahay falcelintaada! 💙", "Way caawisay", "Ma caawin"],
+          "Tigrinya": ["እዚ መብርሂ ጠቓሚ ነይሩዶ?", "ንምላሽካ የቐንየልና! 💙", "ጠቓሚ", "ዘይጠቓሚ"],
+          "Litauisch": ["Ar šis paaiškinimas buvo naudingas?", "Ačiū už atsiliepimą! 💙", "Naudinga", "Nenaudinga"],
+          "Arabisch (Ägyptisch)": ["الشرح ده كان مفيد؟", "شكرًا على رأيك! 💙", "مفيد", "مش مفيد"]
+        };
+        Object.keys(rows).forEach(function (lang) {
+          if (!resultLayoutUiByLang[lang]) return;
+          var vals = rows[lang];
+          var o = {};
+          for (var i = 0; i < keys.length; i++) o[keys[i]] = vals[i];
+          Object.assign(resultLayoutUiByLang[lang], o);
+        });
+      })();
+
       const loadingStepPlainExplainByUiLang = {
         Deutsch: "Einfache Erklärung wird erstellt...",
         Englisch: "Creating a simple explanation...",
@@ -4546,6 +4663,47 @@
         }
       }
 
+      function resetResultFeedbackUi(rl) {
+        if (!resultFeedback) return;
+        resultFeedback.hidden = false;
+        if (resultFeedbackQuestion) {
+          resultFeedbackQuestion.textContent = rl.rsFeedbackQuestion || "";
+        }
+        if (resultFeedbackThanks) {
+          resultFeedbackThanks.textContent = rl.rsFeedbackThanks || "";
+          resultFeedbackThanks.hidden = true;
+        }
+        if (resultFeedbackActions) {
+          resultFeedbackActions.hidden = false;
+        }
+        if (resultFeedbackPositive) {
+          resultFeedbackPositive.setAttribute("aria-label", rl.rsFeedbackPositiveLabel || "Helpful");
+          resultFeedbackPositive.disabled = false;
+        }
+        if (resultFeedbackNegative) {
+          resultFeedbackNegative.setAttribute("aria-label", rl.rsFeedbackNegativeLabel || "Not helpful");
+          resultFeedbackNegative.disabled = false;
+        }
+      }
+
+      function sendResultFeedback(kind) {
+        var isPositive = kind === "positive";
+        var p = lastNormalizedParsed || {};
+        if (resultFeedbackActions) {
+          resultFeedbackActions.hidden = true;
+        }
+        if (resultFeedbackPositive) resultFeedbackPositive.disabled = true;
+        if (resultFeedbackNegative) resultFeedbackNegative.disabled = true;
+        if (resultFeedbackThanks) {
+          resultFeedbackThanks.hidden = false;
+        }
+        if (typeof window.gtag === "function") {
+          window.gtag("event", isPositive ? "feedback_positive" : "feedback_negative", {
+            brief_typ: p.brief_typ || "",
+          });
+        }
+      }
+
       function applyResultTemplateDownloadUi(rl) {
         var disc = $("templateDownloadDisclaimer");
         if (disc) {
@@ -4771,6 +4929,7 @@
         results.classList.remove("visible");
         document.body.classList.remove("results-open");
         setTemplateDownloadSectionVisible(false, "");
+        if (resultFeedback) resultFeedback.hidden = true;
         lastNormalizedParsed = null;
         updateTranslationResultTabHeading();
       });
@@ -4782,6 +4941,17 @@
           var text = buildWhatsAppShareBody(p, getResultLayoutStrings());
           var url = "https://wa.me/?text=" + encodeURIComponent(text);
           window.open(url, "_blank", "noopener,noreferrer");
+        });
+      }
+
+      if (resultFeedbackPositive) {
+        resultFeedbackPositive.addEventListener("click", function () {
+          sendResultFeedback("positive");
+        });
+      }
+      if (resultFeedbackNegative) {
+        resultFeedbackNegative.addEventListener("click", function () {
+          sendResultFeedback("negative");
         });
       }
 
@@ -5621,6 +5791,7 @@
         var rl = getResultLayoutStrings();
         if (btnBack) btnBack.textContent = rl.rsBack || "← Back";
         if (resultsHeading) resultsHeading.textContent = rl.rsResultsHeading || "";
+        resetResultFeedbackUi(rl);
 
         $("rsS1Label").textContent = rl.rsSection1Label || "";
         $("rsS3Label").textContent = rl.rsSection3Label || "";
