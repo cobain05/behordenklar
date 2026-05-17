@@ -5822,6 +5822,11 @@
               ".";
         var common =
           hardLanguageStart +
+          "EXCEPTION: The field 'brief_mit_platzhaltern' must ALWAYS be written in German, even though all other fields must be in " +
+          langLabel +
+          ". Only this one field stays German. Everything else in " +
+          langLabel +
+          ".\n\n" +
           "Du bist ein Experte für deutsche Behördenbriefe und unterstützt Menschen mit Migrationshintergrund dabei, Schreiben sicher zu verstehen, Fristen zu erkennen und sinnvoll zu handeln. " +
           "Formuliere respektvoll, klar und ohne Juristenjargon; erkläre aber präzise genug, damit niemand wichtige Folgen übersieht. " +
           "Die Ausgabe auf der Auswertungsseite muss grammatikalisch einwandfrei und professionell klingen – wie ein gebildeter, freundlicher Berater, der ruhig und verständlich erklärt. " +
@@ -6005,7 +6010,9 @@
           '  "umschlag_absender": "Mehrzeilig mit [Platzhaltern]",\n' +
           '  "umschlag_empfaenger": "Mehrzeilig mit [Platzhaltern]",\n' +
           '  "umschlag_briefmarke_hinweis": "Kurzer Hinweis",\n' +
-          '  "brief_mit_platzhaltern": "Deutscher Brief mit [Platzhaltern] oder leer",\n' +
+          '  "brief_mit_platzhaltern": "The official reply letter draft. ALWAYS IN GERMAN, regardless of target language. This letter will be sent to a German authority. German authorities only accept German language letters. Do NOT translate this field. Do NOT write it in ' +
+          langLabel +
+          '. Write it in German only.",\n' +
           '  "brief_uebersetzung": "Natural translation of the reply letter into ' +
           langLabel +
           ', or empty string",\n' +
