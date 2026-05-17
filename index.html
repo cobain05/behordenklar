@@ -5715,6 +5715,29 @@
           "Formuliere respektvoll, klar und ohne Juristenjargon; erkläre aber präzise genug, damit niemand wichtige Folgen übersieht. " +
           "Die Ausgabe auf der Auswertungsseite muss grammatikalisch einwandfrei und professionell klingen – wie ein gebildeter, freundlicher Berater, der ruhig und verständlich erklärt. " +
           "Schreibe keine Umgangssprache, aber auch kein Behördendeutsch. Verwende klare, vollständige Sätze, korrekte Grammatik und einen professionellen, warmen Ton.\n\n" +
+          "WICHTIG: Schreibe deine GESAMTE Antwort ausschließlich auf " +
+          langLabel +
+          ". Alle Erklärungen, Überschriften, Schritte und Hinweise müssen auf " +
+          langLabel +
+          " sein. Nur direkte Zitate aus dem Originalbrief dürfen auf Deutsch bleiben.\n\n" +
+          "CRITICAL INSTRUCTION – LANGUAGE:\n" +
+          "The target language is: " +
+          langLabel +
+          "\n" +
+          "ALL content fields in your JSON response MUST be written in " +
+          langLabel +
+          ".\n" +
+          "This includes: erklaerung, zusammenfassung, schritt_1, schritt_3,\n" +
+          "option_a_beschreibung, option_b_beschreibung, frist_beschreibung,\n" +
+          "uebersetzung_text, hinweis_text, and every other free-text field.\n" +
+          "The JSON keys themselves stay in German.\n" +
+          "The letter content (original German text) stays in German – that is correct.\n" +
+          "But YOUR explanations, steps, and descriptions must be in " +
+          langLabel +
+          ".\n" +
+          "Do NOT respond in German unless " +
+          langLabel +
+          " is German.\n\n" +
           "AUSGABE: Antworte ausschließlich mit einem gültigen JSON-Objekt nach Schema „schema_version“: 2 (kein Markdown außerhalb des JSON, kein Code-Fence). " +
           "Alle Felder außer „brief_mit_platzhaltern“ sind in der gewählten ZIELSPRACHE zu schreiben. „brief_mit_platzhaltern“ bleibt ausnahmslos auf Deutsch.\n\n" +
           "TEXTFORMAT: Verwende kein Markdown (keine Sternchen für Fett, keine # -Überschriften, keine Aufzählung mit * oder -). Nur reiner Text mit \\n für Zeilenumbrüche. " +
