@@ -1347,6 +1347,30 @@
       margin: 0;
     }
 
+    .rs-letter-translation {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 0.5px solid rgba(15, 23, 42, 0.16);
+    }
+
+    .rs-letter-translation-box {
+      margin-top: 10px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 0.5px solid rgba(15, 23, 42, 0.1);
+      font-size: 14px;
+      line-height: 1.55;
+      color: #475569;
+    }
+
+    .rs-letter-translation-title {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #334155;
+    }
+
     .rs-ph {
       background: rgba(219, 234, 254, 0.85);
       padding: 1px 4px;
@@ -2218,6 +2242,10 @@
             </div>
             <div class="rs-tab-panel" id="rsPanelLetter" role="tabpanel" aria-labelledby="rsTabLetterBtn" hidden>
               <div class="rs-body rs-letter-pre" id="rsLetterBody"></div>
+              <div class="rs-letter-translation" id="rsBriefUebersetzungWrap" hidden>
+                <h4 class="rs-letter-translation-title" id="rsBriefUebersetzungTitel"></h4>
+                <div class="rs-letter-translation-box" id="rsBriefUebersetzungText"></div>
+              </div>
             </div>
           </section>
 
@@ -3973,6 +4001,20 @@
         };
         Object.keys(resultLayoutUiByLang).forEach(function (lang) {
           resultLayoutUiByLang[lang].rsAdresseHinweis = rows[lang] || fallback;
+        });
+      })();
+
+      (function attachReplyLetterTranslationTitleStrings() {
+        var fallback = "What does this letter say? (Your translation)";
+        var rows = {
+          "Deutsch": "Was steht in diesem Brief? (Ihre Übersetzung)",
+          "Englisch": fallback,
+          "Türkisch": "Bu mektupta ne yazıyor? (Çeviriniz)",
+          "Arabisch": "ماذا تقول هذه الرسالة؟ (ترجمتك)",
+          "Arabisch (Ägyptisch)": "ماذا تقول هذه الرسالة؟ (ترجمتك)"
+        };
+        Object.keys(resultLayoutUiByLang).forEach(function (lang) {
+          resultLayoutUiByLang[lang].rsBriefUebersetzungTitel = rows[lang] || fallback;
         });
       })();
 
@@ -5849,7 +5891,8 @@
           "- m² for square meters\n" +
           "Apply this to ALL languages.\n\n" +
           "AUSGABE: Antworte ausschließlich mit einem gültigen JSON-Objekt nach Schema „schema_version“: 2 (kein Markdown außerhalb des JSON, kein Code-Fence). " +
-          "Alle Felder außer „brief_mit_platzhaltern“ sind in der gewählten ZIELSPRACHE zu schreiben. „brief_mit_platzhaltern“ bleibt ausnahmslos auf Deutsch.\n\n" +
+          "Alle Felder außer „brief_mit_platzhaltern“ sind in der gewählten ZIELSPRACHE zu schreiben. „brief_mit_platzhaltern“ bleibt ausnahmslos auf Deutsch. " +
+          "„brief_uebersetzung“ ist die Übersetzung des deutschen Antwortbriefs in die Zielsprache.\n\n" +
           "TEXTFORMAT: Verwende kein Markdown (keine Sternchen für Fett, keine # -Überschriften, keine Aufzählung mit * oder -). Nur reiner Text mit \\n für Zeilenumbrüche. " +
           "Verwende keine Überschrift oder Zwischenzeile „Wer schreibt Ihnen?“; die Absenderinfo gehört nur kurz in „absender_zeile“.\n\n" +
           "KRITISCH - ZAHLEN UND DATEN: Alle Zahlen müssen 100% exakt aus dem Originaldokument übernommen werden ohne jede Änderung. Das gilt für:\n\n" +
@@ -5899,12 +5942,21 @@
           "ANTWORT AN DIE BEHÖRDE: Entscheide intern, ob eine schriftliche Antwort nötig oder üblich ist (Stellungnahme, Widerspruch, Nachreichung auf Aufforderung, ausdrückliche Bitte um Rückmeldung). " +
           "Setze „antwort_erforderlich“ nur dann auf true. Bei reinen Informationsschreiben ohne Rückantwort false.\n\n" +
           "Wenn „antwort_erforderlich“ true und „einspruch_moeglich“ true: „brief_mit_platzhaltern“ als vollständiger deutscher Geschäftsbrief mit Platzhaltern in eckigen Klammern (Name, Adresse, Datum, persönlicher Widerspruch). " +
+          "Der Antwortbrief an die Behörde bleibt IMMER auf Deutsch, egal welche Zielsprache gewählt ist. Das ist korrekt, weil deutsche Behörden deutsche Briefe erwarten. " +
+          "Zusätzlich muss „brief_uebersetzung“ eine natürliche Übersetzung dieses Antwortbriefs in " +
+          langLabel +
+          " enthalten, damit die Nutzerin oder der Nutzer versteht, was unterschrieben wird. „brief_uebersetzung“ ist NICHT der Originalbrief der Behörde, sondern die Übersetzung des entworfenen Antwortbriefs.\n\n" +
+          "brief_uebersetzung: A natural translation of the reply letter content into " +
+          langLabel +
+          ". NOT the original German letter – translate the draft reply letter so the user understands what they are signing. Write in " +
+          langLabel +
+          ".\n\n" +
           "„umschlag_absender“ und „umschlag_empfaenger“ mehrzeilig mit Platzhaltern in Klammern; „umschlag_briefmarke_hinweis“ kurzer Hinweis auf Briefmarke.\n\n" +
           "WICHTIG FÜR DIE BRIEFKOPF-VORLAGE: Die Anschrift und der Name der Behörde oder des Empfängers müssen IMMER auf Deutsch bleiben – egal welche Zielsprache gewählt wurde. " +
           "Nur der Absender-Teil und persönliche Angaben des Nutzers können in der Zielsprache sein. " +
           "Die offizielle deutsche Behördenbezeichnung, Straße, PLZ und Ort des Empfängers dürfen niemals übersetzt werden, weil der Brief an eine deutsche Behörde geht.\n\n" +
-          "Wenn „antwort_erforderlich“ false: „brief_mit_platzhaltern“ leer \"\", „umschlag_*“ leer \"\", und „kein_briefkopf_text“ mit kurzem Hinweis in der Zielsprache (keine Behördenantwort nötig).\n\n" +
-          "Wenn „antwort_erforderlich“ true aber „einspruch_moeglich“ false: „brief_mit_platzhaltern“ und „umschlag_*“ leer „\", da keine Einspruch-Antwortvorlage angezeigt wird.\n\n";
+          "Wenn „antwort_erforderlich“ false: „brief_mit_platzhaltern“ leer \"\", „brief_uebersetzung“ leer \"\", „umschlag_*“ leer \"\", und „kein_briefkopf_text“ mit kurzem Hinweis in der Zielsprache (keine Behördenantwort nötig).\n\n" +
+          "Wenn „antwort_erforderlich“ true aber „einspruch_moeglich“ false: „brief_mit_platzhaltern“, „brief_uebersetzung“ und „umschlag_*“ leer „\", da keine Einspruch-Antwortvorlage angezeigt wird.\n\n";
 
         var langBlock;
         if (sameUi) {
@@ -5954,6 +6006,9 @@
           '  "umschlag_empfaenger": "Mehrzeilig mit [Platzhaltern]",\n' +
           '  "umschlag_briefmarke_hinweis": "Kurzer Hinweis",\n' +
           '  "brief_mit_platzhaltern": "Deutscher Brief mit [Platzhaltern] oder leer",\n' +
+          '  "brief_uebersetzung": "Natural translation of the reply letter into ' +
+          langLabel +
+          ', or empty string",\n' +
           '  "kein_briefkopf_text": "Hinweis wenn keine Antwort nötig, sonst leer"\n' +
           "}\n\n";
 
@@ -6180,6 +6235,7 @@
         var ue = coerceStr(obj.umschlag_empfaenger);
         var uh = coerceStr(obj.umschlag_briefmarke_hinweis).trim();
         var bm = coerceStr(obj.brief_mit_platzhaltern);
+        var bu = coerceStr(obj.brief_uebersetzung).trim();
         var kb = coerceStr(obj.kein_briefkopf_text).trim();
 
         if (ar && kb) {
@@ -6222,6 +6278,7 @@
           umschlag_empfaenger: ue,
           umschlag_briefmarke_hinweis: uh,
           brief_mit_platzhaltern: bm,
+          brief_uebersetzung: bu,
           kein_briefkopf_text: kb,
         };
       }
@@ -6309,6 +6366,7 @@
           umschlag_empfaenger: "",
           umschlag_briefmarke_hinweis: "",
           brief_mit_platzhaltern: ar ? legacy.antwortvorlage : "",
+          brief_uebersetzung: "",
           kein_briefkopf_text: legacy.kein_briefkopf_text,
         };
       }
@@ -6482,6 +6540,10 @@
           $("rsStampHint").textContent =
             (parsed.umschlag_briefmarke_hinweis || "").trim() || rl.rsStampHintDefault || "";
           $("rsLetterBody").innerHTML = wrapPlaceholdersLetter(parsed.brief_mit_platzhaltern || "");
+          $("rsBriefUebersetzungTitel").textContent = rl.rsBriefUebersetzungTitel || "";
+          var replyTranslation = (parsed.brief_uebersetzung || "").trim();
+          $("rsBriefUebersetzungWrap").hidden = !replyTranslation;
+          $("rsBriefUebersetzungText").innerHTML = renderRichPlain(replyTranslation);
           resetTemplateTabs();
           setTemplateDownloadSectionVisible(true, parsed.brief_mit_platzhaltern || "");
         } else {
