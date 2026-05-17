@@ -5766,7 +5766,20 @@
       function buildInstructionPrompt(targetLangOverride) {
         var langLabel = targetLangOverride || readTargetLangFromDom();
         var sameUi = isTargetLangSameAsUiLang();
+        var hardLanguageStart =
+          langLabel === "Deutsch"
+            ? "YOU MUST RESPOND IN Deutsch ONLY. IN Deutsch.\n\n"
+            : "YOU MUST RESPOND IN " + langLabel + " ONLY. NOT IN GERMAN. IN " + langLabel + ".\n\n";
+        var hardLanguageReminder =
+          langLabel === "Deutsch"
+            ? "\n\nREMINDER: Your entire response must be in Deutsch. If you wrote anything in another language, start over in Deutsch."
+            : "\n\nREMINDER: Your entire response must be in " +
+              langLabel +
+              ". If you wrote anything in German, start over in " +
+              langLabel +
+              ".";
         var common =
+          hardLanguageStart +
           "Du bist ein Experte für deutsche Behördenbriefe und unterstützt Menschen mit Migrationshintergrund dabei, Schreiben sicher zu verstehen, Fristen zu erkennen und sinnvoll zu handeln. " +
           "Formuliere respektvoll, klar und ohne Juristenjargon; erkläre aber präzise genug, damit niemand wichtige Folgen übersieht. " +
           "Die Ausgabe auf der Auswertungsseite muss grammatikalisch einwandfrei und professionell klingen – wie ein gebildeter, freundlicher Berater, der ruhig und verständlich erklärt. " +
@@ -5948,7 +5961,7 @@
           "Weise bei Unsicherheit darauf hin, dass du keine Rechtsberatung ersetzt. " +
           "Wenn der Brief Geldbeträge oder Konsequenzen nennt, greife sie in „info_*“ und in den Schritten auf. " +
           "Wenn etwas im Dokument unleserlich fehlt, erwähne das kurz.";
-        return common + langBlock + jsonBlock + tail;
+        return common + langBlock + jsonBlock + tail + hardLanguageReminder;
       }
 
       function extractJsonObject(s) {
@@ -6653,6 +6666,13 @@
         startLoadingScreen();
 
         try {
+          console.log("Zielsprache:", document.getElementById("zielsprache").value);
+          var requestMessages = [
+            {
+              role: "user",
+              content: content,
+            },
+          ];
           var res = await fetch(API_URL, {
             method: "POST",
             headers: {
@@ -6665,12 +6685,7 @@
               max_tokens: 8192,
               temperature: 0,
               thinking: { type: "disabled" },
-              messages: [
-                {
-                  role: "user",
-                  content: content,
-                },
-              ],
+              messages: requestMessages,
             }),
           });
 
