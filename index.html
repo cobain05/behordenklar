@@ -76,6 +76,7 @@
       --surface: #ffffff;
       --text: #0f172a;
       --muted: #64748b;
+      --color-text-secondary: #64748b;
       --border: #e2e8f0;
       --danger: #c5221f;
       --radius: 18px;
@@ -1301,6 +1302,14 @@
       max-width: 72%;
     }
 
+    .rs-address-hint {
+      margin: 6px 0 0;
+      max-width: 72%;
+      font-size: 13px;
+      line-height: 1.35;
+      color: var(--color-text-secondary);
+    }
+
     .rs-env-recipient {
       margin-top: 36px;
       margin-left: auto;
@@ -2201,6 +2210,7 @@
               <div class="rs-envelope">
                 <div class="rs-env-stamp" aria-hidden="true"></div>
                 <div class="rs-env-sender" id="rsEnvSender"></div>
+                <p class="rs-address-hint" id="rsAdresseHinweis"></p>
                 <div class="rs-env-recipient" id="rsEnvRecipient"></div>
                 <p class="rs-env-stamp-note" id="rsStampHint"></p>
               </div>
@@ -3929,6 +3939,39 @@
           var o = {};
           for (var i = 0; i < keys.length; i++) o[keys[i]] = vals[i];
           Object.assign(resultLayoutUiByLang[lang], o);
+        });
+      })();
+
+      (function attachAddressHintStringsToResultLayout() {
+        var fallback = "Please check your address for typos before sending.";
+        var rows = {
+          "Deutsch": "Bitte prüfen Sie Ihre Adresse auf Tippfehler bevor Sie den Brief absenden.",
+          "Englisch": fallback,
+          "Türkisch": "Göndermeden önce adresinizi yazım hataları açısından kontrol edin.",
+          "Arabisch": "يرجى التحقق من عنوانك بحثاً عن أخطاء إملائية قبل الإرسال.",
+          "Russisch": "Перед отправкой проверьте адрес на опечатки.",
+          "Ukrainisch": "Перед відправленням перевірте адресу на друкарські помилки.",
+          "Polnisch": "Przed wysłaniem sprawdź adres pod kątem literówek.",
+          "Rumänisch": "Verificați adresa pentru greșeli de scriere înainte de a trimite.",
+          "Kroatisch": "Prije slanja provjerite adresu za tipografske greške.",
+          "Serbisch": "Пре слања проверите адресу на грешке у куцању.",
+          "Bulgarisch": "Преди изпращане проверете адреса за правописни грешки.",
+          "Albanisch": "Kontrolloni adresën për gabime shtypi para se të dërgoni.",
+          "Vietnamesisch": "Vui lòng kiểm tra địa chỉ của bạn trước khi gửi.",
+          "Chinesisch": "发送前请检查您的地址是否有拼写错误。",
+          "Spanisch": "Por favor revise su dirección antes de enviar.",
+          "Französisch": "Veuillez vérifier votre adresse avant d'envoyer.",
+          "Italienisch": "Si prega di verificare l'indirizzo prima di inviare.",
+          "Portugiesisch": "Por favor verifique o seu endereço antes de enviar.",
+          "Griechisch": "Ελέγξτε τη διεύθυνσή σας για τυπογραφικά λάθη πριν αποστείλετε.",
+          "Somali": "Fadlan hubi cinwaankaaga ka hor inta aadan dirin.",
+          "Tigrinya": "ቅድሚ ምልኣኽ ኣድርስኻ ንጌጋ ምርኣይ።",
+          "Dari": "قبل از ارسال، آدرس خود را برای اشتباهات تایپی بررسی کنید.",
+          "Persisch": "قبل از ارسال، آدرس خود را برای اشتباهات تایپی بررسی کنید.",
+          "Arabisch (Ägyptisch)": "يرجى التحقق من عنوانك بحثاً عن أخطاء إملائية قبل الإرسال."
+        };
+        Object.keys(resultLayoutUiByLang).forEach(function (lang) {
+          resultLayoutUiByLang[lang].rsAdresseHinweis = rows[lang] || fallback;
         });
       })();
 
@@ -5738,6 +5781,16 @@
           "Do NOT respond in German unless " +
           langLabel +
           " is German.\n\n" +
+          "CRITICAL – CONTACT DATA:\n" +
+          "Never invent, guess or assume contact details (email, phone, URL, IBAN).\n" +
+          "Only extract contact information that is explicitly and literally written\n" +
+          "in the letter. If no contact data is visible, leave the field empty.\n" +
+          "Do NOT fill contact fields with plausible-sounding but unverified data.\n\n" +
+          "In the JSON schema, treat these fields as extract-only:\n" +
+          "\"kontakt_email\": \"ONLY if literally in the letter, else empty string\"\n" +
+          "\"kontakt_telefon\": \"ONLY if literally in the letter, else empty string\"\n" +
+          "\"kontakt_url\": \"ONLY if literally in the letter, else empty string\"\n" +
+          "\"iban\": \"ONLY if literally in the letter, else empty string\"\n\n" +
           "AUSGABE: Antworte ausschließlich mit einem gültigen JSON-Objekt nach Schema „schema_version“: 2 (kein Markdown außerhalb des JSON, kein Code-Fence). " +
           "Alle Felder außer „brief_mit_platzhaltern“ sind in der gewählten ZIELSPRACHE zu schreiben. „brief_mit_platzhaltern“ bleibt ausnahmslos auf Deutsch.\n\n" +
           "TEXTFORMAT: Verwende kein Markdown (keine Sternchen für Fett, keine # -Überschriften, keine Aufzählung mit * oder -). Nur reiner Text mit \\n für Zeilenumbrüche. " +
@@ -5832,6 +5885,10 @@
           '  "info_bussgeld": "Betrag oder —",\n' +
           '  "info_datum": "Datum aus dem Schreiben oder —",\n' +
           '  "info_rechtsgrundlage": "Kurz oder —",\n' +
+          '  "kontakt_email": "ONLY if literally in the letter, else empty string",\n' +
+          '  "kontakt_telefon": "ONLY if literally in the letter, else empty string",\n' +
+          '  "kontakt_url": "ONLY if literally in the letter, else empty string",\n' +
+          '  "iban": "ONLY if literally in the letter, else empty string",\n' +
           '  "schritt_1": "Erster Schritt",\n' +
           '  "schritt_2_option_a": "Option neutral",\n' +
           '  "schritt_2_option_b": "Option Einspruch",\n' +
@@ -6363,6 +6420,7 @@
             (parsed.umschlag_empfaenger || "").trim() ||
             "[Name der Behörde]\n[zuständige Abteilung]\n[Straße, Hausnummer]\n[PLZ Ort]";
           $("rsEnvSender").innerHTML = envelopeBlocksHtml(envS);
+          $("rsAdresseHinweis").textContent = rl.rsAdresseHinweis || "";
           $("rsEnvRecipient").innerHTML = envelopeBlocksHtml(envR);
           $("rsStampHint").textContent =
             (parsed.umschlag_briefmarke_hinweis || "").trim() || rl.rsStampHintDefault || "";
