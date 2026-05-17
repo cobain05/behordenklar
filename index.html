@@ -2089,6 +2089,7 @@
           <button type="button" class="target-lang-mobile-trigger" id="targetLangMobileTrigger" aria-haspopup="dialog" aria-controls="targetLangModal" aria-expanded="false">
             <span id="targetLangMobileTriggerText">🌐 🇸🇦 Arabisch ▼</span>
           </button>
+          <input type="hidden" id="zielsprache" name="zielsprache" value="Arabisch" />
           <div class="lang-grid" id="targetLangGrid" role="group" aria-label="Zielsprache für Übersetzung">
             <button type="button" class="lang-btn target-lang-btn is-active" data-lang="Arabisch"><span aria-hidden="true">🇸🇦</span> Arabisch</button>
             <button type="button" class="lang-btn target-lang-btn" data-lang="Türkisch"><span aria-hidden="true">🇹🇷</span> Türkisch</button>
@@ -4086,9 +4087,17 @@
         } catch (e) {}
       })();
 
-      function getTargetLang() {
-        var active = document.querySelector(".target-lang-btn.is-active");
+      function readTargetLangFromDom() {
+        var hidden = document.getElementById("zielsprache");
+        if (hidden && String(hidden.value || "").trim()) {
+          return hidden.value;
+        }
+        var active = document.querySelector(".target-modal-lang-btn.is-active, .target-lang-btn.is-active");
         return active ? active.getAttribute("data-lang") : "Arabisch";
+      }
+
+      function getTargetLang() {
+        return readTargetLangFromDom();
       }
 
       function getUiLang() {
@@ -4892,6 +4901,10 @@
       }
 
       function setTargetLang(dataLang) {
+        var targetField = document.getElementById("zielsprache");
+        if (targetField) {
+          targetField.value = dataLang;
+        }
         document.querySelectorAll(".target-lang-btn, .target-modal-lang-btn").forEach(function (b) {
           b.classList.toggle("is-active", b.getAttribute("data-lang") === dataLang);
         });
@@ -5750,8 +5763,8 @@
         handleLetterFileInputChange(letterCamera);
       });
 
-      function buildInstructionPrompt() {
-        var langLabel = getTargetLang();
+      function buildInstructionPrompt(targetLangOverride) {
+        var langLabel = targetLangOverride || readTargetLangFromDom();
         var sameUi = isTargetLangSameAsUiLang();
         var common =
           "Du bist ein Experte für deutsche Behördenbriefe und unterstützt Menschen mit Migrationshintergrund dabei, Schreiben sicher zu verstehen, Fristen zu erkennen und sinnvoll zu handeln. " +
@@ -5808,6 +5821,14 @@
           "- Do NOT confuse similar digits: 1/7, 3/8, 6/0, 2/7\n" +
           "- If a number is unclear or unreadable, write \"?\" instead of guessing\n" +
           "- The difference between 2 km/h and 3 km/h can have legal consequences\n\n" +
+          "CRITICAL – GERMAN STREET NAMES:\n" +
+          "German street suffixes must be read carefully and completely.\n" +
+          "Common mistakes to avoid:\n" +
+          "- 'Chaussee' must never be split into 'C Häusser' or 'C. Häuser'\n" +
+          "- 'Straße' not 'Strasse' or 'Str.'\n" +
+          "- 'Allee', 'Damm', 'Weg', 'Ring', 'Platz' – copy exactly as written\n" +
+          "If a street name is unclear, copy the visible characters as-is\n" +
+          "rather than guessing a word that looks similar.\n\n" +
           "FORMATTING – UNITS:\n" +
           "Always use abbreviations for units, never write them out:\n" +
           "- km/h (never 'Kilometer pro Stunde' or 'kilometers per hour')\n" +
@@ -6545,7 +6566,8 @@
         var mode = document.querySelector('input[name="inputMode"]:checked').value;
         var content = [];
         var fileMetadataForApi = [];
-        var instruction = buildInstructionPrompt();
+        var targetLangForRequest = readTargetLangFromDom();
+        var instruction = buildInstructionPrompt(targetLangForRequest);
 
         if (mode === "text") {
           var text = letterText.value.trim();
