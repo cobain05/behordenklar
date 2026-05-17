@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BehördenKlar Reel</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #1A3A6B; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+#scene { width: 100vw; height: 100vh; background: #1A3A6B; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 4vw 0; position: relative; overflow: hidden; }
+#scene::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+.headline { text-align: center; z-index: 1; width: 100%; padding: 0 4vw; opacity: 0; transform: translateY(-16px); animation: fadeUp 0.8s ease 0.3s forwards; }
+.headline h1 { color: #fff; font-size: 5.2vw; font-weight: 800; margin-bottom: 1vw; line-height: 1.2; }
+.headline p { color: #A8C8F5; font-size: 3.4vw; }
+.phone-outer { width: 68vw; background: #1c1c1e; border-radius: 8vw; padding: 1.8vw 1.4vw; position: relative; z-index: 1; box-shadow: 0 0 0 2px #3a3a3c; opacity: 0; transform: translateY(24px) scale(0.95); animation: phoneIn 1s cubic-bezier(.22,.68,0,1.2) 0.9s forwards; }
+.phone-inner { background: #f3f4f6; border-radius: 6.5vw; overflow: hidden; }
+.btn-l1 { position:absolute; left:-3px; top:16vw; width:3px; height:3.5vw; background:#3a3a3c; border-radius:2px; }
+.btn-l2 { position:absolute; left:-3px; top:21vw; width:3px; height:5.5vw; background:#3a3a3c; border-radius:2px; }
+.btn-r1 { position:absolute; right:-3px; top:18vw; width:3px; height:7.5vw; background:#3a3a3c; border-radius:2px; }
+.nav-bar { background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 2vw 2.5vw; border-radius: 6.5vw 6.5vw 0 0; border-bottom: 0.5px solid #e5e7eb; }
+.logo-row { display: flex; align-items: center; gap: 1vw; }
+.logo-b { background: #3B73D4; color: #fff; font-size: 2.6vw; font-weight: 900; width: 5.5vw; height: 5.5vw; border-radius: 1vw; display: flex; align-items: center; justify-content: center; }
+.logo-name { font-size: 2.4vw; font-weight: 900; color: #111; }
+.logo-name em { color: #3B73D4; font-style: normal; }
+.lang-pill { border: 0.8px solid #d1d5db; border-radius: 20px; padding: 0.7vw 1.4vw; font-size: 1.8vw; color: #374151; white-space: nowrap; }
+.screen-body { background: #f3f4f6; padding: 2vw 2vw 0; }
+.big-title { font-size: 2.8vw; font-weight: 900; color: #0f172a; line-height: 1.3; margin-bottom: 0.8vw; }
+.big-sub { font-size: 1.7vw; color: #6b7280; line-height: 1.5; margin-bottom: 1.2vw; }
+.flags { font-size: 2.1vw; line-height: 1.8; margin-bottom: 1.4vw; }
+.card { background: #fff; border-radius: 2.5vw; padding: 2vw; border: 0.5px solid #e5e7eb; margin-bottom: 1vw; }
+.tabs { display: flex; gap: 1vw; margin-bottom: 1.5vw; }
+.tab-a { background: #3B73D4; color: #fff; font-size: 2vw; font-weight: 700; padding: 1vw 2vw; border-radius: 20px; }
+.tab-b { background: #f1f5f9; color: #6b7280; font-size: 2vw; padding: 1vw 2vw; border-radius: 20px; }
+.card-lbl { font-size: 2vw; font-weight: 800; color: #0f172a; margin-bottom: 1.2vw; }
+.btn-up { background: #3B73D4; color: #fff; font-size: 2.2vw; font-weight: 700; padding: 1.8vw; border-radius: 1.8vw; text-align: center; margin-bottom: 1vw; }
+.btn-cam { background: #1d4ed8; color: #fff; font-size: 2.2vw; font-weight: 700; padding: 1.8vw; border-radius: 1.8vw; text-align: center; margin-bottom: 1.2vw; }
+.hint { font-size: 1.5vw; color: #9ca3af; line-height: 1.5; }
+.divider { border: none; border-top: 0.5px solid #e5e7eb; margin: 1.2vw 0; }
+.lang-box { border: 0.8px solid #d1d5db; border-radius: 20px; padding: 1.4vw; font-size: 2.2vw; color: #0f172a; text-align: center; background: #fff; margin-bottom: 1vw; }
+.btn-analyze { background: #3B73D4; color: #fff; font-size: 2.4vw; font-weight: 900; padding: 1.8vw; border-radius: 1.8vw; text-align: center; }
+.browser-bar { background: #f9fafb; border-top: 0.5px solid #e5e7eb; display: flex; align-items: center; padding: 1.2vw 2vw; gap: 1vw; border-radius: 0 0 6.5vw 6.5vw; }
+.brow-nav { font-size: 2.5vw; color: #9ca3af; }
+.brow-url { flex:1; background:#fff; border:0.5px solid #d1d5db; border-radius:1vw; padding:0.7vw 1vw; font-size:1.7vw; color:#374151; text-align:center; }
+.brow-more { font-size:2.5vw; color:#6b7280; }
+.steps-section { text-align: center; width: 100%; z-index: 1; opacity: 0; transform: translateY(12px); animation: fadeUp 0.7s ease 3.4s forwards; }
+.steps-lbl { font-size: 2.4vw; font-weight: 700; color: #7AAFF5; letter-spacing: 3px; margin-bottom: 2vw; }
+.steps-row { display: flex; align-items: flex-start; justify-content: center; }
+.step { display: flex; flex-direction: column; align-items: center; width: 22vw; opacity:0; transform:translateY(10px); }
+.step:nth-child(1) { animation: fadeUp 0.5s ease 3.7s forwards; }
+.step:nth-child(3) { animation: fadeUp 0.5s ease 4.0s forwards; }
+.step:nth-child(5) { animation: fadeUp 0.5s ease 4.3s forwards; }
+.step-c { width: 9vw; height: 9vw; background: #3B73D4; border-radius: 50%; display:flex; align-items:center; justify-content:center; font-size: 4vw; font-weight: 800; color:#fff; margin-bottom: 1.2vw; }
+.step-t { font-size: 2.6vw; font-weight: 700; color: #fff; margin-bottom: 0.4vw; }
+.step-s { font-size: 2vw; color: #A8C8F5; }
+.arr { padding-top: 2vw; opacity:0; animation: fadeIn 0.4s ease 4.0s forwards; }
+.arr svg { width: 5.5vw; }
+.cta-row { text-align: center; z-index: 1; opacity: 0; transform: translateY(10px); animation: fadeUp 0.6s ease 4.8s forwards; }
+.cta { background: #3B73D4; color: #fff; font-size: 3.8vw; font-weight: 800; padding: 2.5vw 8vw; border-radius: 8vw; display:inline-block; margin-bottom: 1.2vw; }
+.langs { font-size: 2.2vw; color: #7AAFF5; }
+.fade { transition: opacity 0.4s ease; }
+@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+@keyframes phoneIn { to { opacity:1; transform:translateY(0) scale(1); } }
+@keyframes fadeIn { to { opacity:1; } }
+</style>
+</head>
+<body>
+<div id="scene">
+  <div class="headline">
+    <h1 id="hl-main">Behördenbrief bekommen?</h1>
+    <p id="hl-sub">Wir erklären ihn – einfach &amp; kostenlos.</p>
+  </div>
+
+  <div class="phone-outer">
+    <div class="btn-l1"></div><div class="btn-l2"></div><div class="btn-r1"></div>
+    <div class="phone-inner">
+      <div class="nav-bar">
+        <div class="logo-row">
+          <div class="logo-b">B</div>
+          <div class="logo-name">Behörden<em>Klar</em></div>
+        </div>
+        <div class="lang-pill fade" id="lang-pill">🌐 🇩🇪 Sprache der Seite...</div>
+      </div>
+      <div class="screen-body">
+        <div class="big-title fade" id="sc-title">Willkommen bei BehördenKlar</div>
+        <div class="big-sub fade" id="sc-sub">Fügen Sie Ihren Behördenbrief ein oder laden Sie ein Foto oder PDF hoch – wir helfen beim Verstehen, Übersetzen und den nächsten Schritten.</div>
+        <div class="flags">🇦🇱 🇸🇦 🇦🇹 🇧🇦 🇧🇬 🇨🇳 🇵🇹 🇩🇪 🇬🇧 🇫🇷 🇬🇪 🇬🇷 🇮🇹 🇭🇷 🇱🇹 🇮🇷<br>🇵🇱 🇵🇹 🇷🇴 🇷🇺 🇷🇸 🇸🇴 🇪🇸 🇹🇯 🇹🇷 🇺🇦 🇻🇳</div>
+        <div class="card">
+          <div class="tabs">
+            <div class="tab-a fade" id="tab-a">Foto oder PDF</div>
+            <div class="tab-b fade" id="tab-b">Text eingeben</div>
+          </div>
+          <div class="card-lbl fade" id="card-lbl">Datei hochladen</div>
+          <div class="btn-up fade" id="btn-up">🖼 Foto oder PDF auswählen</div>
+          <div class="btn-cam fade" id="btn-cam">📷 Kamera öffnen</div>
+          <div class="hint fade" id="hint">Bis zu 5 Dateien gleichzeitig, je max. ca. 32 MB. Passwortgeschützte PDFs werden nicht unterstützt.</div>
+          <hr class="divider">
+          <div class="lang-box fade" id="lang-box">🌐 🇩🇪 Deutsch ▼</div>
+          <div class="btn-analyze fade" id="btn-analyze">Brief analysieren</div>
+        </div>
+      </div>
+      <div class="browser-bar">
+        <span class="brow-nav">‹ ›</span>
+        <div class="brow-url">🖥 behördenklar.de ↺</div>
+        <span class="brow-more">···</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="steps-section">
+    <div class="steps-lbl fade" id="steps-lbl">SO EINFACH GEHT'S</div>
+    <div class="steps-row">
+      <div class="step">
+        <div class="step-c">1</div>
+        <div class="step-t fade" id="s1t">Hochladen</div>
+        <div class="step-s fade" id="s1s">Foto oder PDF</div>
+      </div>
+      <div class="arr"><svg viewBox="0 0 40 14" fill="none"><line x1="0" y1="7" x2="30" y2="7" stroke="#4B7EC8" stroke-width="1.5" stroke-dasharray="4 3"/><polyline points="24,2 34,7 24,12" fill="none" stroke="#4B7EC8" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      <div class="step">
+        <div class="step-c">2</div>
+        <div class="step-t fade" id="s2t">KI analysiert</div>
+        <div class="step-s fade" id="s2s">Sofort erklärt</div>
+      </div>
+      <div class="arr"><svg viewBox="0 0 40 14" fill="none"><line x1="0" y1="7" x2="30" y2="7" stroke="#4B7EC8" stroke-width="1.5" stroke-dasharray="4 3"/><polyline points="24,2 34,7 24,12" fill="none" stroke="#4B7EC8" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      <div class="step">
+        <div class="step-c">3</div>
+        <div class="step-t fade" id="s3t">Verstehen</div>
+        <div class="step-s fade" id="s3s">In deiner Sprache</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-row">
+    <div class="cta">behördenklar.de</div>
+    <div class="langs fade" id="langs-sub">Arabisch · Türkisch · Ukrainisch · Russisch · Polnisch + mehr</div>
+  </div>
+</div>
+
+<script>
+var langs=[
+  {pill:'🌐 🇩🇪 Sprache der Seite...',hlMain:'Behördenbrief bekommen?',hlSub:'Wir erklären ihn – einfach & kostenlos.',title:'Willkommen bei BehördenKlar',sub:'Fügen Sie Ihren Behördenbrief ein oder laden Sie ein Foto oder PDF hoch – wir helfen beim Verstehen, Übersetzen und den nächsten Schritten.',tabA:'Foto oder PDF',tabB:'Text eingeben',lbl:'Datei hochladen',btnUp:'🖼 Foto oder PDF auswählen',btnCam:'📷 Kamera öffnen',hint:'Bis zu 5 Dateien gleichzeitig, je max. ca. 32 MB. Passwortgeschützte PDFs werden nicht unterstützt.',langBox:'🌐 🇩🇪 Deutsch ▼',analyze:'Brief analysieren',stepsLbl:"SO EINFACH GEHT'S",s1t:'Hochladen',s1s:'Foto oder PDF',s2t:'KI analysiert',s2s:'Sofort erklärt',s3t:'Verstehen',s3s:'In deiner Sprache',langsSub:'Arabisch · Türkisch · Ukrainisch · Russisch · Polnisch + mehr'},
+  {pill:'🌐 🇹🇷 Sayfa dili...',hlMain:'Resmi mektup mu aldınız?',hlSub:'Açıklıyoruz – kolay ve ücretsiz.',title:"BehördenKlar'a Hoş Geldiniz",sub:'Resmi mektubunuzu ekleyin veya fotoğraf ya da PDF yükleyin – anlamanıza ve çevirmenize yardımcı oluyoruz.',tabA:'Fotoğraf veya PDF',tabB:'Metin girin',lbl:'Dosya yükle',btnUp:'🖼 Fotoğraf veya PDF seçin',btnCam:'📷 Kamerayı aç',hint:"Aynı anda en fazla 5 dosya, her biri max. 32 MB. Şifreli PDF'ler desteklenmez.",langBox:'🌐 🇹🇷 Türkçe ▼',analyze:'Mektubu analiz et',stepsLbl:'BU KADAR KOLAY',s1t:'Yükle',s1s:'Fotoğraf veya PDF',s2t:'YZ analiz eder',s2s:'Anında açıklar',s3t:'Anla',s3s:'Kendi dilinde',langsSub:'Türkçe · Arapça · Ukraynaca · Rusça · Lehçe + daha fazlası'},
+  {pill:'🌐 🇸🇦 لغة الصفحة...',hlMain:'هل تلقيت رسالة رسمية؟',hlSub:'نشرحها لك – بسهولة ومجاناً.',title:'مرحباً بك في BehördenKlar',sub:'أضف رسالتك الرسمية أو قم بتحميل صورة أو ملف PDF – سنساعدك على الفهم والترجمة والخطوات التالية.',tabA:'صورة أو PDF',tabB:'أدخل النص',lbl:'رفع ملف',btnUp:'🖼 اختر صورة أو PDF',btnCam:'📷 افتح الكاميرا',hint:'حتى 5 ملفات في وقت واحد، بحد أقصى 32 ميغابايت لكل منها.',langBox:'🌐 🇸🇦 العربية ▼',analyze:'تحليل الرسالة',stepsLbl:'بهذه السهولة',s1t:'ارفع',s1s:'صورة أو PDF',s2t:'الذكاء يحلل',s2s:'شرح فوري',s3t:'افهم',s3s:'بلغتك',langsSub:'العربية · التركية · الأوكرانية · الروسية · البولندية + المزيد'},
+  {pill:'🌐 🇬🇧 Page language...',hlMain:'Received an official letter?',hlSub:'We explain it – simply & for free.',title:'Welcome to BehördenKlar',sub:'Upload your official letter or a photo or PDF – we help you understand, translate and find your next steps.',tabA:'Photo or PDF',tabB:'Enter text',lbl:'Upload file',btnUp:'🖼 Select photo or PDF',btnCam:'📷 Open camera',hint:'Up to 5 files at once, max. 32 MB each. Password-protected PDFs are not supported.',langBox:'🌐 🇬🇧 English ▼',analyze:'Analyse letter',stepsLbl:'THIS EASY',s1t:'Upload',s1s:'Photo or PDF',s2t:'AI analyses',s2s:'Instant explanation',s3t:'Understand',s3s:'In your language',langsSub:'Arabic · Turkish · Ukrainian · Russian · Polish + more'},
+  {pill:'🌐 🇵🇱 Język strony...',hlMain:'Otrzymałeś oficjalny list?',hlSub:'Wyjaśniamy go – prosto i bezpłatnie.',title:'Witaj w BehördenKlar',sub:'Wgraj swój oficjalny list lub zdjęcie bądź PDF – pomagamy zrozumieć, przetłumaczyć i znaleźć kolejne kroki.',tabA:'Zdjęcie lub PDF',tabB:'Wpisz tekst',lbl:'Prześlij plik',btnUp:'🖼 Wybierz zdjęcie lub PDF',btnCam:'📷 Otwórz aparat',hint:'Do 5 plików jednocześnie, maks. 32 MB każdy. Pliki PDF chronione hasłem nie są obsługiwane.',langBox:'🌐 🇵🇱 Polski ▼',analyze:'Analizuj list',stepsLbl:'TAK PROSTO',s1t:'Wgraj',s1s:'Zdjęcie lub PDF',s2t:'AI analizuje',s2s:'Natychmiastowe wyjaśnienie',s3t:'Zrozum',s3s:'W swoim języku',langsSub:'Arabski · Turecki · Ukraiński · Rosyjski · Polski + więcej'},
+  {pill:'🌐 🇺🇦 Мова сторінки...',hlMain:'Отримали офіційного листа?',hlSub:'Ми пояснимо його – просто і безкоштовно.',title:'Ласкаво просимо до BehördenKlar',sub:'Додайте свій офіційний лист або завантажте фото чи PDF – ми допоможемо зрозуміти та перекласти.',tabA:'Фото або PDF',tabB:'Введіть текст',lbl:'Завантажити файл',btnUp:'🖼 Вибрати фото або PDF',btnCam:'📷 Відкрити камеру',hint:'До 5 файлів одночасно, макс. 32 МБ кожен. PDF із захистом паролем не підтримуються.',langBox:'🌐 🇺🇦 Українська ▼',analyze:'Аналізувати лист',stepsLbl:'ТАК ПРОСТО',s1t:'Завантажити',s1s:'Фото або PDF',s2t:'ШІ аналізує',s2s:'Миттєве пояснення',s3t:'Зрозумій',s3s:'Своєю мовою',langsSub:'Арабська · Турецька · Українська · Російська · Польська + більше'}
+];
+
+var ids=['hl-main','hl-sub','lang-pill','sc-title','sc-sub','tab-a','tab-b','card-lbl','btn-up','btn-cam','hint','lang-box','btn-analyze','steps-lbl','s1t','s1s','s2t','s2s','s3t','s3s','langs-sub'];
+var keys=['hlMain','hlSub','pill','title','sub','tabA','tabB','lbl','btnUp','btnCam','hint','langBox','analyze','stepsLbl','s1t','s1s','s2t','s2s','s3t','s3s','langsSub'];
+var idx=0;
+
+function switchLang(){
+  var els=ids.map(function(id){return document.getElementById(id);});
+  els.forEach(function(el){if(el){el.style.opacity='0';}});
+  window.setTimeout(function(){
+    idx=(idx+1)%langs.length;
+    var l=langs[idx];
+    ids.forEach(function(id,i){var el=document.getElementById(id);if(el){el.innerHTML=l[keys[i]];}});
+    els.forEach(function(el){if(el){el.style.opacity='1';}});
+  },400);
+}
+
+window.setTimeout(function(){
+  window.setInterval(switchLang,3000);
+},6000);
+</script>
+</body>
+</html>
