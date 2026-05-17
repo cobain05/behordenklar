@@ -1547,8 +1547,48 @@
       font-size: 0.78rem;
       color: var(--muted);
       max-width: 640px;
-      margin: 0 auto;
+      margin: 0 auto 0.8rem;
       line-height: 1.5;
+    }
+
+    .site-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.45rem 0.75rem;
+      color: var(--muted);
+      font-size: 0.76rem;
+      line-height: 1.4;
+    }
+
+    .site-footer-links a,
+    .site-footer-links button {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      color: var(--muted);
+      font: inherit;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .site-footer-links a:hover,
+    .site-footer-links button:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    .site-footer-links a:focus-visible,
+    .site-footer-links button:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    .site-footer-separator {
+      color: #cbd5e1;
     }
 
     .loading-screen {
@@ -2217,6 +2257,15 @@
     <p class="site-footer-legal" id="footerDisclaimer">
       Keine Rechtsberatung. Bei Fristen und rechtlichen Folgen prüfen Sie die Angaben oder wenden Sie sich an eine Beratungsstelle oder an eine Rechtsanwältin bzw. einen Rechtsanwalt.
     </p>
+    <nav class="site-footer-links" aria-label="Rechtliches">
+      <a href="/impressum.html" id="footerLinkImpressum">Impressum</a>
+      <span class="site-footer-separator" aria-hidden="true">·</span>
+      <a href="/agb.html" id="footerLinkAgb">AGB</a>
+      <span class="site-footer-separator" aria-hidden="true">·</span>
+      <a href="/datenschutz.html" id="footerLinkDatenschutz">Datenschutz</a>
+      <span class="site-footer-separator" aria-hidden="true">·</span>
+      <button type="button" id="footerCookieSettings" aria-haspopup="dialog" aria-controls="cookieSettingsModal">Cookie Einstellungen</button>
+    </nav>
   </footer>
 
   <div class="ui-lang-modal" id="uiLangModal" aria-hidden="true">
@@ -2460,6 +2509,10 @@
       const welcomeText = $("welcomeText");
       const footerTagline = $("footerTagline");
       const footerDisclaimer = $("footerDisclaimer");
+      const footerLinkImpressum = $("footerLinkImpressum");
+      const footerLinkAgb = $("footerLinkAgb");
+      const footerLinkDatenschutz = $("footerLinkDatenschutz");
+      const footerCookieSettings = $("footerCookieSettings");
 
       const MAX_LETTER_FILES = 5;
       var stagedLetterFiles = [];
@@ -3879,6 +3932,46 @@
         });
       })();
 
+      (function attachFooterLegalStrings() {
+        var keys = ["footerLinkImpressum", "footerLinkAgb", "footerLinkDatenschutz", "footerCookieSettings"];
+        var rows = {
+          "Deutsch": ["Impressum", "AGB", "Datenschutz", "Cookie Einstellungen"],
+          "Englisch": ["Legal notice", "Terms", "Privacy", "Cookie settings"],
+          "Türkisch": ["Künye", "Şartlar", "Gizlilik", "Çerez ayarları"],
+          "Arabisch": ["بيانات النشر", "الشروط", "الخصوصية", "إعدادات ملفات تعريف الارتباط"],
+          "Russisch": ["Выходные данные", "Условия", "Конфиденциальность", "Настройки cookie"],
+          "Ukrainisch": ["Відомості про видавця", "Умови", "Конфіденційність", "Налаштування cookie"],
+          "Rumänisch": ["Imprint", "Termeni", "Confidențialitate", "Setări cookie"],
+          "Polnisch": ["Nota prawna", "Regulamin", "Prywatność", "Ustawienia cookie"],
+          "Dari": ["اطلاعات ناشر", "شرایط", "حریم خصوصی", "تنظیمات کوکی"],
+          "Bulgarisch": ["За издателя", "Условия", "Поверителност", "Настройки на cookie"],
+          "Georgisch": ["გამომცემლობის მონაცემები", "პირობები", "კონფიდენციალურობა", "Cookie პარამეტრები"],
+          "Spanisch": ["Aviso legal", "Términos", "Privacidad", "Configuración de cookies"],
+          "Portugiesisch": ["Impressão legal", "Termos", "Privacidade", "Definições de cookies"],
+          "Französisch": ["Mentions légales", "Conditions", "Confidentialité", "Paramètres des cookies"],
+          "Italienisch": ["Note legali", "Termini", "Privacy", "Impostazioni cookie"],
+          "Griechisch": ["Στοιχεία έκδοσης", "Όροι", "Απόρρητο", "Ρυθμίσεις cookie"],
+          "Albanisch": ["Impressum", "Kushtet", "Privatësia", "Cilësimet e cookie-ve"],
+          "Bosnisch": ["Impresum", "Uvjeti", "Privatnost", "Postavke kolačića"],
+          "Serbisch": ["Impresum", "Uslovi", "Privatnost", "Podešavanja kolačića"],
+          "Kroatisch": ["Impresum", "Uvjeti", "Privatnost", "Postavke kolačića"],
+          "Chinesisch": ["法律信息", "条款", "隐私", "Cookie 设置"],
+          "Vietnamesisch": ["Thông tin pháp lý", "Điều khoản", "Riêng tư", "Cài đặt cookie"],
+          "Persisch": ["اطلاعات ناشر", "شرایط", "حریم خصوصی", "تنظیمات کوکی"],
+          "Somali": ["Macluumaadka daabacaadda", "Shuruudaha", "Asturnaanta", "Dejinta cookie"],
+          "Tigrinya": ["ሓበሬታ ማሕበር", "ውዕላት", "ምስጢር", "ቅንብራት Cookie"],
+          "Litauisch": ["Leidėjo duomenys", "Sąlygos", "Privatumas", "Slapukų nustatymai"],
+          "Arabisch (Ägyptisch)": ["بيانات النشر", "الشروط", "الخصوصية", "إعدادات الكوكيز"]
+        };
+        Object.keys(rows).forEach(function (lang) {
+          var vals = rows[lang];
+          var o = {};
+          for (var i = 0; i < keys.length; i++) o[keys[i]] = vals[i];
+          if (resultLayoutUiByLang[lang]) Object.assign(resultLayoutUiByLang[lang], o);
+          if (uiTranslations[lang]) Object.assign(uiTranslations[lang], o);
+        });
+      })();
+
       const loadingStepPlainExplainByUiLang = {
         Deutsch: "Einfache Erklärung wird erstellt...",
         Englisch: "Creating a simple explanation...",
@@ -4216,34 +4309,7 @@
         hideCookieConsentBar();
       }
 
-      function initCookieConsentUi() {
-        migrateLegacyCookieConsent();
-        if (cookieAllowsAnalytics()) {
-          loadGoogleAnalyticsIfConsented();
-        }
-        if (hasFinalCookieChoice()) {
-          return;
-        }
-
-        var bar = $("cookieConsentBar");
-        var btnAll = $("cookieConsentAcceptAll");
-        var btnNecc = $("cookieConsentNecessary");
-        var btnSet = $("cookieConsentSettings");
-        if (!bar || !btnAll || !btnNecc || !btnSet) return;
-
-        showCookieConsentBar();
-        updateCookieBannerUi(getUiLang());
-
-        btnAll.onclick = function () {
-          persistAllCookiesAndClose();
-        };
-        btnNecc.onclick = function () {
-          persistNecessaryCookiesAndClose();
-        };
-        btnSet.onclick = function () {
-          openCookieSettingsModal();
-        };
-
+      function wireCookieSettingsModalControls() {
         var bd = $("cookieSettingsBackdrop");
         var closeB = $("cookieSettingsClose");
         var saveB = $("cookieSettingsSave");
@@ -4266,6 +4332,11 @@
             syncCookieAnalyticsToggleUi();
           };
         }
+        if (footerCookieSettings) {
+          footerCookieSettings.onclick = function () {
+            openCookieSettingsModal();
+          };
+        }
 
         document.addEventListener("keydown", function cookieSettingsEsc(e) {
           if (e.key !== "Escape") return;
@@ -4275,6 +4346,36 @@
             e.preventDefault();
           }
         });
+      }
+
+      function initCookieConsentUi() {
+        migrateLegacyCookieConsent();
+        if (cookieAllowsAnalytics()) {
+          loadGoogleAnalyticsIfConsented();
+        }
+        wireCookieSettingsModalControls();
+        if (hasFinalCookieChoice()) {
+          return;
+        }
+
+        var bar = $("cookieConsentBar");
+        var btnAll = $("cookieConsentAcceptAll");
+        var btnNecc = $("cookieConsentNecessary");
+        var btnSet = $("cookieConsentSettings");
+        if (!bar || !btnAll || !btnNecc || !btnSet) return;
+
+        showCookieConsentBar();
+        updateCookieBannerUi(getUiLang());
+
+        btnAll.onclick = function () {
+          persistAllCookiesAndClose();
+        };
+        btnNecc.onclick = function () {
+          persistNecessaryCookiesAndClose();
+        };
+        btnSet.onclick = function () {
+          openCookieSettingsModal();
+        };
       }
 
       function updateUploadButtonsCapacityState(uiLang) {
@@ -4368,6 +4469,7 @@
         if (footerDisclaimer) {
           footerDisclaimer.textContent = t.footerDisclaimer || "";
         }
+        updateFooterLegalLinks(t);
         targetLangLabel.textContent = t.targetLangLabel;
         targetLangModalTitle.textContent = (t.targetLangLabel || "").replace(/:\s*$/, "").trim();
         modeFileLabel.textContent = t.modeFile;
@@ -4752,6 +4854,9 @@
         });
         updateTargetLangTrigger();
         updateTranslationResultTabHeading();
+        if (results && results.classList.contains("visible")) {
+          updateFooterLegalLinksForTarget();
+        }
       }
 
       function syncActiveUiLangButtons(lang) {
@@ -4793,6 +4898,18 @@
       function clearError() {
         errorBox.textContent = "";
         errorBox.classList.remove("visible", "is-friendly");
+      }
+
+      function updateFooterLegalLinks(labels) {
+        labels = labels || uiTranslations["Deutsch"];
+        if (footerLinkImpressum) footerLinkImpressum.textContent = labels.footerLinkImpressum || "Impressum";
+        if (footerLinkAgb) footerLinkAgb.textContent = labels.footerLinkAgb || "AGB";
+        if (footerLinkDatenschutz) footerLinkDatenschutz.textContent = labels.footerLinkDatenschutz || "Datenschutz";
+        if (footerCookieSettings) footerCookieSettings.textContent = labels.footerCookieSettings || "Cookie Einstellungen";
+      }
+
+      function updateFooterLegalLinksForTarget() {
+        updateFooterLegalLinks(getResultLayoutStrings());
       }
 
       function updateTemplateDownloadUi(lang) {
@@ -5237,6 +5354,7 @@
         document.body.classList.remove("results-open");
         setTemplateDownloadSectionVisible(false, "");
         if (resultFeedback) resultFeedback.hidden = true;
+        updateFooterLegalLinks(uiTranslations[getUiLang()] || uiTranslations["Deutsch"]);
         lastNormalizedParsed = null;
         updateTranslationResultTabHeading();
       });
@@ -6123,6 +6241,7 @@
         if (btnBack) btnBack.textContent = rl.rsBack || "← Back";
         if (resultsHeading) resultsHeading.textContent = rl.rsResultsHeading || "";
         resetResultFeedbackUi(rl);
+        updateFooterLegalLinks(rl);
 
         $("rsS1Label").textContent = rl.rsSection1Label || "";
         $("rsS3Label").textContent = rl.rsSection3Label || "";
