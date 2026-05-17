@@ -1320,11 +1320,15 @@
       color: #0f172a;
     }
 
-    .rs-env-stamp {
+    .rs-env-stamp-wrap {
       position: absolute;
       top: 14px;
       right: 14px;
       width: 56px;
+      text-align: center;
+    }
+
+    .rs-env-stamp {
       height: 72px;
       border: 1px dashed rgba(100, 116, 139, 0.55);
       border-radius: 6px;
@@ -1332,10 +1336,11 @@
     }
 
     .rs-env-stamp-note {
-      margin-top: 10px;
-      font-size: 0.82rem;
-      color: #64748b;
-      line-height: 1.35;
+      margin: 6px 0 0;
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      line-height: 1.25;
+      text-align: center;
     }
 
     .rs-letter-pre {
@@ -2233,11 +2238,13 @@
             </div>
             <div class="rs-tab-panel" id="rsPanelEnvelope" role="tabpanel" aria-labelledby="rsTabEnvelopeBtn">
               <div class="rs-envelope">
-                <div class="rs-env-stamp" aria-hidden="true"></div>
+                <div class="rs-env-stamp-wrap">
+                  <div class="rs-env-stamp" aria-hidden="true"></div>
+                  <p class="rs-env-stamp-note" id="rsStampHint"></p>
+                </div>
                 <div class="rs-env-sender" id="rsEnvSender"></div>
                 <p class="rs-address-hint" id="rsAdresseHinweis"></p>
                 <div class="rs-env-recipient" id="rsEnvRecipient"></div>
-                <p class="rs-env-stamp-note" id="rsStampHint"></p>
               </div>
             </div>
             <div class="rs-tab-panel" id="rsPanelLetter" role="tabpanel" aria-labelledby="rsTabLetterBtn" hidden>
