@@ -28,7 +28,7 @@
 
   function getUiLang() {
     try {
-      var savedUi = localStorage.getItem("behordenklar-ui-lang");
+      var savedUi = localStorage.getItem("seitensprache") || localStorage.getItem("behordenklar-ui-lang");
       if (savedUi && uiTranslations[savedUi]) {
         return savedUi;
       }
@@ -321,18 +321,88 @@
       Italienisch: "🇮🇹", Griechisch: "🇬🇷", Albanisch: "🇦🇱", Bosnisch: "🇧🇦",
       Serbisch: "🇷🇸", Kroatisch: "🇭🇷", Chinesisch: "🇨🇳", Vietnamesisch: "🇻🇳",
       Persisch: "🇮🇷", Somali: "🇸🇴", Tigrinya: "🇪🇷", Litauisch: "🇱🇹",
-      "Arabisch (Ägyptisch)": "🇪🇬"
+      "Arabisch (Ägyptisch)": "🇪🇬", "Chinesisch (Vereinfacht)": "🇨🇳", Swahili: "🇰🇪", Amharisch: "🇪🇹", Paschtu: "🇦🇫", Kurdisch: "🏴"
     };
     return map[lang] || "🌐";
+  }
+
+
+  var landingTranslations = {
+    Deutsch: {
+      navHow: "So funktioniert's", navFeatures: "Features", navLanguage: "Sprache wählen",
+      heroTitleHtml: 'Behördenbrief bekommen?<span class="blue">Wir erklären ihn — in deiner Sprache.</span>',
+      heroBadgeFree: "Kostenlos", heroBadgeNoSignup: "Ohne Anmeldung", heroBadgeLanguages: "27 Sprachen", heroCta: "Jetzt kostenlos testen", heroSecondaryCta: "So funktioniert's", heroAvailableIn: "Verfügbar in",
+      emoTag: "Die Übersetzer-Generation", emoTitleHtml: 'Wie oft hast du <em>als Kind</em> Briefe für deine Eltern erklärt?', emoSubHtml: '<b>Das war nicht deine Aufgabe.</b><br>Aber du hast es getan — aus Liebe. <span class="heart">❤️</span>', emoQuoteHtml: 'Heute gibt es <b>BehördenKlar</b> — damit sie es selbst verstehen.', emoStories: "Real Stories",
+      howTag: "So funktioniert's", howTitleHtml: 'In 3 Schritten zu jedem Brief — <em>verständlich</em>.', howIntro: "Kein Konto, keine App, keine Wartezeit. Du brauchst nur deinen Brief und 30 Sekunden.", stepLabel: "SCHRITT", step1Title: "Brief hochladen oder fotografieren", step1Body: "PDF, JPG oder einfach ein Foto mit dem Handy. Wir erkennen den Text automatisch.", step2Title: "Deine Sprache wählen", step2Body: "27 Sprachen verfügbar — von Türkçe und العربية bis Українська und Tiếng Việt.", step3Title: "Sofort verstehen & handeln", step3Body: "Klare Erklärung, konkrete nächste Schritte und ein Musterbrief — fertig in Sekunden.",
+      featuresTag: "Was du bekommst", featuresTitleHtml: 'Mehr als nur eine <em>Übersetzung</em>.', featuresIntro: "Wir machen den Brief nicht nur lesbar — wir machen ihn handhabbar.", featuresFreeNoSignup: "Alles kostenlos · ohne Anmeldung", featTranslationTitle: "Übersetzung", featTranslationBody: "Wortgetreu in deine Sprache — mit kulturellem Kontext, nicht nur Wort-für-Wort.", featTranslationTag: "27 Sprachen", featExplanationTitle: "Erklärung", featExplanationBody: "Was bedeutet das Schreiben in einfacher Sprache? Was wollen die Behörden eigentlich?", featExplanationTag: "Alltagssprache", featStepsTitle: "Nächste Schritte", featStepsBody: "Konkrete Anleitung: Welche Frist? Welches Formular? Was musst du jetzt tun?", featStepsTag: "Mit Fristen", featTemplateTitle: "Briefkopf-Vorlage", featTemplateBody: "Antwortbrief in korrektem Deutsch — DIN-konform, einfach ausdrucken und absenden.", featTemplateTag: "DIN 5008",
+      ctaTag: "Bereit?", ctaTitleHtml: 'Bereit, deinen Brief zu <em>verstehen?</em>', ctaIntro: "Lade deinen ersten Brief in 30 Sekunden hoch. Kein Konto, keine Anmeldung, keine Kreditkarte.", ctaButton: "Kostenlos starten", ctaLanguages: "27 Sprachen", ctaDsgvo: "DSGVO-konform", ctaServer: "Server in 🇩🇪",
+      footerTaglineHtml: "Dokumente verstehen, einfach gemacht. Behördenpost auf Deutsch — sofort verständlich in deiner Sprache.", footerProduct: "Produkt", footerLegal: "Rechtliches", footerContact: "Kontakt", footerCookieSettings: "Cookie-Einstellungen"
+    },
+    Englisch: {
+      navHow: "How it works", navFeatures: "Features", navLanguage: "Choose language",
+      heroTitleHtml: 'Received an official letter?<span class="blue">We explain it — in your language.</span>',
+      heroBadgeFree: "Free", heroBadgeNoSignup: "No sign-up", heroBadgeLanguages: "27 languages", heroCta: "Try for free", heroSecondaryCta: "How it works", heroAvailableIn: "Available in",
+      emoTag: "The translator generation", emoTitleHtml: 'How often did you explain official letters for your parents <em>as a child</em>?', emoSubHtml: '<b>That was not your job.</b><br>But you did it — out of love. <span class="heart">❤️</span>', emoQuoteHtml: 'Today there is <b>BehördenKlar</b> — so they can understand it themselves.', emoStories: "Real stories",
+      howTag: "How it works", howTitleHtml: 'Understand any letter in 3 steps — <em>clearly</em>.', howIntro: "No account, no app, no waiting. All you need is your letter and 30 seconds.", stepLabel: "STEP", step1Title: "Upload or photograph the letter", step1Body: "PDF, JPG or simply a phone photo. We recognise the text automatically.", step2Title: "Choose your language", step2Body: "27 languages available — from Türkçe and العربية to Українська and Tiếng Việt.", step3Title: "Understand and act immediately", step3Body: "Clear explanation, concrete next steps and a sample letter — ready in seconds.",
+      featuresTag: "What you get", featuresTitleHtml: 'More than just a <em>translation</em>.', featuresIntro: "We do not just make the letter readable — we make it manageable.", featuresFreeNoSignup: "All free · no sign-up", featTranslationTitle: "Translation", featTranslationBody: "Faithful translation into your language — with cultural context, not just word for word.", featTranslationTag: "27 languages", featExplanationTitle: "Explanation", featExplanationBody: "What does the letter mean in simple language? What do the authorities actually want?", featExplanationTag: "Everyday language", featStepsTitle: "Next steps", featStepsBody: "Concrete guidance: Which deadline? Which form? What do you need to do now?", featStepsTag: "With deadlines", featTemplateTitle: "Letter template", featTemplateBody: "Reply letter in correct German — DIN-compliant, easy to print and send.", featTemplateTag: "DIN 5008",
+      ctaTag: "Ready?", ctaTitleHtml: 'Ready to <em>understand</em> your letter?', ctaIntro: "Upload your first letter in 30 seconds. No account, no registration, no credit card.", ctaButton: "Start free", ctaLanguages: "27 languages", ctaDsgvo: "GDPR-compliant", ctaServer: "Server in 🇩🇪",
+      footerTaglineHtml: "BehördenKlar – Understanding documents, made simple", footerProduct: "Product", footerLegal: "Legal", footerContact: "Contact", footerCookieSettings: "Cookie settings"
+    },
+    Türkisch: {
+      navHow: "Nasıl çalışır?", navFeatures: "Özellikler", navLanguage: "Dil seçin",
+      heroTitleHtml: 'Resmi mektup mu aldın?<span class="blue">Onu senin dilinde açıklıyoruz.</span>', heroBadgeFree: "Ücretsiz", heroBadgeNoSignup: "Kayıt gerekmez", heroBadgeLanguages: "27 dil", heroCta: "Ücretsiz dene", heroSecondaryCta: "Nasıl çalışır?", heroAvailableIn: "MEVCUT DİLLER",
+      emoTag: "ÇEVİRMEN NESLİ", emoTitleHtml: 'Çocukken ebeveynlerin için kaç kez resmi yazıları açıkladın?', emoSubHtml: '<b>Bu senin görevin değildi.</b><br>Ama sevgi yüzünden yaptın. <span class="heart">❤️</span>', emoQuoteHtml: 'Artık <b>BehördenKlar</b> var — ki onlar kendileri anlasın.', emoStories: "GERÇEK HİKAYELER",
+      howTag: "NASIL ÇALIŞIR?", howTitleHtml: 'Her mektubu 3 adımda — anlaşılır şekilde.', howIntro: "Hesap yok, uygulama yok, bekleme yok. Sadece mektubun ve 30 saniyen yeter.", stepLabel: "ADIM", step1Title: "Mektubu yükle veya fotoğrafla", step1Body: "PDF, JPG veya telefonla çekilen bir fotoğraf. Metni otomatik olarak tanırız.", step2Title: "Dilini seç", step2Body: "27 dil mevcut — Türkçe ve العربية'den Українська ve Tiếng Việt'e kadar.", step3Title: "Hemen anla ve harekete geç", step3Body: "Net açıklama, somut adımlar ve örnek mektup — saniyeler içinde hazır.",
+      featuresTag: "NE ALIRSIN?", featuresTitleHtml: 'Sadece <em>çeviri</em> değil.', featuresIntro: "Mektubu sadece okunabilir kılmıyoruz, onunla ne yapacağını da anlaşılır hale getiriyoruz.", featuresFreeNoSignup: "Hepsi ücretsiz · kayıt gerekmez", featTranslationTitle: "Çeviri", featTranslationBody: "Diline sadık çeviri — sadece kelime kelime değil, bağlamıyla birlikte.", featTranslationTag: "27 dil", featExplanationTitle: "Açıklama", featExplanationBody: "Bu yazı sade dilde ne anlama geliyor? Yetkililer aslında ne istiyor?", featExplanationTag: "Günlük dil", featStepsTitle: "Sonraki adımlar", featStepsBody: "Somut rehberlik: Hangi son tarih? Hangi form? Şimdi ne yapmalısın?", featStepsTag: "Son tarihlerle", featTemplateTitle: "Mektup şablonu", featTemplateBody: "Doğru Almanca ile yanıt mektubu — DIN standardına uygun, kolayca yazdırıp gönderebilirsin.", featTemplateTag: "DIN 5008",
+      ctaTag: "HAZIR MISIN?", ctaTitleHtml: 'Mektubunu anlamaya hazır mısın?', ctaIntro: "İlk mektubunu 30 saniyede yükle. Hesap yok, kayıt yok, kredi kartı yok.", ctaButton: "Ücretsiz başla", ctaLanguages: "27 dil", ctaDsgvo: "GDPR uyumlu", ctaServer: "Server in 🇩🇪",
+      footerTaglineHtml: "BehördenKlar – Belgeleri anlamak, artık kolay", footerProduct: "ÜRÜN", footerLegal: "YASAL", footerContact: "İLETİŞİM", footerCookieSettings: "Çerez ayarları"
+    }
+  };
+
+  function stripLeadingLanguageIcon(text) {
+    return String(text || "").replace(/^\s*\p{Extended_Pictographic}\s*/u, "").replace(/:\s*$/, "").trim();
+  }
+
+  function fallbackLandingTranslation(lang) {
+    var t = uiTranslations[lang] || {};
+    return {
+      navHow: t.lpStepsHeading, navFeatures: t.lpFeaturesHeading, navLanguage: stripLeadingLanguageIcon(t.lpUiLangTrigger || t.uiLangLabel),
+      heroTitleHtml: t.lpHeroTitle, heroCta: t.lpNavCta, heroSecondaryCta: t.lpStepsHeading,
+      howTag: t.lpStepsHeading, howIntro: t.lpStepsIntro, step1Title: t.lpStep1Title, step1Body: t.lpStep1Body, step2Title: t.lpStep2Title, step2Body: t.lpStep2Body, step3Title: t.lpStep3Title, step3Body: t.lpStep3Body,
+      featuresTag: t.lpFeaturesHeading, featuresIntro: t.lpFeaturesIntro, featTranslationTitle: t.lpFeat1Title, featTranslationBody: t.lpFeat1Body, featExplanationTitle: t.lpFeat2Title, featExplanationBody: t.lpFeat2Body, featStepsTitle: t.lpFeat3Title, featStepsBody: t.lpFeat3Body, featTemplateTitle: t.lpFeat4Title, featTemplateBody: t.lpFeat4Body,
+      footerTaglineHtml: t.lpFooterTagline || t.footerTagline, footerCookieSettings: t.cookieSettings, footerProduct: t.lpFeaturesHeading, footerLegal: t.lpNavDatenschutz, footerContact: t.lpContactBtn
+    };
+  }
+
+  function getLandingTranslation(lang) {
+    var base = landingTranslations.Englisch || {};
+    var direct = landingTranslations[lang] || fallbackLandingTranslation(lang);
+    var out = {};
+    Object.keys(base).forEach(function (k) { out[k] = base[k]; });
+    Object.keys(direct || {}).forEach(function (k) {
+      if (direct[k] != null && String(direct[k]).trim() !== "") out[k] = direct[k];
+    });
+    return out;
+  }
+
+  function applyLandingDataI18n(lang) {
+    var tr = getLandingTranslation(lang);
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      if (el.id === "uiLangMobileTriggerText") return;
+      var key = el.getAttribute("data-i18n");
+      if (tr[key] != null) el.textContent = tr[key];
+    });
+    document.querySelectorAll("[data-i18n-html]").forEach(function (el) {
+      var key = el.getAttribute("data-i18n-html");
+      if (tr[key] != null) el.innerHTML = tr[key];
+    });
   }
 
   function syncLpFlagsFromModal() {
     var wrap = $("lpFlagsWrap");
     var grid = $("uiLangModalGrid");
     if (!wrap || !grid) return;
-    while (wrap.firstChild) {
-      wrap.removeChild(wrap.firstChild);
-    }
+    while (wrap.firstChild) { wrap.removeChild(wrap.firstChild); }
     grid.querySelectorAll(".ui-modal-lang-btn").forEach(function (btn) {
       var langKey = btn.getAttribute("data-ui-lang");
       var span = document.createElement("span");
@@ -357,7 +427,7 @@
     }
     var uiLangMobileTriggerText = $("uiLangMobileTriggerText");
     if (uiLangMobileTriggerText) {
-      uiLangMobileTriggerText.textContent = t.lpUiLangTrigger || t.uiLangLabel || "";
+      uiLangMobileTriggerText.textContent = getUiLangEmoji(lang) + " " + (getLandingTranslation(lang).navLanguage || stripLeadingLanguageIcon(t.lpUiLangTrigger || t.uiLangLabel || "Sprache wählen"));
     }
 
     document.querySelectorAll(".ui-modal-lang-btn").forEach(function (b) {
@@ -366,6 +436,8 @@
 
     var brand = $("lpBrandLink") || document.querySelector(".brand");
     if (brand) brand.setAttribute("aria-label", t.lpBrandAria || "BehördenKlar");
+
+    applyLandingDataI18n(lang);
 
     var heroCtaLabel = $("lpHeroCtaLabel");
     var heroCta = $("lpHeroCta");
@@ -412,10 +484,13 @@
     tx("lpNavDatenschutz", t.lpNavDatenschutz);
     tx("lpFooterOwnerLabel", t.lpFooterOwnerLabel);
 
+    applyLandingDataI18n(lang);
+
     syncLpFlagsFromModal();
 
     try {
       localStorage.setItem("behordenklar-ui-lang", lang);
+      localStorage.setItem("seitensprache", lang);
     } catch (e) {}
 
     updateCookieBannerUi(lang);
