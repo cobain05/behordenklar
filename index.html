@@ -5808,6 +5808,12 @@
           "- Do NOT confuse similar digits: 1/7, 3/8, 6/0, 2/7\n" +
           "- If a number is unclear or unreadable, write \"?\" instead of guessing\n" +
           "- The difference between 2 km/h and 3 km/h can have legal consequences\n\n" +
+          "FORMATTING – UNITS:\n" +
+          "Always use abbreviations for units, never write them out:\n" +
+          "- km/h (never 'Kilometer pro Stunde' or 'kilometers per hour')\n" +
+          "- EUR (never 'Euro' written out in amounts, e.g. '50,00 EUR')\n" +
+          "- m² for square meters\n" +
+          "Apply this to ALL languages.\n\n" +
           "AUSGABE: Antworte ausschließlich mit einem gültigen JSON-Objekt nach Schema „schema_version“: 2 (kein Markdown außerhalb des JSON, kein Code-Fence). " +
           "Alle Felder außer „brief_mit_platzhaltern“ sind in der gewählten ZIELSPRACHE zu schreiben. „brief_mit_platzhaltern“ bleibt ausnahmslos auf Deutsch.\n\n" +
           "TEXTFORMAT: Verwende kein Markdown (keine Sternchen für Fett, keine # -Überschriften, keine Aufzählung mit * oder -). Nur reiner Text mit \\n für Zeilenumbrüche. " +
@@ -6635,6 +6641,7 @@
               model: MODEL,
               _bk_files: fileMetadataForApi,
               max_tokens: 8192,
+              temperature: 0,
               thinking: { type: "disabled" },
               messages: [
                 {

@@ -208,6 +208,7 @@ module.exports = async function handler(req, res) {
   if (!bodyObj.model || String(bodyObj.model).trim() === "") {
     bodyObj.model = DEFAULT_ANTHROPIC_MODEL;
   }
+  bodyObj.temperature = 0;
 
   var fileValidationError = validateUploadedFiles(bodyObj);
   if (fileValidationError) {
