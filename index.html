@@ -2499,8 +2499,7 @@
             </div>
             <p class="sepa-warning">⚠️ Bitte prüfen Sie IBAN und Betrag sorgfältig anhand Ihres Originalbriefs bevor Sie die Überweisung tätigen.</p>
             <div class="sepa-actions">
-              <button type="button" class="sepa-action-btn" id="btnSepaPrint">Drucken</button>
-              <button type="button" class="sepa-action-btn secondary" id="btnSepaSaveImage">Als Bild speichern</button>
+              <button type="button" class="sepa-action-btn" id="btnSepaPrint">Drucken / Als PDF speichern</button>
             </div>
           </section>
 
@@ -2741,7 +2740,6 @@
       const btnSepaToggle = $("btnSepaToggle");
       const sepaSection = $("sepaSection");
       const btnSepaPrint = $("btnSepaPrint");
-      const btnSepaSaveImage = $("btnSepaSaveImage");
       const uiLangModal = $("uiLangModal");
       const uiLangModalClose = $("uiLangModalClose");
       const uiLangMobileTrigger = $("uiLangMobileTrigger");
@@ -4312,8 +4310,7 @@
         Object.keys(resultLayoutUiByLang).forEach(function (lang) {
           resultLayoutUiByLang[lang].rsSepaHinweis = rows[lang] || fallback;
           resultLayoutUiByLang[lang].rsSepaToggle = "Überweisungsschein anzeigen →";
-          resultLayoutUiByLang[lang].rsSepaPrint = "Drucken";
-          resultLayoutUiByLang[lang].rsSepaSaveImage = "Als Bild speichern";
+          resultLayoutUiByLang[lang].rsSepaPrint = "Drucken / Als PDF speichern";
         });
       })();
 
@@ -5844,122 +5841,6 @@
         });
       }
 
-      function drawCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
-        var words = String(text || "—").split(/\s+/);
-        var line = "";
-        var currentY = y;
-        words.forEach(function (word) {
-          var testLine = line ? line + " " + word : word;
-          if (ctx.measureText(testLine).width > maxWidth && line) {
-            ctx.fillText(line, x, currentY);
-            line = word;
-            currentY += lineHeight;
-          } else {
-            line = testLine;
-          }
-        });
-        if (line) {
-          ctx.fillText(line, x, currentY);
-        }
-      }
-
-      function currentSepaDataForImage() {
-        if (lastNormalizedParsed && lastNormalizedParsed.sepa_daten) {
-          return coerceSepaDaten(lastNormalizedParsed.sepa_daten);
-        }
-        return coerceSepaDaten({
-          empfaenger: $("sepaEmpfaenger") ? $("sepaEmpfaenger").textContent : "",
-          iban: $("sepaIban") ? $("sepaIban").textContent : "",
-          bic: $("sepaBic") ? $("sepaBic").textContent : "",
-          betrag_euro: $("sepaBetrag") ? $("sepaBetrag").textContent : "",
-          verwendungszweck: $("sepaVerwendungszweck") ? $("sepaVerwendungszweck").textContent : "",
-        });
-      }
-
-      function drawSepaField(ctx, label, value, x, y, width, options) {
-        options = options || {};
-        ctx.fillStyle = "#E8600A";
-        ctx.font = "11px Arial";
-        ctx.fillText(label, x, y);
-        ctx.fillStyle = "#1a1a1a";
-        ctx.font = options.amount ? "bold 22px Arial" : options.mono ? "16px Courier New" : "16px Arial";
-        drawCanvasText(ctx, value || "—", x, y + 25, width, 20);
-        ctx.strokeStyle = "#dddddd";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(x, y + 35);
-        ctx.lineTo(x + width, y + 35);
-        ctx.stroke();
-      }
-
-      function saveSepaAsBild() {
-        var sepaData = currentSepaDataForImage();
-        var canvas = document.createElement("canvas");
-        canvas.width = 800;
-        canvas.height = 600;
-        var ctx = canvas.getContext("2d");
-        if (!ctx) {
-          throw new Error("Canvas-Kontext nicht verfügbar.");
-        }
-
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, 800, 600);
-
-        ctx.strokeStyle = "#E8600A";
-        ctx.lineWidth = 3;
-        ctx.strokeRect(10, 10, 780, 580);
-
-        ctx.fillStyle = "#E8600A";
-        ctx.font = "bold 20px Arial";
-        ctx.fillText("SEPA-Überweisung / Zahlschein", 30, 50);
-
-        ctx.strokeStyle = "#E8600A";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(10, 65);
-        ctx.lineTo(790, 65);
-        ctx.stroke();
-
-        drawSepaField(ctx, "EMPFÄNGER", sepaData.empfaenger, 30, 100, 720);
-        drawSepaField(ctx, "IBAN DES EMPFÄNGERS", sepaData.iban, 30, 160, 720, { mono: true });
-        drawSepaField(ctx, "BIC", sepaData.bic, 30, 220, 330, { mono: true });
-        drawSepaField(ctx, "BETRAG (EUR)", sepaData.betrag_euro, 450, 220, 300, { amount: true });
-        drawSepaField(ctx, "VERWENDUNGSZWECK", sepaData.verwendungszweck, 30, 280, 720);
-
-        ctx.fillStyle = "#E8600A";
-        ctx.font = "11px Arial";
-        ctx.fillText("IHRE DATEN (SELBST AUSFÜLLEN)", 30, 370);
-
-        ctx.fillStyle = "#888888";
-        ctx.font = "14px Arial";
-        ctx.fillText("Ihr Name: ________________________", 30, 400);
-        ctx.fillText("Ihre IBAN: _______________________", 30, 430);
-        ctx.fillText("Datum: _______________", 30, 460);
-        ctx.fillText("Unterschrift: ____________________", 30, 490);
-
-        ctx.fillStyle = "#E8600A";
-        ctx.font = "12px Arial";
-        ctx.fillText("Bitte prüfen Sie IBAN und Betrag anhand Ihres Originalbriefs.", 30, 550);
-
-        var link = document.createElement("a");
-        link.download = "SEPA-Ueberweisungsschein.png";
-        link.href = canvas.toDataURL("image/png");
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-      }
-
-      if (btnSepaSaveImage) {
-        btnSepaSaveImage.addEventListener("click", function () {
-          try {
-            saveSepaAsBild();
-          } catch (err) {
-            console.error("Bild speichern fehlgeschlagen:", err);
-            alert("Bild konnte nicht gespeichert werden. Bitte nutzen Sie die Drucken-Funktion.");
-          }
-        });
-      }
-
       function startLoadingScreen() {
         var rl = getResultLayoutStrings();
         if (loadingTitle) loadingTitle.textContent = rl.rsLoadingTitle || "";
@@ -7154,8 +7035,7 @@
         var data = coerceSepaDaten(parsed.sepa_daten);
         btnSepaToggle.textContent = rl.rsSepaToggle || "Überweisungsschein anzeigen →";
         if ($("rsSepaHinweis")) $("rsSepaHinweis").textContent = rl.rsSepaHinweis || "";
-        if (btnSepaPrint) btnSepaPrint.textContent = rl.rsSepaPrint || "Drucken";
-        if (btnSepaSaveImage) btnSepaSaveImage.textContent = rl.rsSepaSaveImage || "Als Bild speichern";
+        if (btnSepaPrint) btnSepaPrint.textContent = rl.rsSepaPrint || "Drucken / Als PDF speichern";
         setTextOrDash("sepaEmpfaenger", data.empfaenger);
         setTextOrDash("sepaIban", data.iban);
         setTextOrDash("sepaBic", data.bic);
@@ -7358,6 +7238,50 @@
         }
       }
 
+      function fallbackHashString(input) {
+        var h1 = 0xdeadbeef;
+        var h2 = 0x41c6ce57;
+        var s = String(input || "");
+        for (var i = 0; i < s.length; i += 1) {
+          var ch = s.charCodeAt(i);
+          h1 = Math.imul(h1 ^ ch, 2654435761);
+          h2 = Math.imul(h2 ^ ch, 1597334677);
+        }
+        h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+        h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+        return ((h2 >>> 0).toString(16).padStart(8, "0") + (h1 >>> 0).toString(16).padStart(8, "0"));
+      }
+
+      async function sha256Hex(input) {
+        var str = String(input || "");
+        if (window.crypto && window.crypto.subtle && window.TextEncoder) {
+          var bytes = new TextEncoder().encode(str);
+          var digest = await window.crypto.subtle.digest("SHA-256", bytes);
+          return Array.from(new Uint8Array(digest))
+            .map(function (b) {
+              return b.toString(16).padStart(2, "0");
+            })
+            .join("");
+        }
+        return fallbackHashString(str);
+      }
+
+      function getCachedModelText(promptHash) {
+        try {
+          return sessionStorage.getItem("bk-model-response-v1:" + promptHash);
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function cacheModelText(promptHash, text) {
+        try {
+          sessionStorage.setItem("bk-model-response-v1:" + promptHash, String(text || ""));
+        } catch (e) {
+          // Large image requests can exceed browser storage limits; deterministic requests still continue normally.
+        }
+      }
+
       analyzeBtn.addEventListener("click", async function () {
         clearError();
         lastNormalizedParsed = null;
@@ -7465,20 +7389,42 @@
               content: content,
             },
           ];
+          var requestBody = {
+            model: MODEL,
+            _bk_files: fileMetadataForApi,
+            max_tokens: 8192,
+            temperature: 0,
+            thinking: { type: "disabled" },
+            messages: requestMessages,
+          };
+          var requestBodyJson = JSON.stringify(requestBody);
+          var promptHash = await sha256Hex(requestBodyJson);
+          console.log("temperature:", requestBody.temperature);
+          console.log("prompt_hash:", promptHash);
+
+          var cachedTextOut = getCachedModelText(promptHash);
+          if (cachedTextOut) {
+            try {
+              var cachedParsed = parseModelJson(cachedTextOut);
+              renderResults(cachedParsed);
+              results.classList.add("visible");
+              document.body.classList.add("results-open");
+              results.scrollTop = 0;
+              return;
+            } catch (cacheErr) {
+              try {
+                sessionStorage.removeItem("bk-model-response-v1:" + promptHash);
+              } catch (e) {}
+            }
+          }
+
           var res = await fetch(API_URL, {
             method: "POST",
             headers: {
               "content-type": "application/json",
               "anthropic-version": ANTHROPIC_VERSION,
             },
-            body: JSON.stringify({
-              model: MODEL,
-              _bk_files: fileMetadataForApi,
-              max_tokens: 8192,
-              temperature: 0,
-              thinking: { type: "disabled" },
-              messages: requestMessages,
-            }),
+            body: requestBodyJson,
           });
 
           var rawText = await res.text();
@@ -7537,6 +7483,7 @@
               textOut += parts[i].text;
             }
           }
+          cacheModelText(promptHash, textOut);
 
           var parsed;
           try {
