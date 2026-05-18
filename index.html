@@ -5847,17 +5847,26 @@
 
       if (btnSepaSaveImage) {
         btnSepaSaveImage.addEventListener("click", async function () {
-          if (!window.html2canvas || !$("sepaSlip")) {
-            window.print();
-            return;
+          var sepaElement = $("sepaSlip");
+          try {
+            if (!window.html2canvas || !sepaElement) {
+              throw new Error("html2canvas oder SEPA-Element nicht verfügbar.");
+            }
+            var canvas = await window.html2canvas(sepaElement, {
+              scale: 2,
+              backgroundColor: "#ffffff",
+              useCORS: true,
+            });
+            var link = document.createElement("a");
+            link.download = "SEPA-Ueberweisungsschein.png";
+            link.href = canvas.toDataURL("image/png");
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+          } catch (err) {
+            console.error("Bild speichern fehlgeschlagen:", err);
+            alert("Bild konnte nicht gespeichert werden. Bitte nutzen Sie die Drucken-Funktion.");
           }
-          var canvas = await window.html2canvas($("sepaSlip"), { backgroundColor: "#ffffff", scale: 2 });
-          var link = document.createElement("a");
-          link.download = "sepa-ueberweisungsschein.png";
-          link.href = canvas.toDataURL("image/png");
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
         });
       }
 
