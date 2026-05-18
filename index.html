@@ -2497,7 +2497,7 @@
                 </div>
               </div>
             </div>
-            <p class="sepa-warning">⚠️ Bitte prüfen Sie IBAN und Betrag sorgfältig anhand Ihres Originalbriefs bevor Sie die Überweisung tätigen.</p>
+            <p class="sepa-warning" id="rsSepaPruefHinweis">Bitte prüfen Sie IBAN und Betrag sorgfältig anhand Ihres Originalbriefs bevor Sie die Überweisung tätigen.</p>
             <div class="sepa-actions">
               <button type="button" class="sepa-action-btn" id="btnSepaPrint">Drucken / Als PDF speichern</button>
             </div>
@@ -4309,8 +4309,137 @@
         };
         Object.keys(resultLayoutUiByLang).forEach(function (lang) {
           resultLayoutUiByLang[lang].rsSepaHinweis = rows[lang] || fallback;
-          resultLayoutUiByLang[lang].rsSepaToggle = "Überweisungsschein anzeigen →";
-          resultLayoutUiByLang[lang].rsSepaPrint = "Drucken / Als PDF speichern";
+        });
+      })();
+
+      (function attachLocalizedResultLabels() {
+        var fallback = {
+          rsWarnboxBussgeld: "Important deadline – action required",
+          rsWarnboxRechnung: "Payment Amount",
+          rsWarnboxMahnung: "Urgent reminder – act now",
+          rsWarnboxBescheid: "Check the decision – note the appeal deadline",
+          rsWarnboxKuendigung: "Note the termination deadline",
+          rsWarnboxBehoerde: "Important deadline – action required",
+          rsLabelRechnungsnummer: "Invoice Number",
+          rsLabelGesamtbetrag: "Total Amount",
+          rsLabelRechnungsdatum: "Invoice Date",
+          rsLabelZahlungsziel: "Payment Due",
+          rsLabelSofortFaellig: "Due immediately",
+          rsSepaButtonAnzeigen: "Show transfer form →",
+          rsSepaButtonDrucken: "Print / Save as PDF",
+          rsSepaPruefHinweis: "Please check IBAN and amount carefully against your original letter before making the transfer.",
+        };
+        var rows = {
+          Deutsch: {
+            rsWarnboxBussgeld: "Wichtige Frist – Handeln erforderlich",
+            rsWarnboxRechnung: "Zahlungsbetrag",
+            rsWarnboxMahnung: "Dringende Mahnung – sofort handeln",
+            rsWarnboxBescheid: "Bescheid prüfen – Widerspruchsfrist beachten",
+            rsWarnboxKuendigung: "Kündigungsfrist beachten",
+            rsWarnboxBehoerde: "Wichtige Frist – Handeln erforderlich",
+            rsLabelRechnungsnummer: "Rechnungsnummer",
+            rsLabelGesamtbetrag: "Gesamtbetrag",
+            rsLabelRechnungsdatum: "Rechnungsdatum",
+            rsLabelZahlungsziel: "Zahlungsziel",
+            rsLabelSofortFaellig: "Sofort fällig",
+            rsSepaButtonAnzeigen: "Überweisungsschein anzeigen →",
+            rsSepaButtonDrucken: "Drucken / Als PDF speichern",
+            rsSepaPruefHinweis: "Bitte prüfen Sie IBAN und Betrag sorgfältig anhand Ihres Originalbriefs bevor Sie die Überweisung tätigen.",
+          },
+          Englisch: fallback,
+          "Türkisch": {
+            rsWarnboxRechnung: "Ödeme Tutarı",
+            rsLabelRechnungsnummer: "Fatura Numarası",
+            rsLabelGesamtbetrag: "Toplam Tutar",
+            rsLabelRechnungsdatum: "Fatura Tarihi",
+            rsLabelZahlungsziel: "Ödeme Vadesi",
+            rsLabelSofortFaellig: "Hemen ödenmeli",
+            rsSepaButtonAnzeigen: "Ödeme formunu göster →",
+            rsSepaButtonDrucken: "Yazdır / PDF olarak kaydet",
+            rsSepaPruefHinweis: "Ödemeyi yapmadan önce IBAN ve tutarı orijinal mektubunuzla dikkatlice karşılaştırın.",
+          },
+          Arabisch: {
+            rsWarnboxRechnung: "مبلغ الدفع",
+            rsLabelRechnungsnummer: "رقم الفاتورة",
+            rsLabelGesamtbetrag: "المبلغ الإجمالي",
+            rsLabelRechnungsdatum: "تاريخ الفاتورة",
+            rsLabelZahlungsziel: "موعد الدفع",
+            rsLabelSofortFaellig: "مستحق فوراً",
+            rsSepaButtonAnzeigen: "عرض نموذج التحويل →",
+            rsSepaButtonDrucken: "طباعة / حفظ كـ PDF",
+            rsSepaPruefHinweis: "يرجى التحقق من IBAN والمبلغ بعناية مقارنةً بالرسالة الأصلية قبل إجراء التحويل.",
+          },
+          "Arabisch (Ägyptisch)": {
+            rsWarnboxRechnung: "مبلغ الدفع",
+            rsLabelRechnungsnummer: "رقم الفاتورة",
+            rsLabelGesamtbetrag: "المبلغ الإجمالي",
+            rsLabelRechnungsdatum: "تاريخ الفاتورة",
+            rsLabelZahlungsziel: "موعد الدفع",
+            rsLabelSofortFaellig: "مستحق فوراً",
+            rsSepaButtonAnzeigen: "عرض نموذج التحويل →",
+            rsSepaButtonDrucken: "طباعة / حفظ كـ PDF",
+            rsSepaPruefHinweis: "يرجى التحقق من IBAN والمبلغ بعناية مقارنةً بالرسالة الأصلية قبل إجراء التحويل.",
+          },
+          Russisch: {
+            rsWarnboxRechnung: "Сумма платежа",
+            rsLabelRechnungsnummer: "Номер счёта",
+            rsLabelGesamtbetrag: "Итого",
+            rsLabelRechnungsdatum: "Дата счёта",
+            rsLabelZahlungsziel: "Срок оплаты",
+            rsLabelSofortFaellig: "Немедленно",
+            rsSepaButtonAnzeigen: "Показать бланк перевода →",
+            rsSepaButtonDrucken: "Печать / Сохранить как PDF",
+            rsSepaPruefHinweis: "Пожалуйста, проверьте IBAN и сумму по оригиналу письма перед переводом.",
+          },
+          Ukrainisch: {
+            rsWarnboxRechnung: "Сума платежу",
+            rsLabelRechnungsnummer: "Номер рахунку",
+            rsLabelGesamtbetrag: "Загальна сума",
+            rsLabelRechnungsdatum: "Дата рахунку",
+            rsLabelZahlungsziel: "Термін оплати",
+            rsLabelSofortFaellig: "Негайно",
+            rsSepaButtonAnzeigen: "Показати бланк переказу →",
+            rsSepaButtonDrucken: "Друк / Зберегти як PDF",
+            rsSepaPruefHinweis: "Будь ласка, перевірте IBAN і суму за оригіналом листа перед переказом.",
+          },
+          Polnisch: {
+            rsWarnboxRechnung: "Kwota płatności",
+            rsLabelRechnungsnummer: "Numer faktury",
+            rsLabelGesamtbetrag: "Łączna kwota",
+            rsLabelRechnungsdatum: "Data faktury",
+            rsLabelZahlungsziel: "Termin płatności",
+            rsLabelSofortFaellig: "Natychmiast wymagalne",
+            rsSepaButtonAnzeigen: "Pokaż formularz przelewu →",
+            rsSepaButtonDrucken: "Drukuj / Zapisz jako PDF",
+            rsSepaPruefHinweis: "Przed dokonaniem przelewu sprawdź uważnie IBAN i kwotę w oryginalnym piśmie.",
+          },
+          Rumänisch: {
+            rsWarnboxRechnung: "Sumă de plată",
+            rsLabelRechnungsnummer: "Număr factură",
+            rsLabelGesamtbetrag: "Total",
+            rsLabelRechnungsdatum: "Data facturii",
+            rsLabelZahlungsziel: "Scadență",
+            rsLabelSofortFaellig: "Imediat scadent",
+            rsSepaButtonAnzeigen: "Afișați formularul de transfer →",
+            rsSepaButtonDrucken: "Tipăriți / Salvați ca PDF",
+            rsSepaPruefHinweis: "Verificați cu atenție IBAN-ul și suma față de scrisoarea originală înainte de transfer.",
+          },
+        };
+        Object.keys(resultLayoutUiByLang).forEach(function (lang) {
+          var current = resultLayoutUiByLang[lang];
+          var row = rows[lang] || fallback;
+          Object.assign(current, fallback, row);
+          current.rsWarnboxBussgeld = row.rsWarnboxBussgeld || fallback.rsWarnboxBussgeld;
+          current.rsWarnboxMahnung = row.rsWarnboxMahnung || fallback.rsWarnboxMahnung;
+          current.rsWarnboxBescheid = row.rsWarnboxBescheid || fallback.rsWarnboxBescheid;
+          current.rsWarnboxKuendigung = row.rsWarnboxKuendigung || fallback.rsWarnboxKuendigung;
+          current.rsWarnboxBehoerde = row.rsWarnboxBehoerde || fallback.rsWarnboxBehoerde;
+          current.rsSepaToggle = current.rsSepaButtonAnzeigen;
+          current.rsSepaPrint = current.rsSepaButtonDrucken;
+          current.rsFileNumber = current.rsFileNumber || current.rsGridAktenzeichen || fallback.rsLabelRechnungsnummer;
+          current.rsFine = current.rsFine || current.rsGridBussgeld || "Fine";
+          current.rsDate = current.rsDate || current.rsGridDatum || "Date";
+          current.rsLegalBasis = current.rsLegalBasis || current.rsGridRechtsgrundlage || "Legal basis";
         });
       })();
 
@@ -6979,13 +7108,13 @@
       function warnTitleForBriefTyp(briefTyp, rl) {
         var type = normalizeBriefTyp(briefTyp);
         var titles = {
-          bussgeld: "Wichtige Frist – Handeln erforderlich",
-          rechnung: "Zahlungsbetrag",
-          mahnung: "Dringende Mahnung – sofort handeln",
-          "kündigung": "Kündigungsfrist beachten",
-          bescheid: "Bescheid prüfen – Widerspruchsfrist beachten",
-          behörde: rl.rsWarnTitle || "Wichtige Frist – Handeln erforderlich",
-          sonstige: rl.rsWarnTitle || "Wichtige Frist – Handeln erforderlich",
+          bussgeld: rl.rsWarnboxBussgeld || rl.rsWarnTitle || "Important deadline – action required",
+          rechnung: rl.rsWarnboxRechnung || "Payment Amount",
+          mahnung: rl.rsWarnboxMahnung || "Urgent reminder – act now",
+          "kündigung": rl.rsWarnboxKuendigung || "Note the termination deadline",
+          bescheid: rl.rsWarnboxBescheid || "Check the decision – note the appeal deadline",
+          behörde: rl.rsWarnboxBehoerde || rl.rsWarnTitle || "Important deadline – action required",
+          sonstige: rl.rsWarnTitle || rl.rsWarnboxBehoerde || "Important deadline – action required",
         };
         return titles[type] || rl.rsWarnTitle || "";
       }
@@ -6996,19 +7125,45 @@
         return Boolean((parsed.brief_mit_platzhaltern || "").trim());
       }
 
-      function renderInfoGrid(fields) {
+      function localizedInfoFieldLabel(label, rl) {
+        var raw = String(label || "").trim();
+        var compact = raw.toLowerCase().replace(/[:：]+$/g, "").trim();
+        var map = {
+          "rechnungsnummer": rl.rsLabelRechnungsnummer,
+          "gesamtbetrag": rl.rsLabelGesamtbetrag,
+          "rechnungsdatum": rl.rsLabelRechnungsdatum,
+          "zahlungsziel": rl.rsLabelZahlungsziel,
+          "aktenzeichen": rl.rsFileNumber,
+          "bußgeld": rl.rsFine,
+          "bussgeld": rl.rsFine,
+          "datum": rl.rsDate,
+          "rechtsgrundlage": rl.rsLegalBasis,
+        };
+        return map[compact] || raw || "—";
+      }
+
+      function localizedInfoFieldValue(value, rl) {
+        var raw = String(value || "").trim();
+        if (raw.toLowerCase() === "sofort fällig" || raw.toLowerCase() === "sofort faellig") {
+          return rl.rsLabelSofortFaellig || raw;
+        }
+        return raw;
+      }
+
+      function renderInfoGrid(fields, rl) {
         var grid = $("rsInfoGrid");
         if (!grid) return;
+        rl = rl || getResultLayoutStrings();
         grid.innerHTML = "";
         coerceInfoFields({ info_felder: fields }, null).forEach(function (field) {
           var cell = document.createElement("div");
           cell.className = "rs-info-cell";
           var key = document.createElement("span");
           key.className = "rs-info-key";
-          key.textContent = field.label || "—";
+          key.textContent = localizedInfoFieldLabel(field.label, rl);
           var val = document.createElement("div");
           val.className = "rs-info-val" + (field.rot ? " rs-info-val--fine" : "");
-          val.innerHTML = renderRichPlain(field.wert || "—");
+          val.innerHTML = renderRichPlain(localizedInfoFieldValue(field.wert || "—", rl));
           cell.appendChild(key);
           cell.appendChild(val);
           grid.appendChild(cell);
@@ -7033,9 +7188,10 @@
         if (!shouldShow) return;
 
         var data = coerceSepaDaten(parsed.sepa_daten);
-        btnSepaToggle.textContent = rl.rsSepaToggle || "Überweisungsschein anzeigen →";
+        btnSepaToggle.textContent = rl.rsSepaButtonAnzeigen || rl.rsSepaToggle || "Show transfer form →";
         if ($("rsSepaHinweis")) $("rsSepaHinweis").textContent = rl.rsSepaHinweis || "";
-        if (btnSepaPrint) btnSepaPrint.textContent = rl.rsSepaPrint || "Drucken / Als PDF speichern";
+        if (btnSepaPrint) btnSepaPrint.textContent = rl.rsSepaButtonDrucken || rl.rsSepaPrint || "Print / Save as PDF";
+        if ($("rsSepaPruefHinweis")) $("rsSepaPruefHinweis").textContent = rl.rsSepaPruefHinweis || "";
         setTextOrDash("sepaEmpfaenger", data.empfaenger);
         setTextOrDash("sepaIban", data.iban);
         setTextOrDash("sepaBic", data.bic);
@@ -7106,7 +7262,7 @@
           }
         }
 
-        renderInfoGrid(parsed.info_felder);
+        renderInfoGrid(parsed.info_felder, rl);
 
         $("rsStep1").innerHTML = renderRichPlain(parsed.schritt_1 || "");
         var optA = (parsed.schritt_2_option_a || "").trim();
