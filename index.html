@@ -4234,6 +4234,22 @@
         });
       })();
 
+      (function attachStampHintStringsToResultLayout() {
+        var fallback = "Attach stamp here";
+        var rows = {
+          Deutsch: "Briefmarke hier einkleben",
+          Englisch: fallback,
+          "Türkisch": "Pulu buraya yapıştırın",
+          Arabisch: "ضع الطابع هنا",
+          "Arabisch (Ägyptisch)": "ضع الطابع هنا",
+        };
+        Object.keys(resultLayoutUiByLang).forEach(function (lang) {
+          var text = rows[lang] || fallback;
+          resultLayoutUiByLang[lang].rsStampHint = text;
+          resultLayoutUiByLang[lang].rsStampHintDefault = text;
+        });
+      })();
+
       (function attachReplyLetterTranslationTitleStrings() {
         var fallback = "What does this letter say? (Your translation)";
         var rows = {
@@ -7351,8 +7367,7 @@
           $("rsEnvSender").innerHTML = envelopeBlocksHtml(envS);
           $("rsAdresseHinweis").textContent = rl.rsAdresseHinweis || "";
           $("rsEnvRecipient").innerHTML = envelopeBlocksHtml(envR);
-          $("rsStampHint").textContent =
-            (parsed.umschlag_briefmarke_hinweis || "").trim() || rl.rsStampHintDefault || "";
+          $("rsStampHint").textContent = rl.rsStampHint || rl.rsStampHintDefault || "";
           $("rsLetterBody").innerHTML = wrapPlaceholdersLetter(parsed.brief_mit_platzhaltern || "");
           $("rsBriefUebersetzungTitel").textContent = rl.rsBriefUebersetzungTitel || "";
           var replyTranslation = (parsed.brief_uebersetzung || "").trim();
