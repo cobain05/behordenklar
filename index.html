@@ -1387,6 +1387,7 @@
       cursor: pointer;
       box-shadow: var(--shadow);
       border: 0.5px solid rgba(232, 96, 10, 0.28);
+      margin-top: 12px;
     }
 
     .sepa-section {
@@ -2359,6 +2360,7 @@
               </li>
             </ol>
             <div id="rsKeinAntwort" class="rs-muted" hidden></div>
+            <button type="button" class="sepa-toggle-btn" id="btnSepaToggle" hidden>Überweisungsschein anzeigen →</button>
           </section>
 
           <section class="rs-card" id="rsTemplateSection" hidden>
@@ -2388,7 +2390,6 @@
           </section>
 
           <div class="results-download-share-stack" id="resultsDownloadShareStack">
-            <button type="button" class="sepa-toggle-btn" id="btnSepaToggle" hidden>Überweisungsschein anzeigen →</button>
             <div id="templateDownloadBlock" class="template-download-block" hidden>
               <p id="templateDownloadDisclaimer" class="template-download-disclaimer" role="note"></p>
               <div class="template-download-buttons">
@@ -6202,6 +6203,51 @@
           "\"kontakt_telefon\": \"ONLY if literally in the letter, else empty string\"\n" +
           "\"kontakt_url\": \"ONLY if literally in the letter, else empty string\"\n" +
           "\"iban\": \"ONLY if literally in the letter, else empty string\"\n\n" +
+          "CRITICAL – FIELD MAPPING (MANDATORY):\n\n" +
+          "Before extracting any number, READ THE ENTIRE LETTER FIRST.\n" +
+          "Identify every labeled field and its value.\n" +
+          "Then assign each value ONLY to the field it belongs to.\n\n" +
+          "NEVER assign a value to a field just because it looks similar\n" +
+          "or appears nearby. Each field has an explicit label in the letter.\n\n" +
+          "For medical invoices (Vivantes and similar):\n" +
+          "The letter contains MULTIPLE reference numbers with different labels:\n" +
+          "- \"RechnungsNr.\" or \"Rechnungs-Nr.\" → this is the INVOICE NUMBER\n" +
+          "  Use this for: rechnungsnummer, info_felder[0], verwendungszweck\n" +
+          "- \"Debitoren-Nr.\" → debtor number, completely separate\n" +
+          "- \"Fall-Nr.\" → case number, completely separate\n" +
+          "- \"IK-Nummer\" → institution code, completely separate\n" +
+          "- \"Steuer-Nr.\" → tax number, completely separate\n\n" +
+          "These are FIVE DIFFERENT numbers. Never mix them up.\n" +
+          "The invoice number field must contain ONLY the value after \"RechnungsNr.\"\n\n" +
+          "Example from this letter:\n" +
+          "RechnungsNr.: 6012175606  ← USE THIS for rechnungsnummer\n" +
+          "Debitoren-Nr.: 40925089   ← different field, do not use as invoice number\n" +
+          "Fall-Nr.: 516516138921    ← different field\n" +
+          "IK-Nummer: 261101878      ← different field, do not use as invoice number\n" +
+          "Steuer-Nr.: 30/124/75006  ← different field, never show to user\n\n" +
+          "CRITICAL – IBAN EXTRACTION:\n" +
+          "IBAN appears in \"Bankverbindung\" section at bottom of invoice.\n" +
+          "Copy every character exactly: DE28 3005 0000 0002 000099\n" +
+          "Do not use any other number as IBAN.\n\n" +
+          "CRITICAL – INFO FELDER für brief_typ \"rechnung\":\n" +
+          "Exactly these 4 fields in this order:\n" +
+          "1. label: \"Rechnungsnummer\",\n" +
+          "   wert: [value after \"RechnungsNr.\" ONLY – not IK-Nummer, not Fall-Nr.]\n" +
+          "2. label: \"Gesamtbetrag\",\n" +
+          "   wert: [value after \"zu zahlender Betrag\" or final total], rot: true\n" +
+          "3. label: \"Rechnungsdatum\",\n" +
+          "   wert: [value after \"Datum:\"]\n" +
+          "4. label: \"Zahlungsziel\",\n" +
+          "   wert: [\"Sofort fällig\" if stated, or payment deadline if explicit]\n\n" +
+          "Never put Steuernummer, IK-Nummer or Debitoren-Nr. in info_felder.\n\n" +
+          "CRITICAL – SEPA DATA für Überweisungsschein:\n" +
+          "empfaenger: name from \"Bankverbindung\" section, e.g.\n" +
+          "            \"Vivantes Netzwerk für Gesundheit GmbH\"\n" +
+          "iban: IBAN from \"Bankverbindung\" section, copied digit by digit\n" +
+          "bic: BIC from \"Bankverbindung\" section\n" +
+          "betrag_euro: exact total amount\n" +
+          "verwendungszweck: value after \"RechnungsNr.\" + \" / \" + Debitoren-Nr.\n" +
+          "                  e.g. \"6012175606 / 40925089\"\n\n" +
           "CRITICAL – SEPA DATA ACCURACY:\n" +
           "sepa_daten must be copied CHARACTER BY CHARACTER from the letter.\n" +
           "IBAN: copy every digit exactly, no transpositions, no missing digits.\n" +
@@ -6301,11 +6347,11 @@
           "- \"sonstige\" für alles andere\n\n" +
           "INFO-FELDER: Gib statt fester Bußgeld-Felder ein Array „info_felder“ mit maximal 4 Objekten zurück. " +
           "Jedes Objekt hat exakt: {\"label\": \"...\", \"wert\": \"...\", \"rot\": true/false}. " +
-          "„label“ und „wert“ müssen in der ZIELSPRACHE sein, Zahlen/IDs/Beträge bleiben exakt wie im Original. " +
+          "„label“ und „wert“ müssen in der ZIELSPRACHE sein, Zahlen/IDs/Beträge bleiben exakt wie im Original. Ausnahme: Für brief_typ \"rechnung\" gelten die exakten deutschen Labels und die Reihenfolge aus CRITICAL – INFO FELDER. " +
           "Setze „rot\": true für wichtige Beträge, Zahlungsfristen, Widerspruchsfristen, Kündigungsfristen oder sonstige kritische Fristen.\n\n" +
           "Typische Info-Felder pro „brief_typ“:\n" +
           "- bussgeld: Aktenzeichen, Bußgeld (rot), Datum, Rechtsgrundlage\n" +
-          "- rechnung: Rechnungsnummer, Betrag (rot), Datum, Zahlungsziel\n" +
+          "- rechnung: exakt CRITICAL – INFO FELDER für brief_typ \"rechnung\" verwenden\n" +
           "- bescheid: Bescheidnummer, Betrag/Leistung, Datum, Gültig ab\n" +
           "- mahnung: Rechnungsnummer, Offener Betrag (rot), Mahnstufe, Frist (rot)\n" +
           "- kündigung: Vertragsnummer, Kündigungsdatum, Frist (rot), Aktenzeichen\n" +
