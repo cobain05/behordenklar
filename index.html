@@ -1376,6 +1376,125 @@
       color: #334155;
     }
 
+    .sepa-toggle-btn {
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      background: #fff7ed;
+      color: #c2410c;
+      font-weight: 800;
+      padding: 0.9rem 1rem;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      border: 0.5px solid rgba(232, 96, 10, 0.28);
+    }
+
+    .sepa-section {
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 14px;
+      background: #fff;
+      border: 0.5px solid rgba(232, 96, 10, 0.28);
+      box-shadow: var(--shadow);
+    }
+
+    .sepa-hint {
+      margin: 0 0 0.85rem;
+      color: #475569;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .sepa-slip {
+      background: #fff;
+      border: 2px solid #e8600a;
+      color: #111827;
+      font-family: "Courier New", Courier, monospace;
+      padding: 12px;
+      overflow-x: auto;
+    }
+
+    .sepa-slip-title {
+      margin: 0 0 10px;
+      color: #e8600a;
+      font-weight: 800;
+      font-size: 1rem;
+    }
+
+    .sepa-row {
+      border-top: 1px solid #e8600a;
+      padding: 9px 0;
+    }
+
+    .sepa-row:first-of-type {
+      border-top: 0;
+    }
+
+    .sepa-label {
+      display: block;
+      color: #9a3412;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .sepa-value {
+      color: #111827;
+      font-weight: 800;
+      word-break: break-word;
+      min-height: 1.2em;
+    }
+
+    .sepa-empty {
+      color: #94a3b8;
+      border-bottom: 1px solid #cbd5e1;
+      display: inline-block;
+      min-width: 180px;
+      font-weight: 400;
+    }
+
+    .sepa-bank-row,
+    .sepa-payer-row,
+    .sepa-sign-row {
+      display: flex;
+      gap: 14px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .sepa-amount {
+      text-align: right;
+      font-size: 1.15rem;
+    }
+
+    .sepa-warning {
+      margin: 0.85rem 0 0;
+      color: #b91c1c;
+      font-weight: 700;
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .sepa-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 0.9rem;
+    }
+
+    .sepa-action-btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 0.72rem 1rem;
+      background: #e8600a;
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .sepa-action-btn.secondary {
+      background: #334155;
+    }
+
     .rs-ph {
       background: rgba(219, 234, 254, 0.85);
       padding: 1px 4px;
@@ -1415,6 +1534,35 @@
       .lang-btn {
         font-size: 0.78rem;
         padding: 0.45rem 0.6rem;
+      }
+    }
+
+    @media print {
+      body.sepa-printing .app-header,
+      body.sepa-printing .site-footer,
+      body.sepa-printing .btn-back,
+      body.sepa-printing .rs-card,
+      body.sepa-printing .results-download-share-stack,
+      body.sepa-printing .rs-yellow-box {
+        display: none !important;
+      }
+
+      body.sepa-printing #results,
+      body.sepa-printing .results-view,
+      body.sepa-printing #sepaSection {
+        display: block !important;
+        visibility: visible !important;
+      }
+
+      body.sepa-printing #sepaSection {
+        box-shadow: none;
+        border: 0;
+      }
+
+      body.sepa-printing .sepa-actions,
+      body.sepa-printing .sepa-toggle-btn,
+      body.sepa-printing .sepa-hint {
+        display: none !important;
       }
     }
 
@@ -2240,6 +2388,7 @@
           </section>
 
           <div class="results-download-share-stack" id="resultsDownloadShareStack">
+            <button type="button" class="sepa-toggle-btn" id="btnSepaToggle" hidden>Überweisungsschein anzeigen →</button>
             <div id="templateDownloadBlock" class="template-download-block" hidden>
               <p id="templateDownloadDisclaimer" class="template-download-disclaimer" role="note"></p>
               <div class="template-download-buttons">
@@ -2272,6 +2421,54 @@
               <p class="result-feedback-thanks" id="resultFeedbackThanks" hidden></p>
             </div>
           </div>
+
+          <section class="sepa-section" id="sepaSection" hidden>
+            <p class="sepa-hint" id="rsSepaHinweis"></p>
+            <div class="sepa-slip" id="sepaSlip">
+              <h3 class="sepa-slip-title">SEPA-Überweisung / Zahlschein</h3>
+              <div class="sepa-row">
+                <span class="sepa-label">Name und Sitz des überweisenden Kreditinstituts</span>
+                <div class="sepa-bank-row">
+                  <span class="sepa-empty">[leer – füllt Nutzer selbst aus]</span>
+                  <span>BIC: <span class="sepa-empty">____</span></span>
+                </div>
+              </div>
+              <div class="sepa-row">
+                <span class="sepa-label">Angaben zum Zahlungsempfänger:</span>
+                <div class="sepa-value" id="sepaEmpfaenger"></div>
+              </div>
+              <div class="sepa-row">
+                <span class="sepa-label">IBAN:</span>
+                <div class="sepa-value" id="sepaIban"></div>
+                <span class="sepa-label">BIC:</span>
+                <div class="sepa-value" id="sepaBic"></div>
+              </div>
+              <div class="sepa-row sepa-amount">
+                <span class="sepa-label">Betrag:</span>
+                <div class="sepa-value">EUR <span id="sepaBetrag"></span></div>
+              </div>
+              <div class="sepa-row">
+                <span class="sepa-label">Verwendungszweck / Kunden-Referenznummer:</span>
+                <div class="sepa-value" id="sepaVerwendungszweck"></div>
+              </div>
+              <div class="sepa-row">
+                <span class="sepa-label">Angaben zum Kontoinhaber/Zahler:</span>
+                <div class="sepa-payer-row">
+                  <span class="sepa-empty">[Ihr Name]</span>
+                  <span class="sepa-empty">[Ihre IBAN]</span>
+                </div>
+              </div>
+              <div class="sepa-row sepa-sign-row">
+                <span>Datum: <span class="sepa-empty">___________</span></span>
+                <span>Unterschrift: <span class="sepa-empty">_________________</span></span>
+              </div>
+            </div>
+            <p class="sepa-warning">Bitte prüfen Sie alle Daten vor der Überweisung sorgfältig. Vergleichen Sie IBAN und Betrag mit Ihrem Originalbrief.</p>
+            <div class="sepa-actions">
+              <button type="button" class="sepa-action-btn" id="btnSepaPrint">Drucken</button>
+              <button type="button" class="sepa-action-btn secondary" id="btnSepaSaveImage">Als Bild speichern</button>
+            </div>
+          </section>
 
           <section class="rs-yellow-box" id="rsLegalStrip">
             <p id="rsDisclaimer"></p>
@@ -2460,6 +2657,7 @@
 
   <script src="cookie-consent-i18n.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" crossorigin="anonymous"></script>
   <script>
     try {
       var _initLang = localStorage.getItem("behordenklar-ui-lang");
@@ -2507,6 +2705,10 @@
       const templateDownloadBlock = $("templateDownloadBlock");
       const btnDownloadTemplatePdf = $("btnDownloadTemplatePdf");
       const btnDownloadTemplateDocx = $("btnDownloadTemplateDocx");
+      const btnSepaToggle = $("btnSepaToggle");
+      const sepaSection = $("sepaSection");
+      const btnSepaPrint = $("btnSepaPrint");
+      const btnSepaSaveImage = $("btnSepaSaveImage");
       const uiLangModal = $("uiLangModal");
       const uiLangModalClose = $("uiLangModalClose");
       const uiLangMobileTrigger = $("uiLangMobileTrigger");
@@ -4062,6 +4264,26 @@
         });
       })();
 
+      (function attachSepaStringsToResultLayout() {
+        var fallback =
+          "How to transfer the amount – fill in the grey fields with your own bank details.";
+        var rows = {
+          Deutsch:
+            "So überweisen Sie den Betrag – füllen Sie die grauen Felder mit Ihren eigenen Bankdaten aus.",
+          Englisch: fallback,
+          "Türkisch":
+            "Tutarı bu şekilde havale edin – gri alanları kendi banka bilgilerinizle doldurun.",
+          Arabisch: "كيفية تحويل المبلغ – املأ الحقول الرمادية ببياناتك المصرفية.",
+          "Arabisch (Ägyptisch)": "كيفية تحويل المبلغ – املأ الحقول الرمادية ببياناتك المصرفية.",
+        };
+        Object.keys(resultLayoutUiByLang).forEach(function (lang) {
+          resultLayoutUiByLang[lang].rsSepaHinweis = rows[lang] || fallback;
+          resultLayoutUiByLang[lang].rsSepaToggle = "Überweisungsschein anzeigen →";
+          resultLayoutUiByLang[lang].rsSepaPrint = "Drucken";
+          resultLayoutUiByLang[lang].rsSepaSaveImage = "Als Bild speichern";
+        });
+      })();
+
       (function attachFooterLegalStrings() {
         var keys = ["footerLinkImpressum", "footerLinkAgb", "footerLinkDatenschutz", "footerCookieSettings"];
         var rows = {
@@ -5160,6 +5382,8 @@
         setTemplateDownloadSectionVisible(false, "");
         clearError();
         if (resultFeedback) resultFeedback.hidden = true;
+        if (btnSepaToggle) btnSepaToggle.hidden = true;
+        if (sepaSection) sepaSection.hidden = true;
         if ($("rsTemplateSection")) $("rsTemplateSection").hidden = true;
         if ($("rsKeinAntwort")) $("rsKeinAntwort").hidden = true;
         if ($("rsWarnSection")) $("rsWarnSection").hidden = true;
@@ -5525,6 +5749,8 @@
         results.classList.remove("visible");
         document.body.classList.remove("results-open");
         setTemplateDownloadSectionVisible(false, "");
+        if (btnSepaToggle) btnSepaToggle.hidden = true;
+        if (sepaSection) sepaSection.hidden = true;
         if (resultFeedback) resultFeedback.hidden = true;
         updateFooterLegalLinks(uiTranslations[getUiLang()] || uiTranslations["Deutsch"]);
         lastNormalizedParsed = null;
@@ -5560,6 +5786,44 @@
       if (btnDownloadTemplateDocx) {
         btnDownloadTemplateDocx.addEventListener("click", function () {
           downloadAntwortvorlageDocx();
+        });
+      }
+
+      if (btnSepaToggle && sepaSection) {
+        btnSepaToggle.addEventListener("click", function () {
+          sepaSection.hidden = !sepaSection.hidden;
+          if (!sepaSection.hidden) {
+            sepaSection.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      }
+
+      if (btnSepaPrint) {
+        btnSepaPrint.addEventListener("click", function () {
+          document.body.classList.add("sepa-printing");
+          window.print();
+          setTimeout(function () {
+            document.body.classList.remove("sepa-printing");
+          }, 500);
+        });
+        window.addEventListener("afterprint", function () {
+          document.body.classList.remove("sepa-printing");
+        });
+      }
+
+      if (btnSepaSaveImage) {
+        btnSepaSaveImage.addEventListener("click", async function () {
+          if (!window.html2canvas || !$("sepaSlip")) {
+            window.print();
+            return;
+          }
+          var canvas = await window.html2canvas($("sepaSlip"), { backgroundColor: "#ffffff", scale: 2 });
+          var link = document.createElement("a");
+          link.download = "sepa-ueberweisungsschein.png";
+          link.href = canvas.toDataURL("image/png");
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
         });
       }
 
@@ -5938,6 +6202,16 @@
           "\"kontakt_telefon\": \"ONLY if literally in the letter, else empty string\"\n" +
           "\"kontakt_url\": \"ONLY if literally in the letter, else empty string\"\n" +
           "\"iban\": \"ONLY if literally in the letter, else empty string\"\n\n" +
+          "CRITICAL – SEPA DATA ACCURACY:\n" +
+          "sepa_daten must be copied CHARACTER BY CHARACTER from the letter.\n" +
+          "IBAN: copy every digit exactly, no transpositions, no missing digits.\n" +
+          "A wrong IBAN means money sent to the wrong account – this is critical.\n" +
+          "BIC: copy exactly as printed.\n" +
+          "Empfaenger: copy name exactly as printed, no abbreviations.\n" +
+          "Betrag: copy exact amount including cents (e.g. 67,24 not 67.24).\n" +
+          "Verwendungszweck: copy reference number exactly as printed.\n" +
+          "If any field is not clearly visible in the letter, leave it empty.\n" +
+          "NEVER guess or reconstruct IBAN digits.\n\n" +
           "CRITICAL – NUMBER ACCURACY:\n" +
           "Numbers are extremely important in German official letters.\n" +
           "Read ALL numbers with maximum precision – do NOT guess or approximate.\n\n" +
@@ -6067,7 +6341,10 @@
           "Die offizielle deutsche Behördenbezeichnung, Straße, PLZ und Ort des Empfängers dürfen niemals übersetzt werden, weil der Brief an eine deutsche Behörde geht.\n\n" +
           "Wenn „antwort_erforderlich“ false: „brief_mit_platzhaltern“ leer \"\", „brief_uebersetzung“ leer \"\", „umschlag_*“ leer \"\", und „kein_briefkopf_text“ mit kurzem Hinweis in der Zielsprache (keine Behördenantwort nötig).\n\n" +
           "Wenn „antwort_erforderlich“ true: Erstelle „brief_mit_platzhaltern“ immer dann, wenn ein sinnvoller deutscher Antwortbrief gebraucht wird – auch bei Zahlungsbestätigung oder Nachreichung, nicht nur bei Einspruch. " +
-          "Wenn „antwort_erforderlich“ false: keine Antwortvorlage anzeigen und „brief_mit_platzhaltern“, „brief_uebersetzung“ und „umschlag_*“ leer lassen.\n\n";
+          "Wenn „antwort_erforderlich“ false: keine Antwortvorlage anzeigen und „brief_mit_platzhaltern“, „brief_uebersetzung“ und „umschlag_*“ leer lassen.\n\n" +
+          "ÜBERWEISUNG: Setze „ueberweisung_erforderlich“ auf true, wenn der Brief eine Zahlung per Überweisung nahelegt oder fordert. " +
+          "Das kann bei brief_typ rechnung, bussgeld, mahnung oder bescheid vorkommen. Setze es NICHT true bei behörde ohne Zahlungsaufforderung, kündigung oder sonstige ohne klare Zahlung. " +
+          "Wenn true, fülle „sepa_daten“ ausschließlich aus sichtbar gedruckten Daten im Brief. Fehlende oder unklare SEPA-Felder bleiben leere Strings.\n\n";
 
         var langBlock;
         if (sameUi) {
@@ -6087,12 +6364,20 @@
         }
 
         var jsonBlock =
-          "„antwort_erforderlich“, „einspruch_moeglich“, „frist_warnung_aktiv“, „bildqualitaet_unzureichend“ als JSON-Boolean (true/false), keine Strings.\n" +
+          "„antwort_erforderlich“, „einspruch_moeglich“, „ueberweisung_erforderlich“, „frist_warnung_aktiv“, „bildqualitaet_unzureichend“ als JSON-Boolean (true/false), keine Strings.\n" +
           "Verwende exakt diese Schlüssel:\n" +
           "{\n" +
           '  "schema_version": 2,\n' +
           '  "antwort_erforderlich": true,\n' +
           '  "einspruch_moeglich": true,\n' +
+          '  "ueberweisung_erforderlich": false,\n' +
+          '  "sepa_daten": {\n' +
+          '    "empfaenger": "Name des Empfängers exakt wie im Brief, sonst leer",\n' +
+          '    "iban": "IBAN exakt wie im Brief, sonst leer",\n' +
+          '    "bic": "BIC exakt wie im Brief, sonst leer",\n' +
+          '    "betrag_euro": "Betrag exakt mit Komma und Cent, z.B. 67,24, sonst leer",\n' +
+          '    "verwendungszweck": "Rechnungsnummer oder Aktenzeichen exakt wie im Brief, sonst leer"\n' +
+          '  },\n' +
           '  "bildqualitaet_unzureichend": false,\n' +
           '  "brief_typ": "bussgeld | rechnung | bescheid | mahnung | behörde | kündigung | sonstige",\n' +
           '  "absender_zeile": "Kurze eine Zeile: wer schreibt (Behörde/Einrichtung), ohne Zwischenüberschrift.",\n' +
@@ -6355,6 +6640,23 @@
         return "";
       }
 
+      function formatSepaIban(value) {
+        var compact = String(value || "").replace(/\s+/g, "").toUpperCase();
+        if (!compact) return "";
+        return compact.replace(/(.{4})/g, "$1 ").trim();
+      }
+
+      function coerceSepaDaten(value) {
+        var src = value && typeof value === "object" ? value : {};
+        return {
+          empfaenger: coerceStr(src.empfaenger).trim(),
+          iban: formatSepaIban(src.iban),
+          bic: coerceStr(src.bic).trim(),
+          betrag_euro: coerceStr(src.betrag_euro).trim(),
+          verwendungszweck: coerceStr(src.verwendungszweck).trim(),
+        };
+      }
+
       function validateParsedV2(obj) {
         if (obj.schema_version !== 2 && obj.schema_version !== "2") {
           throw new Error('„schema_version“ muss 2 sein.');
@@ -6362,6 +6664,11 @@
         var ar = coerceBool(obj.antwort_erforderlich, "antwort_erforderlich");
         var em = coerceBool(obj.einspruch_moeglich, "einspruch_moeglich");
         var fw = coerceBool(obj.frist_warnung_aktiv, "frist_warnung_aktiv");
+        var ueberweisungErforderlich = false;
+        if (obj.ueberweisung_erforderlich !== undefined && obj.ueberweisung_erforderlich !== null && obj.ueberweisung_erforderlich !== "") {
+          ueberweisungErforderlich = coerceBool(obj.ueberweisung_erforderlich, "ueberweisung_erforderlich");
+        }
+        var sepaDaten = coerceSepaDaten(obj.sepa_daten);
         var bqRaw = obj.bildqualitaet_unzureichend;
         var bqu = false;
         if (bqRaw !== undefined && bqRaw !== null && bqRaw !== "") {
@@ -6421,6 +6728,8 @@
           schema_version: 2,
           antwort_erforderlich: ar,
           einspruch_moeglich: em,
+          ueberweisung_erforderlich: ueberweisungErforderlich,
+          sepa_daten: sepaDaten,
           bildqualitaet_unzureichend: bqu,
           brief_typ: briefTyp,
           absender_zeile: abs,
@@ -6509,6 +6818,8 @@
           schema_version: 2,
           antwort_erforderlich: ar,
           einspruch_moeglich: ar,
+          ueberweisung_erforderlich: false,
+          sepa_daten: coerceSepaDaten(null),
           bildqualitaet_unzureichend: false,
           brief_typ: legacy.titel_erklaerung,
           absender_zeile: "",
@@ -6638,6 +6949,35 @@
         });
       }
 
+      function setTextOrDash(id, value) {
+        var el = $(id);
+        if (!el) return;
+        el.textContent = value && String(value).trim() ? String(value).trim() : "—";
+      }
+
+      function renderSepaSection(parsed, rl) {
+        if (!btnSepaToggle || !sepaSection) return;
+        var sepaAllowedTypes = { rechnung: true, bussgeld: true, mahnung: true, bescheid: true };
+        var shouldShow =
+          parsed &&
+          parsed.ueberweisung_erforderlich === true &&
+          sepaAllowedTypes[normalizeBriefTyp(parsed.brief_typ)] === true;
+        btnSepaToggle.hidden = !shouldShow;
+        sepaSection.hidden = true;
+        if (!shouldShow) return;
+
+        var data = coerceSepaDaten(parsed.sepa_daten);
+        btnSepaToggle.textContent = rl.rsSepaToggle || "Überweisungsschein anzeigen →";
+        if ($("rsSepaHinweis")) $("rsSepaHinweis").textContent = rl.rsSepaHinweis || "";
+        if (btnSepaPrint) btnSepaPrint.textContent = rl.rsSepaPrint || "Drucken";
+        if (btnSepaSaveImage) btnSepaSaveImage.textContent = rl.rsSepaSaveImage || "Als Bild speichern";
+        setTextOrDash("sepaEmpfaenger", data.empfaenger);
+        setTextOrDash("sepaIban", data.iban);
+        setTextOrDash("sepaBic", data.bic);
+        setTextOrDash("sepaBetrag", data.betrag_euro);
+        setTextOrDash("sepaVerwendungszweck", data.verwendungszweck);
+      }
+
       function renderResults(parsed) {
         lastNormalizedParsed = parsed;
         initResultsTabDelegation();
@@ -6757,6 +7097,7 @@
         var waLabEl2 = btnWhatsAppShare && btnWhatsAppShare.querySelector(".btn-whatsapp-share-label");
         if (waLabEl2) waLabEl2.textContent = rl.rsWhatsAppShareLabel || "WhatsApp";
         if (btnWhatsAppShare) btnWhatsAppShare.setAttribute("aria-label", rl.rsWhatsAppShareLabel || "WhatsApp");
+        renderSepaSection(parsed, rl);
       }
 
       function truncateForErrorDisplay(text, maxLen) {
@@ -6838,6 +7179,8 @@
         results.classList.remove("visible");
         document.body.classList.remove("results-open");
         setTemplateDownloadSectionVisible(false, "");
+        if (btnSepaToggle) btnSepaToggle.hidden = true;
+        if (sepaSection) sepaSection.hidden = true;
         updateTranslationResultTabHeading();
 
         var mode = document.querySelector('input[name="inputMode"]:checked').value;
