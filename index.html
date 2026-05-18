@@ -1409,70 +1409,99 @@
     .sepa-slip {
       background: #fff;
       border: 2px solid #e8600a;
-      color: #111827;
-      font-family: "Courier New", Courier, monospace;
-      padding: 12px;
-      overflow-x: auto;
+      color: #1a1a1a;
+      padding: 0;
+      max-width: 600px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .sepa-slip-head {
+      padding: 18px 20px 14px;
     }
 
     .sepa-slip-title {
-      margin: 0 0 10px;
-      color: #e8600a;
+      margin: 0 0 4px;
+      color: #1a1a1a;
       font-weight: 800;
-      font-size: 1rem;
+      font-size: 1.05rem;
     }
 
-    .sepa-row {
+    .sepa-slip-subtitle {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.86rem;
+      line-height: 1.35;
+    }
+
+    .sepa-slip-section {
       border-top: 1px solid #e8600a;
-      padding: 9px 0;
-    }
-
-    .sepa-row:first-of-type {
-      border-top: 0;
+      padding: 16px 20px;
     }
 
     .sepa-label {
       display: block;
-      color: #9a3412;
-      font-size: 12px;
-      margin-bottom: 4px;
+      color: #e8600a;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      line-height: 1.2;
+      margin-bottom: 7px;
+      text-transform: uppercase;
     }
 
-    .sepa-value {
-      color: #111827;
-      font-weight: 800;
+    .sepa-field {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      color: #1a1a1a;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.35;
+      min-height: 42px;
+      padding: 10px 14px;
       word-break: break-word;
-      min-height: 1.2em;
+    }
+
+    .sepa-field-mono {
+      font-family: "Courier New", Courier, monospace;
+      letter-spacing: 0.01em;
+    }
+
+    .sepa-field-amount {
+      color: #1a1a1a;
+      font-size: 20px;
+      font-weight: 700;
     }
 
     .sepa-empty {
       color: #94a3b8;
-      border-bottom: 1px solid #cbd5e1;
+      border-bottom: 1px dashed #cbd5e1;
       display: inline-block;
-      min-width: 180px;
+      font-size: 14px;
       font-weight: 400;
+      min-width: 190px;
+      padding-bottom: 2px;
     }
 
-    .sepa-bank-row,
-    .sepa-payer-row,
-    .sepa-sign-row {
-      display: flex;
-      gap: 14px;
-      justify-content: space-between;
-      flex-wrap: wrap;
+    .sepa-two-col {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 
-    .sepa-amount {
-      text-align: right;
-      font-size: 1.15rem;
+    .sepa-self-data {
+      display: grid;
+      gap: 10px;
     }
 
     .sepa-warning {
-      margin: 0.85rem 0 0;
+      margin: 0.85rem auto 0;
       color: #b91c1c;
       font-weight: 700;
       font-size: 0.92rem;
       line-height: 1.45;
+      max-width: 600px;
     }
 
     .sepa-actions {
@@ -1494,6 +1523,12 @@
 
     .sepa-action-btn.secondary {
       background: #334155;
+    }
+
+    @media (max-width: 520px) {
+      .sepa-two-col {
+        grid-template-columns: 1fr;
+      }
     }
 
     .rs-ph {
@@ -2426,45 +2461,43 @@
           <section class="sepa-section" id="sepaSection" hidden>
             <p class="sepa-hint" id="rsSepaHinweis"></p>
             <div class="sepa-slip" id="sepaSlip">
-              <h3 class="sepa-slip-title">SEPA-Überweisung / Zahlschein</h3>
-              <div class="sepa-row">
-                <span class="sepa-label">Name und Sitz des überweisenden Kreditinstituts</span>
-                <div class="sepa-bank-row">
-                  <span class="sepa-empty">[leer – füllt Nutzer selbst aus]</span>
-                  <span>BIC: <span class="sepa-empty">____</span></span>
+              <div class="sepa-slip-head">
+                <h3 class="sepa-slip-title">🏦 SEPA-Überweisung / Zahlschein</h3>
+                <p class="sepa-slip-subtitle">Für Überweisungen innerhalb Deutschlands<br />und in EU/EWR-Staaten in Euro</p>
+              </div>
+              <div class="sepa-slip-section">
+                <span class="sepa-label">Empfänger</span>
+                <div class="sepa-field" id="sepaEmpfaenger"></div>
+              </div>
+              <div class="sepa-slip-section">
+                <span class="sepa-label">IBAN des Empfängers</span>
+                <div class="sepa-field sepa-field-mono" id="sepaIban"></div>
+              </div>
+              <div class="sepa-slip-section sepa-two-col">
+                <div>
+                  <span class="sepa-label">BIC</span>
+                  <div class="sepa-field sepa-field-mono" id="sepaBic"></div>
+                </div>
+                <div>
+                  <span class="sepa-label">Betrag (EUR)</span>
+                  <div class="sepa-field sepa-field-amount" id="sepaBetrag"></div>
                 </div>
               </div>
-              <div class="sepa-row">
-                <span class="sepa-label">Angaben zum Zahlungsempfänger:</span>
-                <div class="sepa-value" id="sepaEmpfaenger"></div>
+              <div class="sepa-slip-section">
+                <span class="sepa-label">Verwendungszweck / Referenznummer</span>
+                <div class="sepa-field" id="sepaVerwendungszweck"></div>
               </div>
-              <div class="sepa-row">
-                <span class="sepa-label">IBAN:</span>
-                <div class="sepa-value" id="sepaIban"></div>
-                <span class="sepa-label">BIC:</span>
-                <div class="sepa-value" id="sepaBic"></div>
-              </div>
-              <div class="sepa-row sepa-amount">
-                <span class="sepa-label">Betrag:</span>
-                <div class="sepa-value">EUR <span id="sepaBetrag"></span></div>
-              </div>
-              <div class="sepa-row">
-                <span class="sepa-label">Verwendungszweck / Kunden-Referenznummer:</span>
-                <div class="sepa-value" id="sepaVerwendungszweck"></div>
-              </div>
-              <div class="sepa-row">
-                <span class="sepa-label">Angaben zum Kontoinhaber/Zahler:</span>
-                <div class="sepa-payer-row">
-                  <span class="sepa-empty">[Ihr Name]</span>
-                  <span class="sepa-empty">[Ihre IBAN]</span>
+              <div class="sepa-slip-section">
+                <span class="sepa-label">Ihre Daten (selbst ausfüllen)</span>
+                <div class="sepa-self-data">
+                  <span>Ihr Name: <span class="sepa-empty"></span></span>
+                  <span>Ihre IBAN: <span class="sepa-empty"></span></span>
+                  <span>Datum: <span class="sepa-empty"></span></span>
+                  <span>Unterschrift: <span class="sepa-empty"></span></span>
                 </div>
-              </div>
-              <div class="sepa-row sepa-sign-row">
-                <span>Datum: <span class="sepa-empty">___________</span></span>
-                <span>Unterschrift: <span class="sepa-empty">_________________</span></span>
               </div>
             </div>
-            <p class="sepa-warning">Bitte prüfen Sie alle Daten vor der Überweisung sorgfältig. Vergleichen Sie IBAN und Betrag mit Ihrem Originalbrief.</p>
+            <p class="sepa-warning">⚠️ Bitte prüfen Sie IBAN und Betrag sorgfältig anhand Ihres Originalbriefs bevor Sie die Überweisung tätigen.</p>
             <div class="sepa-actions">
               <button type="button" class="sepa-action-btn" id="btnSepaPrint">Drucken</button>
               <button type="button" class="sepa-action-btn secondary" id="btnSepaSaveImage">Als Bild speichern</button>
@@ -6241,13 +6274,20 @@
           "   wert: [\"Sofort fällig\" if stated, or payment deadline if explicit]\n\n" +
           "Never put Steuernummer, IK-Nummer or Debitoren-Nr. in info_felder.\n\n" +
           "CRITICAL – SEPA DATA für Überweisungsschein:\n" +
-          "empfaenger: name from \"Bankverbindung\" section, e.g.\n" +
-          "            \"Vivantes Netzwerk für Gesundheit GmbH\"\n" +
-          "iban: IBAN from \"Bankverbindung\" section, copied digit by digit\n" +
-          "bic: BIC from \"Bankverbindung\" section\n" +
-          "betrag_euro: exact total amount\n" +
-          "verwendungszweck: value after \"RechnungsNr.\" + \" / \" + Debitoren-Nr.\n" +
-          "                  e.g. \"6012175606 / 40925089\"\n\n" +
+          "sepa_daten extraction rules:\n" +
+          "- empfaenger: Look for 'Bankverbindung:' section.\n" +
+          "  Copy the name that follows 'Bankverbindung:' exactly.\n" +
+          "  For this letter: 'Vivantes Netzwerk für Gesundheit GmbH'\n\n" +
+          "- iban: Look for 'IBAN =' or 'IBAN:' in Bankverbindung section.\n" +
+          "  Copy every character: DE28 3005 0000 0002 000099\n" +
+          "  Format with spaces every 4 characters.\n\n" +
+          "- bic: Look for 'BIC =' or 'BIC/SWIFT' in Bankverbindung section.\n" +
+          "  Copy exactly: WELADEDDXXX\n\n" +
+          "- betrag_euro: Value after 'zu zahlender Betrag:' → 67,24\n\n" +
+          "- verwendungszweck: Value after 'RechnungsNr.:' ONLY → 6012175606\n" +
+          "  Add Debitoren-Nr. if space allows: '6012175606 / 40925089'\n\n" +
+          "NEVER put BIC where IBAN should be.\n" +
+          "NEVER put IK-Nummer as Verwendungszweck.\n\n" +
           "CRITICAL – SEPA DATA ACCURACY:\n" +
           "sepa_daten must be copied CHARACTER BY CHARACTER from the letter.\n" +
           "IBAN: copy every digit exactly, no transpositions, no missing digits.\n" +
