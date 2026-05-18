@@ -7144,10 +7144,15 @@
 
       function localizedInfoFieldValue(value, rl) {
         var raw = String(value || "").trim();
-        if (raw.toLowerCase() === "sofort fällig" || raw.toLowerCase() === "sofort faellig") {
-          return rl.rsLabelSofortFaellig || raw;
-        }
-        return raw;
+        return localizeImmediateDueText(raw, rl);
+      }
+
+      function localizeImmediateDueText(value, rl) {
+        var label = (rl && rl.rsLabelSofortFaellig) || "Due immediately";
+        return String(value || "")
+          .replace(/sofort\s+fällig/gi, label)
+          .replace(/sofort\s+faellig/gi, label)
+          .replace(/\bsofort\b/gi, label);
       }
 
       function renderInfoGrid(fields, rl) {
@@ -7243,6 +7248,7 @@
         var ws = $("rsWarnSection");
         ws.classList.remove("rs-warn-box", "rs-warn-box-neutral");
         var fdRaw = (parsed.frist_datum_oder_betrag || "").trim();
+        var fdLocalized = localizeImmediateDueText(fdRaw, rl);
         var fdOk = fdRaw && !deadlineHighlightLooksInvalid(fdRaw);
         var showWarn = parsed.frist_warnung_aktiv === true && (normalizeBriefTyp(parsed.brief_typ) !== "sonstige" || fdOk);
         if (!showWarn) {
@@ -7252,7 +7258,7 @@
           if (fdOk) {
             ws.classList.add("rs-warn-box");
             $("rsWarnTitle").textContent = warnTitleForBriefTyp(parsed.brief_typ, rl);
-            $("rsWarnHighlight").textContent = fdRaw;
+            $("rsWarnHighlight").textContent = fdLocalized;
             $("rsWarnDetail").innerHTML = renderRichPlain(parsed.frist_erlaeuterung || "");
           } else {
             ws.classList.add("rs-warn-box-neutral");
