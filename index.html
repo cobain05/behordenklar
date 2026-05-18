@@ -2186,24 +2186,7 @@
 
           <section class="rs-card" aria-labelledby="rsS3Label">
             <p class="rs-label" id="rsS3Label"></p>
-            <div class="rs-info-grid">
-              <div class="rs-info-cell">
-                <span class="rs-info-key" id="rsGkAz"></span>
-                <div class="rs-info-val" id="rsValAz"></div>
-              </div>
-              <div class="rs-info-cell">
-                <span class="rs-info-key" id="rsGkFine"></span>
-                <div class="rs-info-val rs-info-val--fine" id="rsValFine"></div>
-              </div>
-              <div class="rs-info-cell">
-                <span class="rs-info-key" id="rsGkDate"></span>
-                <div class="rs-info-val" id="rsValDate"></div>
-              </div>
-              <div class="rs-info-cell">
-                <span class="rs-info-key" id="rsGkLaw"></span>
-                <div class="rs-info-val" id="rsValLaw"></div>
-              </div>
-            </div>
+            <div class="rs-info-grid" id="rsInfoGrid"></div>
           </section>
 
           <section class="rs-card" aria-labelledby="rsS4Label">
@@ -5950,22 +5933,41 @@
           "Der Brief ist so weit weg, dass der Text nicht entzifferbar ist.\n\n" +
           "Bei leicht schrägen Fotos, kleinen Schatten, leichter Unschärfe oder teilweise abgeschnittenen Rändern soll die Analyse NORMAL weiterlaufen („bildqualitaet_unzureichend“: false). " +
           "Im Zweifel immer analysieren und am Ende von „kurz_erlaeuterung“ oder – falls dort zu kurz – als letzten Absatz von „zusatzinhalt“ eine kurze Notiz in der ZIELSPRACHE hinzufügen, sinngemäß wie: „⚠️ Einige Stellen waren schwer lesbar – bitte überprüfe wichtige Zahlen.“\n\n" +
-          "BEHÖRDE ERKENNEN: Leite aus Briefkopf, Logo, Betreff und Inhalt ab, von welcher Art von Stelle das Schreiben stammt. " +
-          "Ordne es wenn möglich einer dieser Kategorien zu (oder der naheliegendsten): Jobcenter, BAMF, Ausländerbehörde, Finanzamt, " +
-          "Krankenversicherung (z. B. Krankenkasse), Rentenversicherung (DRV oder andere Rentenversicherungsträger), Jugendamt, Standesamt, Bürgeramt, Gericht. " +
-          "Typische Schreibtypen für „brief_typ“ sind z. B. Verwarnung, Anhörung, Bescheid, Mahnung – kurz und für Laien verständlich.\n\n" +
+          "BRIEFTYP ERKENNEN: Das Feld „brief_typ“ ist eine technische Kategorie und muss exakt einer dieser Werte sein:\n" +
+          "- \"bussgeld\" für Bußgeldbescheid, Verwarnungsschreiben, Anhörung wegen Ordnungswidrigkeit\n" +
+          "- \"rechnung\" für Arztrechnung, Krankenhausrechnung oder allgemeine Rechnung\n" +
+          "- \"bescheid\" für Sozialleistungsbescheid, Rentenbescheid, ALG, Jobcenter-/BAMF-/Ausländerbehördenbescheid\n" +
+          "- \"mahnung\" für Zahlungserinnerung, Mahnung, letzte Mahnung, Inkassoankündigung\n" +
+          "- \"behörde\" für allgemeine Behördenbriefe, Nachfragen, Informationsschreiben, Termine, Nachforderungen\n" +
+          "- \"kündigung\" für Kündigung von Mietvertrag, Arbeitsverhältnis oder Vertrag\n" +
+          "- \"sonstige\" für alles andere\n\n" +
+          "INFO-FELDER: Gib statt fester Bußgeld-Felder ein Array „info_felder“ mit maximal 4 Objekten zurück. " +
+          "Jedes Objekt hat exakt: {\"label\": \"...\", \"wert\": \"...\", \"rot\": true/false}. " +
+          "„label“ und „wert“ müssen in der ZIELSPRACHE sein, Zahlen/IDs/Beträge bleiben exakt wie im Original. " +
+          "Setze „rot\": true für wichtige Beträge, Zahlungsfristen, Widerspruchsfristen, Kündigungsfristen oder sonstige kritische Fristen.\n\n" +
+          "Typische Info-Felder pro „brief_typ“:\n" +
+          "- bussgeld: Aktenzeichen, Bußgeld (rot), Datum, Rechtsgrundlage\n" +
+          "- rechnung: Rechnungsnummer, Betrag (rot), Datum, Zahlungsziel\n" +
+          "- bescheid: Bescheidnummer, Betrag/Leistung, Datum, Gültig ab\n" +
+          "- mahnung: Rechnungsnummer, Offener Betrag (rot), Mahnstufe, Frist (rot)\n" +
+          "- kündigung: Vertragsnummer, Kündigungsdatum, Frist (rot), Aktenzeichen\n" +
+          "- behörde: Aktenzeichen, Frist (rot wenn kritisch), Datum, Zuständige Stelle\n" +
+          "- sonstige: Die 4 wichtigsten Felder aus dem Brief\n" +
+          "Wenn ein typisches Feld nicht vorhanden ist, wähle ein anderes relevantes Feld aus dem Brief. Erfinde niemals Werte.\n\n" +
           "WARNBOX „frist_datum_oder_betrag“ (rote Ampel-Zeile): Nur echte Handlungsfristen eintragen: Zahlungsfrist, letzter Tag zur Bußgeldzahlung, Annahmefrist, Antwortfrist oder Rechtsbehelfsfrist/Widerspruchsfrist – also das Datum oder den Betrag, bis zu dem gezahlt oder schriftlich reagiert werden muss.\n" +
           "NIEMALS die Tatzeit oder den genauen Zeitpunkt der Ordnungswidrigkeit (z. B. mit Uhrzeit wie „saat 10:37“ oder „um 10:37 Uhr“ beim Vorfall).\n" +
           "NIEMALS das reine Ausstellungs-/Bearbeitungsdatum des Briefes („info_datum“), wenn dadurch keine Zahlungs- oder Reaktionsfrist gemeint ist – für das Briefdatum nur „info_datum“ verwenden.\n" +
           "Wenn keine sichere Zahlungs-/Reaktionsfrist erkennbar ist: „frist_warnung_aktiv“ auf false setzen und „frist_datum_oder_betrag“ sowie „frist_erlaeuterung“ als leere Strings \"\" (nichts erfinden, nichts von Tatzeit oder Briefdatum kopieren).\n\n" +
           "Wenn eine konkrete Zahlungs-/Handlungs-/Rechtsbehelfsfrist oder ein Bußgeldbetrag mit klarer Fälligkeit genannt ist, setze „frist_warnung_aktiv“ auf true und „frist_datum_oder_betrag“ auf genau diese Frist bzw. diesen Betrag (lesbar, z. B. „14.06.2026“ oder „35 €“). Kurze Erklärung in „frist_erlaeuterung“.\n\n" +
-          "INFO-RASTER: „info_aktenzeichen“, „info_bussgeld“, „info_datum“, „info_rechtsgrundlage“ mit kurzen Werten aus dem Brief; wenn etwas fehlt „—“.\n\n" +
+          "WARNBOX: Setze „frist_warnung_aktiv“ nur dann true, wenn ein Betrag oder eine Frist wirklich hervorgehoben werden soll. " +
+          "Für rechnung nur true, wenn ein Zahlungsbetrag oder Zahlungsziel vorhanden ist. Für sonstige nur true, wenn wirklich eine Frist/Handlungspflicht erkennbar ist.\n\n" +
           "SCHRITTE: „schritt_1“ erste konkrete Handlung. „schritt_2_option_a“ neutrale Option (z. B. Bußgeld akzeptieren und zahlen). „schritt_2_option_b“ Option mit Einspruch/Widerspruch. " +
           "„schritt_3“ weiteres Vorgehen. Wenn keine sinnvolle Zwei-Optionen-Gabel existiert, lasse „schritt_2_option_a“ und „schritt_2_option_b“ leer \"\" und packe die Handlung in „schritt_1“/„schritt_3“.\n\n" +
           "EINSPRUCH: „einspruch_moeglich“ nur true, wenn ein Einspruch/Widerspruch/Beschwerde gegen eine Sanktion oder Bußgeldbescheid realistisch ist; sonst false.\n\n" +
-          "ANTWORT AN DIE BEHÖRDE: Entscheide intern, ob eine schriftliche Antwort nötig oder üblich ist (Stellungnahme, Widerspruch, Nachreichung auf Aufforderung, ausdrückliche Bitte um Rückmeldung). " +
-          "Setze „antwort_erforderlich“ nur dann auf true. Bei reinen Informationsschreiben ohne Rückantwort false.\n\n" +
-          "Wenn „antwort_erforderlich“ true und „einspruch_moeglich“ true: „brief_mit_platzhaltern“ als vollständiger deutscher Geschäftsbrief mit Platzhaltern in eckigen Klammern (Name, Adresse, Datum, persönlicher Widerspruch). " +
+          "ANTWORT AN DIE BEHÖRDE: Entscheide intern, ob eine schriftliche Antwort sinnvoll ist. Setze „antwort_erforderlich“ nur dann auf true. " +
+          "Regeln: bussgeld -> Einspruch nur wenn sinnvoll; bescheid -> Widerspruch wenn möglich/sinnvoll; mahnung -> Zahlungsbestätigung oder kurze Mitteilung wenn sinnvoll; kündigung -> Widerspruch wenn sinnvoll; rechnung -> normalerweise false, keine Antwortvorlage; behörde -> je nach Inhalt; sonstige -> nur wenn wirklich nötig. " +
+          "Bei reinen Informationsschreiben oder Rechnungen ohne Klärungsbedarf false.\n\n" +
+          "Wenn „antwort_erforderlich“ true: „brief_mit_platzhaltern“ als vollständiger deutscher Geschäftsbrief mit Platzhaltern in eckigen Klammern (Name, Adresse, Datum, persönlicher Widerspruch, Zahlungsbestätigung oder Nachreichung je nach Fall). " +
           "Der Antwortbrief an die Behörde bleibt IMMER auf Deutsch, egal welche Zielsprache gewählt ist. Das ist korrekt, weil deutsche Behörden deutsche Briefe erwarten. " +
           "Zusätzlich muss „brief_uebersetzung“ eine natürliche Übersetzung dieses Antwortbriefs in " +
           langLabel +
@@ -5980,7 +5982,8 @@
           "Nur der Absender-Teil und persönliche Angaben des Nutzers können in der Zielsprache sein. " +
           "Die offizielle deutsche Behördenbezeichnung, Straße, PLZ und Ort des Empfängers dürfen niemals übersetzt werden, weil der Brief an eine deutsche Behörde geht.\n\n" +
           "Wenn „antwort_erforderlich“ false: „brief_mit_platzhaltern“ leer \"\", „brief_uebersetzung“ leer \"\", „umschlag_*“ leer \"\", und „kein_briefkopf_text“ mit kurzem Hinweis in der Zielsprache (keine Behördenantwort nötig).\n\n" +
-          "Wenn „antwort_erforderlich“ true aber „einspruch_moeglich“ false: „brief_mit_platzhaltern“, „brief_uebersetzung“ und „umschlag_*“ leer „\", da keine Einspruch-Antwortvorlage angezeigt wird.\n\n";
+          "Wenn „antwort_erforderlich“ true: Erstelle „brief_mit_platzhaltern“ immer dann, wenn ein sinnvoller deutscher Antwortbrief gebraucht wird – auch bei Zahlungsbestätigung oder Nachreichung, nicht nur bei Einspruch. " +
+          "Wenn „antwort_erforderlich“ false: keine Antwortvorlage anzeigen und „brief_mit_platzhaltern“, „brief_uebersetzung“ und „umschlag_*“ leer lassen.\n\n";
 
         var langBlock;
         if (sameUi) {
@@ -6007,17 +6010,17 @@
           '  "antwort_erforderlich": true,\n' +
           '  "einspruch_moeglich": true,\n' +
           '  "bildqualitaet_unzureichend": false,\n' +
-          '  "brief_typ": "Kurzer verständlicher Schreibtyp (Zielsprache), z. B. Verwarnungsschreiben.",\n' +
+          '  "brief_typ": "bussgeld | rechnung | bescheid | mahnung | behörde | kündigung | sonstige",\n' +
           '  "absender_zeile": "Kurze eine Zeile: wer schreibt (Behörde/Einrichtung), ohne Zwischenüberschrift.",\n' +
           '  "kurz_erlaeuterung": "Kurz was passiert ist, natürlich formuliert (Zielsprache).",\n' +
           '  "zusatzinhalt": "Vollständige sinngemäße Übersetzung oder ausführliche einfache Erklärung je nach Modus – idiomatisch, nicht wörtlich holprig (Zielsprache).",\n' +
           '  "frist_warnung_aktiv": true,\n' +
           '  "frist_datum_oder_betrag": "Nur Zahlungs-/Antwort-/Widerspruchsfrist oder fälliger Betrag — NICHT Tatzeit/Uhrzeit des Vorfalls, NICHT nur Briefdatum.",\n' +
           '  "frist_erlaeuterung": "Kurz was bis wann gilt, oder leer.",\n' +
-          '  "info_aktenzeichen": "… oder —",\n' +
-          '  "info_bussgeld": "Betrag oder —",\n' +
-          '  "info_datum": "Datum aus dem Schreiben oder —",\n' +
-          '  "info_rechtsgrundlage": "Kurz oder —",\n' +
+          '  "info_felder": [\n' +
+          '    {"label": "Relevantes Feld 1", "wert": "Wert exakt aus dem Brief oder —", "rot": false},\n' +
+          '    {"label": "Relevantes Feld 2", "wert": "Wert exakt aus dem Brief oder —", "rot": true}\n' +
+          '  ],\n' +
           '  "kontakt_email": "ONLY if literally in the letter, else empty string",\n' +
           '  "kontakt_telefon": "ONLY if literally in the letter, else empty string",\n' +
           '  "kontakt_url": "ONLY if literally in the letter, else empty string",\n' +
@@ -6225,6 +6228,49 @@
         return false;
       }
 
+      function normalizeBriefTyp(value) {
+        var raw = String(value || "").trim().toLowerCase();
+        if (raw === "bussgeld" || raw === "bußgeld" || raw.indexOf("verwarn") >= 0 || raw.indexOf("ordnungswidrig") >= 0) return "bussgeld";
+        if (raw === "rechnung" || raw.indexOf("rechnung") >= 0) return "rechnung";
+        if (raw === "bescheid" || raw.indexOf("bescheid") >= 0 || raw.indexOf("jobcenter") >= 0 || raw.indexOf("alg") >= 0) return "bescheid";
+        if (raw === "mahnung" || raw.indexOf("mahn") >= 0 || raw.indexOf("zahlungserinner") >= 0) return "mahnung";
+        if (raw === "kündigung" || raw === "kuendigung" || raw.indexOf("kündig") >= 0 || raw.indexOf("kuendig") >= 0) return "kündigung";
+        if (raw === "behörde" || raw === "behoerde" || raw.indexOf("behörd") >= 0 || raw.indexOf("behoerd") >= 0) return "behörde";
+        if (raw === "sonstige" || raw === "sonstiges") return "sonstige";
+        return "behörde";
+      }
+
+      function coerceInfoFields(obj, fallbackFields) {
+        var src = Array.isArray(obj && obj.info_felder) ? obj.info_felder : [];
+        var out = [];
+        src.slice(0, 4).forEach(function (field) {
+          var label = coerceStr(field && field.label).trim();
+          var wert = coerceStr(field && field.wert).trim();
+          var rot = field && (field.rot === true || field.rot === "true");
+          if (!label && !wert) return;
+          out.push({
+            label: label || "Info",
+            wert: wert || "—",
+            rot: rot,
+          });
+        });
+        if (!out.length && Array.isArray(fallbackFields)) {
+          out = fallbackFields.slice(0, 4);
+        }
+        return out.slice(0, 4);
+      }
+
+      function findInfoFieldValue(fields, regex) {
+        fields = Array.isArray(fields) ? fields : [];
+        for (var i = 0; i < fields.length; i += 1) {
+          var field = fields[i] || {};
+          if (regex.test(String(field.label || ""))) {
+            return String(field.wert || "").trim();
+          }
+        }
+        return "";
+      }
+
       function validateParsedV2(obj) {
         if (obj.schema_version !== 2 && obj.schema_version !== "2") {
           throw new Error('„schema_version“ muss 2 sein.');
@@ -6237,7 +6283,7 @@
         if (bqRaw !== undefined && bqRaw !== null && bqRaw !== "") {
           bqu = coerceBool(bqRaw, "bildqualitaet_unzureichend");
         }
-        var briefTyp = coerceStr(obj.brief_typ).trim() || "Behördenbrief";
+        var briefTyp = normalizeBriefTyp(obj.brief_typ);
         var abs = coerceStr(obj.absender_zeile).trim();
         var kurz = coerceStr(obj.kurz_erlaeuterung).trim();
         if (!kurz) {
@@ -6253,6 +6299,16 @@
         var ib = coerceStr(obj.info_bussgeld).trim() || "—";
         var id = coerceStr(obj.info_datum).trim() || "—";
         var ir = coerceStr(obj.info_rechtsgrundlage).trim() || "—";
+        var infoFelder = coerceInfoFields(obj, [
+          { label: "Aktenzeichen", wert: ia, rot: false },
+          { label: "Betrag", wert: ib, rot: true },
+          { label: "Datum", wert: id, rot: false },
+          { label: "Rechtsgrundlage", wert: ir, rot: false },
+        ]);
+        if (ia === "—") ia = findInfoFieldValue(infoFelder, /aktenzeichen|bescheidnummer|rechnungsnummer|vertragsnummer/i) || ia;
+        if (ib === "—") ib = findInfoFieldValue(infoFelder, /betrag|bußgeld|bussgeld|leistung|offen/i) || ib;
+        if (id === "—") id = findInfoFieldValue(infoFelder, /datum|kündigungsdatum|kuendigungsdatum/i) || id;
+        if (ir === "—") ir = findInfoFieldValue(infoFelder, /rechtsgrundlage|frist|zahlungsziel|gültig|gueltig/i) || ir;
         var s1 = coerceStr(obj.schritt_1).trim();
         var s2a = coerceStr(obj.schritt_2_option_a).trim();
         var s2b = coerceStr(obj.schritt_2_option_b).trim();
@@ -6270,14 +6326,11 @@
         if (!ar && !kb) {
           throw new Error("„kein_briefkopf_text“ fehlt, obwohl keine Antwort nötig ist.");
         }
-        if (ar && em && !bm.trim()) {
+        if (ar && briefTyp !== "rechnung" && !bm.trim()) {
           throw new Error("„brief_mit_platzhaltern“ fehlt für die Antwortvorlage.");
         }
         if (!ar && bm.trim()) {
           throw new Error("„brief_mit_platzhaltern“ muss leer sein, wenn keine Antwort nötig ist.");
-        }
-        if (ar && !em && bm.trim()) {
-          throw new Error("„brief_mit_platzhaltern“ muss ohne Einspruch leer sein.");
         }
 
         return {
@@ -6296,6 +6349,7 @@
           info_bussgeld: ib,
           info_datum: id,
           info_rechtsgrundlage: ir,
+          info_felder: infoFelder,
           schritt_1: s1,
           schritt_2_option_a: s2a,
           schritt_2_option_b: s2b,
@@ -6383,6 +6437,12 @@
           info_bussgeld: "—",
           info_datum: "—",
           info_rechtsgrundlage: "—",
+          info_felder: [
+            { label: "Aktenzeichen", wert: "—", rot: false },
+            { label: "Betrag", wert: "—", rot: true },
+            { label: "Datum", wert: "—", rot: false },
+            { label: "Rechtsgrundlage", wert: "—", rot: false },
+          ],
           schritt_1:
             "Lesen Sie die Erklärungen oben und prüfen Sie, welche Fristen und Beträge für Sie gelten.",
           schritt_2_option_a: "",
@@ -6455,6 +6515,45 @@
         });
       }
 
+      function warnTitleForBriefTyp(briefTyp, rl) {
+        var type = normalizeBriefTyp(briefTyp);
+        var titles = {
+          bussgeld: "Wichtige Frist – Handeln erforderlich",
+          rechnung: "Zahlungsbetrag",
+          mahnung: "Dringende Mahnung – sofort handeln",
+          "kündigung": "Kündigungsfrist beachten",
+          bescheid: "Bescheid prüfen – Widerspruchsfrist beachten",
+          behörde: rl.rsWarnTitle || "Wichtige Frist – Handeln erforderlich",
+          sonstige: rl.rsWarnTitle || "Wichtige Frist – Handeln erforderlich",
+        };
+        return titles[type] || rl.rsWarnTitle || "";
+      }
+
+      function shouldShowTemplateForParsed(parsed) {
+        if (!parsed || parsed.antwort_erforderlich !== true) return false;
+        if (normalizeBriefTyp(parsed.brief_typ) === "rechnung") return false;
+        return Boolean((parsed.brief_mit_platzhaltern || "").trim());
+      }
+
+      function renderInfoGrid(fields) {
+        var grid = $("rsInfoGrid");
+        if (!grid) return;
+        grid.innerHTML = "";
+        coerceInfoFields({ info_felder: fields }, null).forEach(function (field) {
+          var cell = document.createElement("div");
+          cell.className = "rs-info-cell";
+          var key = document.createElement("span");
+          key.className = "rs-info-key";
+          key.textContent = field.label || "—";
+          var val = document.createElement("div");
+          val.className = "rs-info-val" + (field.rot ? " rs-info-val--fine" : "");
+          val.innerHTML = renderRichPlain(field.wert || "—");
+          cell.appendChild(key);
+          cell.appendChild(val);
+          grid.appendChild(cell);
+        });
+      }
+
       function renderResults(parsed) {
         lastNormalizedParsed = parsed;
         initResultsTabDelegation();
@@ -6468,10 +6567,6 @@
         $("rsS3Label").textContent = rl.rsSection3Label || "";
         $("rsS4Label").textContent = rl.rsSection4Label || "";
         $("rsS5Label").textContent = rl.rsSection5Label || "";
-        $("rsGkAz").textContent = rl.rsGridAktenzeichen || "";
-        $("rsGkFine").textContent = rl.rsGridBussgeld || "";
-        $("rsGkDate").textContent = rl.rsGridDatum || "";
-        $("rsGkLaw").textContent = rl.rsGridRechtsgrundlage || "";
 
         var tb = $("rsTabBar");
         if (tb) tb.setAttribute("aria-label", rl.rsTabListAria || "");
@@ -6502,15 +6597,16 @@
 
         var ws = $("rsWarnSection");
         ws.classList.remove("rs-warn-box", "rs-warn-box-neutral");
-        if (!parsed.frist_warnung_aktiv) {
+        var fdRaw = (parsed.frist_datum_oder_betrag || "").trim();
+        var fdOk = fdRaw && !deadlineHighlightLooksInvalid(fdRaw);
+        var showWarn = parsed.frist_warnung_aktiv === true && (normalizeBriefTyp(parsed.brief_typ) !== "sonstige" || fdOk);
+        if (!showWarn) {
           ws.hidden = true;
         } else {
           ws.hidden = false;
-          var fdRaw = (parsed.frist_datum_oder_betrag || "").trim();
-          var fdOk = fdRaw && !deadlineHighlightLooksInvalid(fdRaw);
           if (fdOk) {
             ws.classList.add("rs-warn-box");
-            $("rsWarnTitle").textContent = rl.rsWarnTitle || "";
+            $("rsWarnTitle").textContent = warnTitleForBriefTyp(parsed.brief_typ, rl);
             $("rsWarnHighlight").textContent = fdRaw;
             $("rsWarnDetail").innerHTML = renderRichPlain(parsed.frist_erlaeuterung || "");
           } else {
@@ -6521,11 +6617,7 @@
           }
         }
 
-        $("rsValAz").innerHTML = renderRichPlain(parsed.info_aktenzeichen || "—");
-        $("rsValFine").innerHTML =
-          '<span class="rs-info-val--fine">' + escapeHtml(parsed.info_bussgeld || "—") + "</span>";
-        $("rsValDate").innerHTML = renderRichPlain(parsed.info_datum || "—");
-        $("rsValLaw").innerHTML = renderRichPlain(parsed.info_rechtsgrundlage || "—");
+        renderInfoGrid(parsed.info_felder);
 
         $("rsStep1").innerHTML = renderRichPlain(parsed.schritt_1 || "");
         var optA = (parsed.schritt_2_option_a || "").trim();
@@ -6549,7 +6641,7 @@
         }
 
         var tpl = $("rsTemplateSection");
-        var showTpl = parsed.antwort_erforderlich === true && parsed.einspruch_moeglich === true;
+        var showTpl = shouldShowTemplateForParsed(parsed);
         if (showTpl) {
           tpl.hidden = false;
           $("rsTabEnvelopeBtn").textContent = rl.rsTabEnvelope || "";
