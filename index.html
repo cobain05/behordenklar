@@ -4008,6 +4008,60 @@
         });
       })();
 
+      (function attachBriefTypLabelStrings() {
+        var fallback = {
+          bussgeld: "Fine notice / warning letter",
+          rechnung: "Invoice",
+          bescheid: "Official decision",
+          mahnung: "Reminder / payment notice",
+          "kündigung": "Termination notice",
+          behörde: "Official letter",
+          sonstige: "Official letter",
+        };
+        var rows = {
+          Deutsch: {
+            bussgeld: "Bußgeldbescheid / Verwarnungsschreiben",
+            rechnung: "Rechnung",
+            bescheid: "Behördenbescheid",
+            mahnung: "Mahnung / Zahlungserinnerung",
+            "kündigung": "Kündigung",
+            behörde: "Behördenschreiben",
+            sonstige: "Offizielles Schreiben",
+          },
+          Englisch: fallback,
+          "Türkisch": {
+            bussgeld: "Para cezası bildirimi / uyarı yazısı",
+            rechnung: "Fatura",
+            bescheid: "Resmi karar yazısı",
+            mahnung: "İhtar / ödeme hatırlatması",
+            "kündigung": "Fesih bildirimi",
+            behörde: "Resmi kurum yazısı",
+            sonstige: "Resmi yazı",
+          },
+          Arabisch: {
+            bussgeld: "إشعار غرامة / خطاب إنذار",
+            rechnung: "فاتورة",
+            bescheid: "قرار رسمي",
+            mahnung: "تذكير بالدفع / إنذار",
+            "kündigung": "إشعار إنهاء",
+            behörde: "خطاب رسمي",
+            sonstige: "خطاب رسمي",
+          },
+          "Arabisch (Ägyptisch)": {
+            bussgeld: "إشعار غرامة / خطاب إنذار",
+            rechnung: "فاتورة",
+            bescheid: "قرار رسمي",
+            mahnung: "تذكير بالدفع / إنذار",
+            "kündigung": "إشعار إنهاء",
+            behörde: "خطاب رسمي",
+            sonstige: "خطاب رسمي",
+          },
+        };
+        Object.keys(resultLayoutUiByLang).forEach(function (lang) {
+          resultLayoutUiByLang[lang].rsBriefTypLabels = rows[lang] || fallback;
+        });
+      })();
+
       (function attachFooterLegalStrings() {
         var keys = ["footerLinkImpressum", "footerLinkAgb", "footerLinkDatenschutz", "footerCookieSettings"];
         var rows = {
@@ -5000,6 +5054,12 @@
         updateFooterLegalLinks(getResultLayoutStrings());
       }
 
+      function getBriefTypDisplayLabel(briefTyp, rl) {
+        var type = normalizeBriefTyp(briefTyp);
+        var labels = (rl && rl.rsBriefTypLabels) || (resultLayoutUiByLang["Englisch"] && resultLayoutUiByLang["Englisch"].rsBriefTypLabels) || {};
+        return labels[type] || labels.sonstige || "Official letter";
+      }
+
       function updateTemplateDownloadUi(lang) {
         var t = uiTranslations[lang] || uiTranslations["Deutsch"];
         var disc = $("templateDownloadDisclaimer");
@@ -5087,6 +5147,30 @@
           lastAntwortvorlageForDownload = "";
           templateDownloadBlock.hidden = true;
         }
+      }
+
+      function resetResultsForFreshPageLoad() {
+        lastNormalizedParsed = null;
+        lastAntwortvorlageForDownload = "";
+        if (results) {
+          results.classList.remove("visible");
+          results.scrollTop = 0;
+        }
+        document.body.classList.remove("results-open");
+        setTemplateDownloadSectionVisible(false, "");
+        clearError();
+        if (resultFeedback) resultFeedback.hidden = true;
+        if ($("rsTemplateSection")) $("rsTemplateSection").hidden = true;
+        if ($("rsKeinAntwort")) $("rsKeinAntwort").hidden = true;
+        if ($("rsWarnSection")) $("rsWarnSection").hidden = true;
+        if ($("rsInfoGrid")) $("rsInfoGrid").innerHTML = "";
+        ["rsBriefTyp", "rsAbsender", "rsKurz", "rsZusatz", "rsStep1", "rsOptA", "rsOptB", "rsStep3", "rsLetterBody", "rsBriefUebersetzungText"].forEach(function (id) {
+          var el = $(id);
+          if (el) el.textContent = "";
+        });
+        var textMode = document.querySelector('input[name="inputMode"]:checked').value === "text";
+        $("panelText").classList.toggle("active", textMode);
+        $("panelFile").classList.toggle("active", !textMode);
       }
 
       function escapeHtmlForPrint(s) {
@@ -5209,7 +5293,7 @@
           d.write('<header class="export-header"><div class="brand-group"><span class="brand-icon">B</span><span class="brand-text">BehördenKlar</span></div><p class="analysis-date">Datum der Analyse: ' + escapeHtmlForPrint(analysisDate) + '</p></header>');
           d.write('<hr class="separator">');
           if (p && p.brief_typ) {
-            d.write('<p class="meta">' + escapeHtmlForPrint(p.brief_typ) + '</p>');
+            d.write('<p class="meta">' + escapeHtmlForPrint(getBriefTypDisplayLabel(p.brief_typ, rl)) + '</p>');
           }
           sections.forEach(function (section) {
             writeExportHtmlSection(d, section);
@@ -5299,7 +5383,7 @@
             })
           );
           if (p && p.brief_typ) {
-            children.push(docxTextParagraph(Paragraph, TextRun, p.brief_typ, { color: "4B5563", size: 20 }));
+            children.push(docxTextParagraph(Paragraph, TextRun, getBriefTypDisplayLabel(p.brief_typ, rl), { color: "4B5563", size: 20 }));
           }
 
           sections.forEach(function (section) {
@@ -6156,7 +6240,7 @@
         parts.push("");
         parts.push(rl.rsWaSectionMeta || "");
         var sender = plaintextSnippetFromModelField(parsed.absender_zeile);
-        if (!sender) sender = plaintextSnippetFromModelField(parsed.brief_typ);
+        if (!sender) sender = getBriefTypDisplayLabel(parsed.brief_typ, rl);
         if (sender) parts.push(sender);
         var dat = plaintextSnippetFromModelField(parsed.info_datum);
         if (dat && dat !== "—") parts.push((rl.rsWaLabelDatum || "") + ": " + dat);
@@ -6571,7 +6655,7 @@
         var tb = $("rsTabBar");
         if (tb) tb.setAttribute("aria-label", rl.rsTabListAria || "");
 
-        $("rsBriefTyp").textContent = parsed.brief_typ || "";
+        $("rsBriefTyp").textContent = getBriefTypDisplayLabel(parsed.brief_typ, rl);
         var absEl = $("rsAbsender");
         if (parsed.absender_zeile && String(parsed.absender_zeile).trim()) {
           absEl.innerHTML = "<strong>" + escapeHtml(String(parsed.absender_zeile).trim()) + "</strong>";
@@ -6964,6 +7048,17 @@
       }
 
       initCookieConsentUi();
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", resetResultsForFreshPageLoad, { once: true });
+      } else {
+        resetResultsForFreshPageLoad();
+      }
+      window.addEventListener("pageshow", function (event) {
+        if (event && event.persisted) {
+          resetResultsForFreshPageLoad();
+        }
+      });
 
       window.addEventListener("resize", function () {
         updateDropZoneTextsForViewport(getUiLang());
